@@ -1,0 +1,46 @@
+<div class="w3-row w3-border">
+  <div class="w3-col w3-right w3-green w3-quarter" title="Subir Archivos">
+    <button class="w3-button w3-block w3-hover-green" (click)="loadFile()">
+      <span class="fa fa-cloud-upload"></span>
+    </button>
+  </div>
+
+  <div class="w3-threequarter w3-theme">
+    <div class="control">
+      <label class="w3-tag w3-theme w3-button w3-block" for="inputFile" title="Elegir Archivos">Elegir Archivos</label>
+      <input type="file" id="inputFile" class="file" (change)="OnChange($event)" accept=".pdf, .doc, .docx, .xlsx, .jpg, .jpeg, .pptx, .ppt, .png, .rar, .zip"
+        multiple="multiple" />
+    </div>
+  </div>
+</div>
+
+<div class="w3-row w3-section">
+
+  <ul class="w3-ul">
+    <li style="padding: 0!important;border-bottom:none" *ngFor="let a of lista_archivo">
+      <div ng-switch="a.activo">
+        <label *ngIf="a.activo" class="w3-tag w3-theme w3-tiny">{{'Nombre del archivo'}}</label>
+        <label *ngIf="!a.activo" class="w3-tag w3-theme w3-tiny">{{'No Enviar'}}</label>
+      </div>
+      <div class="w3-row w3-border">
+        <div class="w3-col w3-right w3-theme w3-quarter" [hidden]="a.activo" title="Activar envio">
+          <button class="w3-button w3-block" style="padding: 8px 8px !important" (click)="eliminar_archivo(a)">
+            <span class="fa fa-check"></span>
+          </button>
+        </div>
+        <div class="w3-col w3-right w3-theme w3-quarter" [hidden]="!a.activo" title="No enviar">
+          <button class="w3-button w3-block" style="padding: 8px 8px !important" (click)="eliminar_archivo(a)">
+            <span class="fa fa-times"></span>
+          </button>
+        </div>
+        <div class="w3-threequarter w3-theme">
+          <input type="text" class="w3-input" [disabled]="!a.activo" [(ngModel)]="a.nombre" />
+        </div>
+      </div>
+      <label class="w3-tag w3-red w3-tiny" *ngIf="error">Error al subir archivo</label>
+    </li>
+  </ul>
+
+  <hr>
+
+</div>

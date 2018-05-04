@@ -1,0 +1,110 @@
+<ul class="w3-ul">
+  <li (click)="mostrarLista(0)">
+    <a>
+      <i class="fa fa-bookmark">
+        <sup>{{cantidad_pieza_matriz_en_actividad}}</sup>
+      </i>
+      {{dataVisor.piezas_evaluadora_matriz + ' a los que responde'}}
+      <span class="pull-right"> </span>
+    </a>
+  </li>
+  <li (click)="mostrarLista(1)">
+    <a>
+      <i class="fa fa-bookmark"> </i>
+      {{'Indicadores de seguimiento'}}
+      <span class="pull-right"> </span>
+    </a>
+  </li>
+  <li (click)="mostrarLista(3)">
+    <a>
+      <i class="fa fa-bookmark"> </i>
+      {{'Responsables del seguimiento'}}
+      <span class="pull-right"> </span>
+    </a>
+  </li>
+  <li (click)="mostrarLista(2)">
+    <a>
+      <i class="fa fa-bookmark"> </i>
+      {{'Recursos de la actividad'}}
+      <span class="pull-right"> </span>
+    </a>
+  </li>
+  <li (click)="open()">
+    <a>
+      <i class="fa fa-bookmark"> </i>
+      {{'Diagrama de gantt'}}
+      <span class="pull-right"> </span>
+    </a>
+  </li>
+</ul>
+
+<div id="formulario" class="w3-modal">
+  <div class="w3-modal-content w3-animate-right w3-card-4">
+    <header class="w3-container w3-theme-d5 w3-margin-bottom" style="padding-right: 5px">
+      <span onclick=" document.getElementById('formulario').style.display = 'none'" style="cursor: pointer" class="w3-right w3-padding fa fa-remove w3-hover-text-red"
+        title="Cerrar"></span>
+      <h5>{{tituloModal}}</h5>
+    </header>
+
+    <div class="w3-container">
+      <div class="w3-row w3-section w3-row-padding" *ngIf="tipoEvidencia">
+        <div class="w3-col w3-theme w3-quarter" title="Guardar">
+          <button class="w3-button w3-block" style="padding: 8px 8px !important" (click)="inserta_relacion_piezas_matriz_evalua()">
+            <span class="fa fa-bookmark"></span>
+            <span class="fa fa-plus"></span>
+          </button>
+        </div>
+        <div class="w3-threequarter w3-theme" style="padding: 0">
+          <select class="w3-select w3-border" name="p_m_autoevaluacion" [(ngModel)]="select_idsecuencia" (change)="asigna_idsecuencia(select_idsecuencia)">
+            <option value="null" selected>- SELECCIONE TIPO DE EVIDENCIA -</option>
+            <option *ngFor="let a of piezas_matriz_autoevaluacion|orderBy:'ordenar' | filterBy:['asigana']: false" value="{{a.idsecuencia}}">{{a.orden +'-'+ a.nombre}}</option>
+          </select>
+        </div>
+      </div>
+      <div class="w3-row w3-section w3-row-padding" *ngIf="tipoEvidencia">
+        <div class="w3-col l12">
+          <ul class="w3-ul">
+            <li *ngFor="let a of piezas_matriz_autoevaluacion|filterBy:['asigana']: true|orderBy:'ordenar'">
+              <a>
+                <i class="fa fa-bookmark"></i>
+                {{a.orden +' - '+ a.nombre | maxLength:75}}
+                <span *ngIf="permisos.registrar == 1" class="pull-right" (click)="elimina_relacion_piezas_matriz_evalua(a)">
+                  <i class="fa fa-remove danger"> </i>
+                </span>
+              </a>
+            </li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="w3-row w3-border" *ngIf="!tipoEvidencia">
+        <div class="w3-col w3-theme w3-quarter" title="Guardar">
+          <button class="w3-button w3-block" style="padding: 8px 8px !important" (click)="inserta_lista(nombre_lista)">
+            <span class="fa fa-bookmark"></span>
+            <span class="fa fa-plus"></span>
+          </button>
+        </div>
+        <div class="w3-threequarter w3-theme">
+          <input type="text" class="w3-input" [(ngModel)]="nombre_lista" />
+        </div>
+      </div>
+
+      <div class="w3-row w3-section w3-row-padding" *ngIf="!tipoEvidencia">
+        <div class="w3-col l12">
+          <ul class="w3-ul">
+            <li *ngFor="let a of lista_actividad|filterBy:['idlista']: select_idlista|orderBy:'nombre'">
+              <a>
+                <i class="fa fa-bookmark"></i>
+                {{a.nombre | maxLength:75}}
+                <span ng-if="registrar == true" class="pull-right" (click)="elimina_lista(a)">
+                  <i class="fa fa-remove danger"> </i>
+                </span>
+              </a>
+            </li>
+          </ul>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>

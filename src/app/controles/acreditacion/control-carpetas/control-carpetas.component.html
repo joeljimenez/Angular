@@ -1,0 +1,140 @@
+<h5 class="w3-center">Carpetas</h5>
+
+<div *ngIf="gestionar">
+  <div class="w3-padding-16">
+    <button type="button" class="w3-bar-item w3-button w3-theme w3-block w3-theme" (click)="crear(a)" title="Nueva Carpeta">
+      <i class="fa fa-folder" style="font-size:15px"></i>
+      <i class="fa fa-plus" style="font-size:15px"></i>
+    </button>
+  </div>
+</div>
+
+
+<ul class="w3-ul">
+  <li (dblclick)="select_file(0,0,'root')">
+    <a>
+      <i class="fa fa-folder">
+      </i>
+      ROOT...
+      <span class="w3-button w3-orange w3-text-white w3-tiny w3-right w3-hover-orange gestionar_evidencia">
+        <span class="w3-right">
+          {{cantidad_root}}
+        </span>
+      </span>
+      <!-- <span class="w3-tag w3-orange w3-tiny w3-text-white w3-right"></span> -->
+    </a>
+  </li>
+  <div *ngFor="let a of carpetas">
+    <li *ngIf="a.idcarpeta_padre == idcarpeta && autoevaluacion" (dblclick)="select_file(a.idcarpeta,a.idcarpeta_padre,a.nombre)"
+      class="w3-border-bottom">
+
+      <a>
+        <i class="fa fa-folder">
+        </i>
+        {{a.nombre}}
+      </a>
+
+      <span class="w3-orange w3-text-white w3-tiny w3-right w3-hover-orange w3-margin-left gestionar_evidencia">
+        <span class="w3-right">
+          {{a.cantidad}}
+        </span>
+      </span>
+
+      <span *ngIf="gestionar">
+        <button class="w3-button w3-red w3-tiny w3-right gestionar_evidencia" *ngIf="permisos.eliminar == 1" (click)="eliminar(a)">
+          <i class="fa fa-remove"></i>
+        </button>
+        <button class="w3-button w3-green w3-tiny w3-right gestionar_evidencia" (click)="editar(a)">
+          <i class="fa fa-edit"></i>
+        </button>
+      </span>
+
+    </li>
+    <li *ngIf="a.idcarpeta_padre == idcarpeta && a.periodo == periodoActivo && !autoevaluacion" (dblclick)="select_file(a.idcarpeta,a.idcarpeta_padre,a.nombre)"
+      class="w3-border-bottom">
+
+      <a>
+        <i class="fa fa-folder">
+        </i>
+        {{a.nombre}}
+      </a>
+
+      <span class="w3-orange w3-text-white w3-tiny w3-right w3-hover-orange w3-margin-left gestionar_evidencia">
+        <span class="w3-right">
+          {{a.cantidad}}
+        </span>
+      </span>
+
+      <span *ngIf="gestionar">
+        <button class="w3-button w3-red w3-tiny w3-right gestionar_evidencia" *ngIf="permisos.eliminar == 1" (click)="eliminar(a)">
+          <i class="fa fa-remove"></i>
+        </button>
+        <button class="w3-button w3-green w3-tiny w3-right gestionar_evidencia" (click)="editar(a)">
+          <i class="fa fa-edit"></i>
+        </button>
+      </span>
+
+    </li>
+  </div>
+</ul>
+
+
+<div class="" *ngIf="gestionar">
+
+  <div class="w3-row w3-section">
+    <label class="w3-tag w3-small w3-theme">Tipo de registro</label>
+    <select class="w3-select w3-border" name="entidades" [(ngModel)]="tipo_evi" (change)="cambio_tipoEvi(tipo_evi)">
+      <option value="" selected>- SELECCIONE TIPO DE EVIDENCIA -</option>
+      <option *ngFor="let a of tipo_evidencia" value="{{a.id}}">{{a.nombre}}</option>
+    </select>
+  </div>
+
+  <div class="w3-row w3-section" *ngIf="video">
+    <div class="w3-section">
+      <label class="w3-tag w3-small w3-theme">Titulo</label>
+      <input class="w3-input w3-border" type="text" [(ngModel)]="solicitud.nombre" maxlength="50" placeholder="">
+    </div>
+    <div class="w3-section">
+      <label class="w3-tag w3-small w3-theme">Script de la Evidencia</label>
+      <textarea rows="5" class="w3-input w3-border" [(ngModel)]="solicitud.script" maxlength="2000"></textarea>
+    </div>
+    <div class="w3-section">
+      <button class="w3-button w3-theme w3-block" (click)="guardar_evidencia()">Guardar</button>
+    </div>
+  </div>
+  <div class="w3-row w3-section">
+    <app-input-file [idcarpeta]="idcarpeta" [periodo_activo]="periodoActivo" [vistaActual]="vistaActual" *ngIf="arch"></app-input-file>
+  </div>
+</div>
+
+<div id="formulario_carpeta" class="w3-modal inmodal">
+  <div class="w3-modal-content w3-animate-right w3-card-4" style="width: 1235px!important;top: -40px">
+    <header class="w3-container w3-center w3-theme">
+      <span onclick="document.getElementById('formulario_carpeta').style.display = 'none'" class="w3-button w3-display-topright">&times;</span>
+      <div class="w3-padding-16">
+        <h5>{{titulo_modal}}</h5>
+      </div>
+    </header>
+    <div class="">
+      <div class="w3-row w3-section w3-container">
+        <div class="w3-section w3-col m12" *ngIf="opc == 'crear_carpeta' || opc == 'editar_carpeta'">
+          <label class="w3-tag w3-small w3-theme">Nombre de la carpeta</label>
+          <input class="w3-input w3-border" type="text" [(ngModel)]="solicitud.nombre" maxlength="50" placeholder="">
+        </div>
+        <div class="w3-section w3-col m12" *ngIf="opc == 'eliminar_carpeta'">
+          <p>Desea eliminar la carpeta
+            <strong>[ {{ nombre_carpeta}} ]</strong> . Si la elimina todo el contenido que este dentro de ella también se borrará
+            "sub carpetas y archivos"</p>
+        </div>
+        <div class="w3-section w3-col m12">
+          <button class="w3-button" onclick="document.getElementById('formulario_carpeta').style.display = 'none'">
+            Cerrar
+          </button>
+          <button *ngIf="permisos.registrar == 1" class="w3-button {{colorBtn}}" (click)="guardar()">
+            <i class="fa fa-{{icon}}"></i> {{evento}}
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

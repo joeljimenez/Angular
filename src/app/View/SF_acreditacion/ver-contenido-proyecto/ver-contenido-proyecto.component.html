@@ -1,0 +1,76 @@
+<simple-notifications [options]="options">
+</simple-notifications>
+<control-skin [skin]="1" [estado]="flag_envio"></control-skin>
+<app-nav [titulo]="titulo" [breadcrumb]="breadcrumbArray"></app-nav>
+
+<div class="w3-row-padding w3-small">
+
+  <div class="w3-col s12 m12 l4">
+    <div class="w3-panel w3-padding-16 w3-white w3-card">
+      <div class="">
+        <h4 class="w3-center">{{dataVisor.nombre1 + '# ' + dataVisor.orden}}</h4>
+        <hr>
+
+        <div class="w3-hide-small w3-hide-medium" style="height: 635px; overflow: auto;">
+
+          <div *ngIf="dataVisor.act_nombre == 1">
+            <h5 class="w3-center">Nombre</h5>
+            <p class="w3-justify">
+              {{dataVisor.nombre}}
+            </p>
+            <hr>
+          </div>
+
+          <div *ngIf="dataVisor.act_objetivo == 1">
+            <h5 class="w3-center">Objetivo</h5>
+            <p class="w3-justify">
+              {{dataVisor.objetivo}}
+            </p>
+            <hr>
+          </div>
+
+          <app-control-gantt></app-control-gantt>
+
+          <hr>
+
+          <app-lista-proyecto [breadcrumbArray]="breadcrumbArray"></app-lista-proyecto>
+
+          <div class="w3-padding-16">
+            <app-control-carpetas 
+              [vistaActual]="vistaActual" 
+              [gestionar]="gesionar" 
+              [carpetas]="carpetas" 
+              [idcarpeta]="idcarpeta" 
+              [barra]="barra" 
+              [cantidad_root]="cantidad_root"
+              (cambioCarpeta)="select_file($event)" 
+              (guardaR)="guardar_Cambios($event)">
+            </app-control-carpetas>
+          </div>
+
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <div class="w3-col s12 m12 l8">
+    <div class="w3-panel w3-padding-16 w3-white w3-card">
+      <div [hidden]="nuestra_visor">
+        <ul class="breadcrumb w3-light-grey w3-padding-16" style="margin-top: 0;">
+          <li>
+            <a (click)="select_barra(-1)">ROOT...</a>
+          </li>
+          <li *ngFor="let c of barra">
+            <a (click)="select_barra(c.id)">{{c.nombre}}</a>
+          </li>
+        </ul>
+
+        <div class="w3-table-responsive" style="height: 635px; overflow: auto;">
+          <app-control-evidencia [vistaActual]="vistaActual" [gestionar]="gesionar" [evidencias]="evidencias" [idcarpeta]="idcarpeta" (guardaE)="guardar_Cambios($event)"></app-control-evidencia>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>

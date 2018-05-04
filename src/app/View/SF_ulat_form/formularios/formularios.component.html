@@ -1,0 +1,103 @@
+<control-skin [skin]="1" [estado]="flag_envio"></control-skin>
+<simple-notifications [options]="options"></simple-notifications>
+<app-nav [titulo]="titulo" [breadcrumb]="breadcrumbArray" [btnCrear]="true" (Crear)="crear()"></app-nav>
+
+
+<div class="w3-container">
+    <div class="w3-col m6 l6 w3-center w3-animate-bottom" *ngFor="let a of respuesta">
+        <div class="w3-row-padding">
+            <div class="w3-dropdown-hover w3-right">
+                <button class="w3-btn w3-theme"><i class="fa fa-ellipsis-v"></i></button>
+                <div class="w3-dropdown-content w3-bar-block w3-border" style="right:0">
+                <a (click)="editar(a)" *ngIf="permisos.actualizar == 1"  class="w3-bar-item w3-button"><i class="fa fa-edit"></i> Editar</a>
+                <a (click)="eliminar(a)" *ngIf="permisos.eliminar == 1" class="w3-bar-item w3-button"><i class="fa fa-remove"></i> Eliminar</a>
+                <a (click)="open(a)" class="w3-bar-item w3-button"><i class="fa fa-code-fork"></i> Periodos</a>
+                <a (click)="frmOpen(a)" class="w3-bar-item w3-button"><i class="fa fa-list-ol"></i> Cuestionario</a>
+                </div>
+            </div>
+            <div class="w3-container w3-card w3-white w3-margin-bottom">
+                <h3 class="w3-text-grey">
+                    {{a.nombre}}
+                </h3>
+                <div class="w3-padding-16">
+                    <a  (click)="frmOpen(a)" class="w3-btn w3-circle w3-theme" style="font-size: 40px">
+                        <i class="fa fa-list-alt"></i>
+                    </a>
+                </div>
+                <p class="font-bold">{{a.descripcion}}</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div id="formulario" class="w3-modal inmodal">
+    <div class="w3-modal-content w3-animate-right w3-card-4">
+        <header class="w3-container w3-center w3-theme"> 
+        <span onclick="document.getElementById('formulario').style.display='none'" class="w3-button w3-display-topright">&times;</span>
+        <div class="w3-padding-16">
+            <i class="fa fa-list-alt modal-icon"></i>
+            <h4 class="modal-title">{{titulo_modal}}</h4>
+        </div>
+        </header>
+        <div class="w3-container">
+          <div class="w3-panel w3-margin w3-padding-24 w3-light-grey">
+              <div class="w3-row w3-section  w3-row-padding">
+                  <div class="w3-col l12 m12">
+                    <label>Tipo de Formulario</label>
+                    <select class="w3-select" name="tipoFormulario"  [(ngModel)]="solicitud.idtipo_formulario">
+                        <option value="0">- Seleccione Formulario -</option>
+                        <option *ngFor="let a of tipo_formularios" value="{{a.idtipo_formulario}}">{{a.nombre}}</option>
+                      </select>
+                  </div>
+              </div>
+              <div class="w3-row w3-section  w3-row-padding">
+                  <div class="w3-col l12 m12">
+                    <label>Tipo de periodo</label>
+                    <select class="w3-select" name="tipoPeriodo" [(ngModel)]="solicitud.idtipo_periodo">
+                        <option value="0">- Seleccione Periodo -</option>
+                        <option *ngFor="let a of tipo_periodo" value="{{a.idtipo_periodo}}">{{a.nombre}} - {{a.cantidad}} por año.</option>
+                      </select>
+                  </div>
+              </div>
+              <div class="w3-row w3-section  w3-row-padding">
+                  <div class="w3-col l12 m12">
+                      <label>Nombre del formulario</label>
+                      <input class="w3-input" type="text" maxlength="100" [(ngModel)]="solicitud.nombre" placeholder="Nombre del formulario">
+                  </div>
+              </div>
+          </div>
+
+
+          <button class="w3-btn w3-medium"onclick="document.getElementById('formulario').style.display='none'"> Cerrar</button>
+          <button class="w3-btn w3-medium w3-theme w3-margin" (click)="run()" *ngIf="!flag_envio"><i class="fa fa-save"></i> Guardar</button>
+         
+              <control-skin [estado]="flag_envio" [skin]="1"></control-skin>
+        </div>
+    </div>
+</div>
+
+
+<div id="eliminar" class="w3-modal inmodal">
+        <div class="w3-modal-content w3-animate-right w3-card-4">
+            <header class="w3-container w3-center w3-theme"> 
+            <span onclick="document.getElementById('eliminar').style.display='none'" class="w3-button w3-display-topright">&times;</span>
+            <div class="w3-padding-16">
+                <i class="fa fa-list-alt modal-icon"></i>
+                <h4 class="modal-title">{{titulo_modal}}</h4>
+            </div>
+            </header>
+            <div class="w3-container">
+              <div class="w3-panel w3-margin w3-padding-24 w3-light-grey">
+                  <div class="w3-row w3-section  w3-row-padding">
+                      {{mensaje}}
+                  </div>
+              </div>
+    
+    
+              <button class="w3-btn w3-medium"onclick="document.getElementById('eliminar').style.display='none'"> NO</button>
+              <button class="w3-btn w3-medium w3-theme w3-margin" (click)="run()"> Si</button>
+    
+            </div>
+        </div>
+</div>

@@ -1,0 +1,170 @@
+<simple-notifications [options]="options"></simple-notifications>
+<control-skin [skin]="1" [estado]="flag_envio"></control-skin>
+<app-nav [titulo]="titulo" [breadcrumb]="breadcrumbArray"></app-nav>
+
+  <div class="w3-col s12 m12 l12">
+    <div class="w3-panel">
+      <h5 class="modal-title">Asigna {{dataVisor.piezas_evaluadora_matriz}} a {{dataVisor.nombre1}} </h5>
+    </div>
+  </div>
+
+
+<div class="w3-row-padding w3-small">
+  <div class="w3-col s12 m12 l6" *ngFor="let a of periodos">
+    <div class="w3-panel w3-padding-16 w3-white w3-card">
+
+      <div class="w3-row w3-row-padding">
+        <div class="w3-padding-16 w3-topbar" [ngClass]="{'w3-border-blue': a.estatus == true}">
+          <div class="">
+            <div class="w3-left w3-text-green">
+              {{a.periodo}}
+            </div>
+            <div class="w3-right">
+              <div *ngIf="a.estatus == 1">
+                <strong> Activo</strong>
+                <label class="switch" *ngIf="permisos.registrar == 1">
+                  <input type="checkbox" [(ngModel)]="a.estatus" (click)="delete_gantt(a)">
+                  <span class="slider round"></span>
+                </label>
+              </div>
+              <div *ngIf="a.estatus == 0">
+                <strong> Inactivo</strong>
+                <label class="switch" *ngIf="permisos.registrar == 1">
+                  <input type="checkbox" [(ngModel)]="a.estatus" (click)="insert_gantt(a)">
+                  <span class="slider round"></span>
+                </label>
+              </div>
+            </div>
+          </div>
+        </div>
+        <hr>
+        <div class="meses" *ngIf="permisos.registrar == 1">
+          <h5 class="w3-center">Meses</h5>
+          <div class="w3-col l1 m1 s1 w3-tag w3-light-grey w3-text-grey w3-border-right" [ngClass]="{'w3-theme': a.ene == 1}" (dblclick)="update_gantt(a, 1)">
+            <div>
+              <label class="">1</label>
+            </div>
+          </div>
+          <div class="w3-col l1 m1 s1 w3-tag w3-light-grey w3-text-grey w3-border-right" [ngClass]="{'w3-theme': a.feb == 1}" (dblclick)="update_gantt(a, 2)">
+            <div>
+              <label class="">2</label>
+            </div>
+          </div>
+          <div class="w3-col l1 m1 s1 w3-tag w3-light-grey w3-text-grey w3-border-right" [ngClass]="{'w3-theme': a.mar == 1}" (dblclick)="update_gantt(a, 3)">
+            <div>
+              <label class="">3</label>
+            </div>
+          </div>
+          <div class="w3-col l1 m1 s1 w3-tag w3-light-grey w3-text-grey w3-border-right" [ngClass]="{'w3-theme': a.abr == 1}" (dblclick)="update_gantt(a, 4)">
+            <div>
+              <label class="">4</label>
+            </div>
+          </div>
+          <div class="w3-col l1 m1 s1 w3-tag w3-light-grey w3-text-grey w3-border-right" [ngClass]="{'w3-theme': a.may == 1}" (dblclick)="update_gantt(a, 5)">
+            <div>
+              <label class="">5</label>
+            </div>
+          </div>
+          <div class="w3-col l1 m1 s1 w3-tag w3-light-grey w3-text-grey w3-border-right" [ngClass]="{'w3-theme': a.jun == 1}" (dblclick)="update_gantt(a, 6)">
+            <div>
+              <label class="">6</label>
+            </div>
+          </div>
+          <div class="w3-col l1 m1 s1 w3-tag w3-light-grey w3-text-grey w3-border-right" [ngClass]="{'w3-theme': a.jul == 1}" (dblclick)="update_gantt(a, 7)">
+            <div>
+              <label class="">7</label>
+            </div>
+          </div>
+          <div class="w3-col l1 m1 s1 w3-tag w3-light-grey w3-text-grey w3-border-right" [ngClass]="{'w3-theme': a.ago == 1}" (dblclick)="update_gantt(a, 8)">
+            <div>
+              <label class="">8</label>
+            </div>
+          </div>
+          <div class="w3-col l1 m1 s1 w3-tag w3-light-grey w3-text-grey w3-border-right" [ngClass]="{'w3-theme': a.sep == 1}" (dblclick)="update_gantt(a, 9)">
+            <div>
+              <label class="">9</label>
+            </div>
+          </div>
+          <div class="w3-col l1 m1 s1 w3-tag w3-light-grey w3-text-grey w3-border-right" [ngClass]="{'w3-theme': a.oct == 1}" (dblclick)="update_gantt(a, 10)">
+            <div>
+              <label class="">10</label>
+            </div>
+          </div>
+          <div class="w3-col l1 m1 s1 w3-tag w3-light-grey w3-text-grey w3-border-right" [ngClass]="{'w3-theme': a.nov == 1}" (dblclick)="update_gantt(a, 11)">
+            <div>
+              <label class="">11</label>
+            </div>
+          </div>
+          <div class="w3-col l1 m1 s1 w3-tag w3-light-grey w3-text-grey" [ngClass]="{'w3-theme': a.dic == 1}" (dblclick)="update_gantt(a, 12)">
+            <div>
+              <label class="">12</label>
+            </div>
+          </div>
+        </div>
+        <div class="meses" *ngIf="permisos.registrar != 1">
+          <h5 class="w3-center">Meses</h5>
+          <div class="w3-col l1 m1 s1 w3-tag w3-light-grey w3-text-grey w3-border-right" [ngClass]="{'w3-theme': a.ene == 1}">
+            <div>
+              <label class="">1</label>
+            </div>
+          </div>
+          <div class="w3-col l1 m1 s1 w3-tag w3-light-grey w3-text-grey w3-border-right" [ngClass]="{'w3-theme': a.feb == 1}">
+            <div>
+              <label class="">2</label>
+            </div>
+          </div>
+          <div class="w3-col l1 m1 s1 w3-tag w3-light-grey w3-text-grey w3-border-right" [ngClass]="{'w3-theme': a.mar == 1}">
+            <div>
+              <label class="">3</label>
+            </div>
+          </div>
+          <div class="w3-col l1 m1 s1 w3-tag w3-light-grey w3-text-grey w3-border-right" [ngClass]="{'w3-theme': a.abr == 1}">
+            <div>
+              <label class="">4</label>
+            </div>
+          </div>
+          <div class="w3-col l1 m1 s1 w3-tag w3-light-grey w3-text-grey w3-border-right" [ngClass]="{'w3-theme': a.may == 1}">
+            <div>
+              <label class="">5</label>
+            </div>
+          </div>
+          <div class="w3-col l1 m1 s1 w3-tag w3-light-grey w3-text-grey w3-border-right" [ngClass]="{'w3-theme': a.jun == 1}">
+            <div>
+              <label class="">6</label>
+            </div>
+          </div>
+          <div class="w3-col l1 m1 s1 w3-tag w3-light-grey w3-text-grey w3-border-right" [ngClass]="{'w3-theme': a.jul == 1}">
+            <div>
+              <label class="">7</label>
+            </div>
+          </div>
+          <div class="w3-col l1 m1 s1 w3-tag w3-light-grey w3-text-grey w3-border-right" [ngClass]="{'w3-theme': a.ago == 1}">
+            <div>
+              <label class="">8</label>
+            </div>
+          </div>
+          <div class="w3-col l1 m1 s1 w3-tag w3-light-grey w3-text-grey w3-border-right" [ngClass]="{'w3-theme': a.sep == 1}">
+            <div>
+              <label class="">9</label>
+            </div>
+          </div>
+          <div class="w3-col l1 m1 s1 w3-tag w3-light-grey w3-text-grey w3-border-right" [ngClass]="{'w3-theme': a.oct == 1}">
+            <div>
+              <label class="">10</label>
+            </div>
+          </div>
+          <div class="w3-col l1 m1 s1 w3-tag w3-light-grey w3-text-grey w3-border-right" [ngClass]="{'w3-theme': a.nov == 1}">
+            <div>
+              <label class="">11</label>
+            </div>
+          </div>
+          <div class="w3-col l1 m1 s1 w3-tag w3-light-grey w3-text-grey" [ngClass]="{'w3-theme': a.dic == 1}">
+            <div>
+              <label class="">12</label>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

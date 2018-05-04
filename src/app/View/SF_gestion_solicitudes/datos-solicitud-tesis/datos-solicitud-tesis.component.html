@@ -1,0 +1,313 @@
+<simple-notifications [options]="options"></simple-notifications>
+<control-skin [skin]="1" [estado]="flag_envio"></control-skin>
+<app-nav [titulo]="titulo" [breadcrumb]="breadcrumbArray"></app-nav>
+
+<!-- <div class="w3-container w3-center" *ngIf="load">
+    <span><i class="fa fa-spinner w3-spin" style="font-size:64px"></i></span>
+</div> -->
+<div class="w3-container w3-animate-bottom">
+    <div class="w3-panel w3-padding-32 w3-white w3-card">
+        <div class="w3-row">
+
+            <!--para la vista de profesores -->
+            <div class="w3-container" *ngIf="data.detalleProf == 1">
+                <button class="w3-button w3-theme w3-circle chat" (click)="arma_mensajes(data.observacion_director)">
+                    <i class="fa fa-comments"></i>
+                </button>
+            </div>
+
+            <!--para la vista de administrativos-->
+            <div class="w3-container" *ngIf="data.detalleProf == 0">
+                <div class="w3-row w3-section  w3-row-padding">
+                    <button class="w3-button w3-theme" (click)="historia(data)">
+                        <i class="fa fa-list-ul"></i> Historial
+                    </button>
+                </div>
+
+
+                <div class="w3-row w3-section  w3-row-padding" *ngIf="data.mensaje_estado_bool">
+                    <div class="w3-panel w3-yellow w3-display-container">
+                        <h3>
+                            <i class="fa fa-bullhorn" aria-hidden="true"></i> {{data.aviso}}!</h3>
+                        <i>
+                            <b>Presione el botón
+                                <span class="w3-theme w3-padding-small">
+                                    <i class="fa fa-envelope"></i> comunicar</span> y envié el siguiente {{data.aviso}}.</b>
+                        </i>
+                        <p>{{data.mensaje_estado}}</p>
+
+                        <div class="w3-row w3-section  w3-row-padding" *ngIf="data.btn_estado_bool">
+                            <button class="w3-button w3-theme w3-right" (click)="comunicar(data)" ng-show="registra">
+                                <i class="fa fa-envelope"></i> Comunicar
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="w3-container">
+                <div class="w3-row w3-section  w3-row-padding">
+                    <div class="w3-col l12">
+                        <label>
+                            <b>Fecha de creación</b>: {{data.fecha_creacion| date:'MMM d, y h:mm:ss a'}}</label>
+                    </div>
+                </div>
+
+                <div class="w3-row w3-section  w3-row-padding">
+                    <div class="w3-col l12">
+                        <label>
+                            <b>Estado de la Solicitud</b>: {{data.est_nom}}</label>
+                    </div>
+                </div>
+
+                <br/>
+
+                <div class="w3-row w3-section  w3-row-padding">
+                    <div class="w3-col l4">
+                        <label>
+                            <b>Cédula:</b>
+                        </label>
+                        <p>{{data.cedula}}</p>
+                    </div>
+                    <div class="w3-col l4">
+                        <label>
+                            <b>Nombre:</b>
+                        </label>
+                        <p>{{data.nombre_principal}}</p>
+                    </div>
+                    <div class="w3-col l4">
+                        <label>
+                            <b>Correo:</b>
+                        </label>
+                        <p>{{data.correo_principal}}</p>
+                    </div>
+                </div>
+
+
+                <hr>
+
+                <div class="w3-row w3-section  w3-row-padding">
+                    <div class="w3-col l4">
+                        <label>
+                            <b>Decano(a):</b>
+                        </label>
+                        <p>{{data.dec_nom}}</p>
+                    </div>
+                </div>
+
+                <div class="w3-row w3-section  w3-row-padding">
+                    <div class="w3-col l4">
+                        <label>
+                            <b>Director:</b>
+                        </label>
+                        <select class="w3-select" [(ngModel)]="data.director" [disabled]="!est_vista">
+                            <option value=""> - Seleccione - </option>
+                            <option *ngFor="let a of profesores| orderBy:'M26NOM'" [value]="a.M26COD" title="{{a.M26NOM}}">{{a.M26NOM|corrector}}</option>
+                        </select>
+                    </div>
+                    <div class="w3-col l4">
+                        <label>
+                            <b>Jurado:</b>
+                        </label>
+                        <select class="w3-select" [(ngModel)]="data.jurado" [disabled]="!est_vista">
+                            <option value=""> - Seleccione - </option>
+                            <option *ngFor="let a of profesores| orderBy:'M26NOM'" [value]="a.M26COD" title="{{a.M26NOM}}">{{a.M26NOM|corrector}}</option>
+                        </select>
+                    </div>
+                    <div class="w3-col l4">
+                        <label>
+                            <b>Jurado alterno:</b>
+                        </label>
+                        <select class="w3-select" [(ngModel)]="data.jurado_alterno" [disabled]="!est_vista">
+                            <option value=""> - Seleccione - </option>
+                            <option *ngFor="let a of profesores| orderBy:'M26NOM'" [value]="a.M26COD" title="{{a.M26NOM}}">{{a.M26NOM|corrector}}</option>
+                        </select>
+                    </div>
+                </div>
+
+                <br/>
+
+                <div class="w3-row w3-section  w3-row-padding">
+                    <div class="w3-col l12">
+                        <label>
+                            <b>Linea de investigación:</b>
+                        </label>
+                        <select class="w3-select" [(ngModel)]="data.id_linea_inv" [disabled]="!est_vista">
+                            <option value=""> - Seleccione - </option>
+                            <option *ngFor="let a of lineaInvestigacion | orderBy:'descripcion'" [value]="a.id_linea_inv" title="{{a.descripcion}}">{{a.descripcion|corrector}}</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="w3-row w3-section  w3-row-padding">
+                    <button class="w3-button w3-theme" (click)="editar(data)" *ngIf="permisos.actualizar == 1" [disabled]="!est_vista">
+                        <i class="fa fa-save"></i> Guardar
+                    </button>
+                </div>
+
+                <hr>
+
+                <div class="w3-row w3-section  w3-row-padding">
+                    <div class="w3-col l12">
+                        <label>
+                            <b>Título:</b>
+                        </label>
+                        <p>{{data.titulo}}</p>
+                    </div>
+                </div>
+
+                <div class="w3-row w3-section  w3-row-padding">
+                    <div class="w3-col l12">
+                        <label>
+                            <b>Tema:</b>
+                        </label>
+                        <p [innerHTML]="data.tema|corrector"></p>
+                    </div>
+                </div>
+
+                <div class="w3-row w3-section  w3-row-padding">
+                    <div class="w3-col l12">
+                        <label>
+                            <b>Descripción del problema de investigación:</b>
+                        </label>
+                        <p [innerHTML]="data.problema_investigar|corrector"></p>
+                    </div>
+                </div>
+
+                <div class="w3-row w3-section  w3-row-padding">
+                    <div class="w3-col l12">
+                        <label>
+                            <b>Razones de la investigación:</b>
+                        </label>
+                        <p [innerHTML]="data.razon_tema|corrector"></p>
+                    </div>
+                </div>
+
+                <div class="w3-row w3-section  w3-row-padding">
+                    <div class="w3-col l12">
+                        <label>
+                            <b>Objetivos general de la investigación:</b>
+                        </label>
+                        <p [innerHTML]="data.obj_general|corrector"></p>
+                    </div>
+                </div>
+
+                <div class="w3-row w3-section  w3-row-padding">
+                    <div class="w3-col l12">
+                        <label>
+                            <b>Objetivos específico de la investigación:</b>
+                        </label>
+                        <p [innerHTML]="data.obj_especifico|corrector"></p>
+                    </div>
+                </div>
+
+                <div class="w3-row w3-section  w3-row-padding">
+                    <div class="w3-col l12">
+                        <label>
+                            <b>Aportes de la investigación:</b>
+                        </label>
+                        <p [innerHTML]="data.aportes|corrector"></p>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div id="mensaje_informativo" class="w3-modal">
+    <div class="w3-modal-content w3-card-4">
+        <header class="w3-container w3-theme-d5 w3-margin-bottom">
+            <h2>{{titulo_modal}}</h2>
+        </header>
+
+        <div class="w3-container">
+            <p [innerHTML]="mensaje"></p>
+        </div>
+        <div class="w3-row w3-section  w3-row-padding">
+                <button class="w3-button w3-medium w3-theme w3-margin" onclick="window.history.back()"> Cerrar</button>
+            </div>
+    </div>
+</div>
+<div id="chat" class="w3-modal">
+    <div class="w3-modal-content w3-card-4">
+        <header class="w3-container w3-theme-d5 w3-margin-bottom">
+            <span onclick="document.getElementById('chat').style.display='none'" class="w3-button w3-display-topright">&times;</span>
+            <h2>{{titulo_modal}}</h2>
+        </header>
+
+        <div class="w3-container container-chat">
+            <div>
+                <blockquote *ngFor="let a of conversacion" class="w3-panel w3-leftbar w3-light-grey">
+
+                    <p [innerHTML]="a.mensaje|corrector" class="w3-large w3-serif">
+                        <i></i>
+                    </p>
+                    <small>{{a.puesto}} :
+                        <cite title="Nombre Apellidos">{{a.nombre | lowercase}}</cite>
+                    </small>
+                    <br/>
+                    <small>{{a.fecha}}</small>
+                </blockquote>
+            </div>
+        </div>
+
+        <button class="w3-button w3-medium w3-theme w3-margin" onclick="document.getElementById('chat').style.display='none'">
+            <i class="fa fa-check"></i> Ok</button>
+    </div>
+</div>
+<div id="historial" class="w3-modal">
+    <div class="w3-modal-content w3-card-4">
+        <header class="w3-container w3-theme-d5 w3-margin-bottom">
+            <span onclick="document.getElementById('historial').style.display='none'" class="w3-button w3-display-topright">&times;</span>
+            <h2>{{titulo_modal}}</h2>
+        </header>
+
+        <div class="w3-container container-chat">
+            <div class="w3-row w3-section  w3-row-padding">
+                <table class="w3-table w3-striped w3-border w3-hoverable">
+                    <tr class="w3-theme-d5">
+                        <th>Estados</th>
+                        <th>Fechas</th>
+                    </tr>
+                    <tr *ngFor="let a of historia_bitacora">
+                        <td>{{a.estado_bitacora}}</td>
+                        <td>{{a.fecha_bitacora|date:'MMM d, y h:mm:ss a'}}</td>
+                    </tr>
+                </table>
+            </div>
+            <!-- <pre>{{historia_bitacora|json}}</pre> -->
+        </div>
+        <button class="w3-button w3-medium w3-theme w3-margin" onclick="document.getElementById('historial').style.display='none'">
+        Cerrar</button>
+
+        <control-skin [estado]="flag_envio" [skin]="1"></control-skin>
+    </div>
+</div>
+<div id="comunicar" class="w3-modal">
+    <div class="w3-modal-content w3-card-4">
+        <header class="w3-container w3-theme-d5 w3-margin-bottom">
+            <span onclick="document.getElementById('comunicar').style.display='none'" class="w3-button w3-display-topright">&times;</span>
+            <h2>{{titulo_modal}}</h2>
+        </header>
+
+        <div class="w3-container">
+            <div class="w3-row w3-section  w3-row-padding">
+                <label>Correo</label>
+                <input class="w3-input" type="text" [(ngModel)]="solicitud.correo_destinatario" maxlength="50" placeholder="Correo" disabled>
+            </div>
+            <div class="w3-row w3-section  w3-row-padding">
+                <label>Mensaje</label>
+                <textarea class="w3-input" type="text" name="mensaje" id="mensaje" rows="6" [(ngModel)]="solicitud.mensaje"></textarea>
+                <i>(Usted Puede modificar este mensaje).</i>
+            </div>
+            <div class="w3-row w3-section  w3-row-padding">
+                <button class="w3-button w3-medium w3-theme w3-margin" (click)="enviar_correo()"> Enviar</button>
+            </div>
+
+        </div>
+        <control-skin [estado]="flag_envio" [skin]="1"></control-skin>
+
+    </div>
+</div>

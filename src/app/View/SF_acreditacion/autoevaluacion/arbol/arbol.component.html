@@ -1,0 +1,101 @@
+
+
+<div  class="w3-margin-bottom w3-card-4 w3-leftbar w3-border-gray" *ngFor="let a of visor | orderBy:'ordenar'">
+
+
+  <div >
+    <div class="w3-row">
+     
+
+
+
+      <div  class="w3-col">
+       
+        <div class="w3-animate-left" >
+          <div style="margin: 0px !important" class="w3-row w3-section panel w3-white w3-card" >
+              <!-- <div style="position: absolute;">
+                  <button (click)="Toggle(a)" class="w3-button w3-green" *ngIf="a.hijos.length > 0">
+                    <i id="{{'fa'+ a.idsecuencia}}" class="fa" [ngClass]="a.ico"></i>
+                  </button>
+              
+                </div> -->
+            <div class="w3-container">
+                
+              <div class="w3-row w3-padding-16" >
+                <div class="w3-rest">
+                  <small>{{a.nombre_pieza +' ' + a.orden + ': '+ a.nombre}}</small>
+                </div>
+              </div>
+              <div class="w3-panel w3-padding-16 w3-light-grey" *ngIf="a.act_descripcion == 1">
+                <small> {{a.descripcion}} </small>
+              </div>
+            </div>
+            <footer class="w3-border-top">
+              <div class="w3-row w3-container">
+                <div class="w3-half">
+                  <div class="">
+                    <div class="w3-row w3-row-padding w3-left">
+                      <div class="w3-bar w3-padding-16">
+                      <button (click)="Toggle(a)" class="w3-button w3-green" *ngIf="a.hijos.length > 0">
+                          <i id="{{'fa'+ a.idsecuencia}}" class="fa" [ngClass]="a.ico"></i>
+                        </button>
+                        <button class="w3-text-white w3-border w3-theme w3-small w3-padding-small" (click)="vista(a, 'ver-evidencias')" *ngIf="a.act_evidencia == 1 || a.act_hallasgo == 1"
+                          style="cursor: pointer;" title="Muestra contenido">
+                          <i class="fa fa-eye"></i> Ver Evidencias
+                        </button>
+                        <button class="w3-text-white w3-border w3-theme w3-small w3-padding-small" (click)="admin(a, 'crear-evidencias')" *ngIf="a.act_evidencia == 1 && permisos.registrar == 1"
+                          style="cursor: pointer;" title="Adjuntar">
+                          <i class="fa fa-paperclip"></i> adjuntar
+                        </button>
+                        <button class="w3-text-white w3-border w3-theme w3-small w3-padding-small" (click)="crear(a,'modal_crea_nodo')" *ngIf="permisos.registrar == 1"
+                          style="cursor: pointer;" title="Crear">
+                          <i class="fa fa-plus"></i> Agregar 
+                        </button>
+                        <button class="w3-text-white w3-border w3-theme w3-small w3-padding-small" (click)="editar(a)" *ngIf="permisos.actualizar == 1"
+                          style="cursor: pointer;" title="Editar">
+                          <i class="fa fa-pencil"></i> Editar</button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="w3-row" *ngIf="a.act_evidencia == 1">
+                <div class="w3-container">
+                  <div class="w3-bar w3-padding-16">
+                    <button class="w3-text-black w3-border w3-white w3-small w3-padding-small" disabled title="Evidencias">
+                      <i class="fa fa-tag"></i> Evidencias:
+                      <strong class="w3-right"> {{a.cant_evidencia}}</strong>
+                    </button>
+                    <button class="w3-text-black w3-border w3-white w3-small w3-padding-small" disabled title="Categoría">
+                      <i class="fa fa-tag"></i> Categoría:
+                      <span class="w3-right w3-tag w3-text-white w3-tiny w3-orange"> {{' ' + a.nom_categoria}}</span>
+                    </button>
+                    <button class="w3-text-black w3-border w3-white w3-small w3-padding-small" disabled title="Criterio">
+                      <i class="fa fa-tag"></i> Criterio:
+                      <span class="w3-right w3-tag w3-text-white w3-tiny w3-orange"> {{' ' + a.nom_cripterio}}</span>
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </footer>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+ 
+
+  <div style="padding: 10px 0px 0px 16px" [ngClass]="a.muestra"  id="{{a.idsecuencia}}" class="w3-container ">
+    
+    <app-arbol [visor]='a.hijos'
+              (Admin)='admin($event)' 
+              (Vista)='vista($event)' 
+              (Crear)='crear($event)' 
+              (Editar)='editar($event)'></app-arbol>
+  </div>
+</div>
+
+
+

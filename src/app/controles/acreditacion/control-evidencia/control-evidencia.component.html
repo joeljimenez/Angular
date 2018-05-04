@@ -1,0 +1,102 @@
+
+<table class="w3-table w3-hoverable w3-bordered" *ngIf="periodoActivo != 0">
+  <tbody>
+    <tr *ngFor="let a of evidencias" (dblclick)="visor(a)" style="cursor: pointer;">
+      <div *ngIf="a.idcarpeta == idcarpeta && a.periodo == periodoActivo">
+
+        <td style="width:1%">
+          <span style="font-size:46px" *ngIf=" a.extencion =='.doc' || a.extencion =='.docx'">
+            <i class="fa fa-file-word-o w3-text-blue"></i>
+          </span>
+          <span style="font-size:46px" *ngIf=" a.extencion =='.pdf'">
+            <i class="fa fa-file-pdf-o w3-text-red"></i>
+          </span>
+          <span style="font-size:46px" *ngIf=" a.extencion =='.ppt' || a.extencion =='.pptx'">
+            <i class="fa fa-file-powerpoint-o w3-text-red"></i>
+          </span>
+          <span style="font-size:46px" *ngIf=" a.extencion =='.xls' || a.extencion =='.xlsx'">
+            <i class="fa fa-file-excel-o w3-text-green"></i>
+          </span>
+          <span style="font-size:46px" *ngIf=" a.extencion =='.rar'">
+            <i class="fa fa-file-archive-o w3-text-gray"></i>
+          </span>
+          <span style="font-size:46px" *ngIf=" a.extencion =='.video'">
+            <i class="fa fa-youtube-play w3-text-red"></i>
+          </span>
+          <span style="font-size:46px" *ngIf=" a.extencion =='.png' || a.extencion =='.jpg' || a.extencion == '.jpeg'">
+            <i class="fa fa-file-picture-o w3-text-blue"></i>
+          </span>
+          <span style="font-size:46px" *ngIf=" a.extencion =='.link'">
+            <i class="fa fa-chain w3-text-blue"></i>
+          </span>
+        </td>
+
+        <td class="issue-info" style="vertical-align: middle;">
+          <a>
+            {{a.nombre }}
+          </a>
+          <br>
+          <small class="w3-opacity">
+            Doble clic para abrir la evidencia
+          </small>
+        </td>
+
+        <td class="w3-right" style="vertical-align: middle;" *ngIf="gestionar">
+          <button *ngIf="permisos.eliminar == 1" class="w3-button w3-red w3-tiny w3-right w3-hover-white" (click)="eliminar_evidencia(a)">
+            <i class="fa fa-remove"></i>
+          </button>
+          <button *ngIf="permisos.actualizar == 1" class="w3-button w3-green w3-tiny w3-right w3-hover-white" (click)="editar_archivo(a)">
+            <i class="fa fa-edit"></i>
+          </button>
+        </td>
+      </div>
+    </tr>
+
+  </tbody>
+</table>
+
+<div id="reporte" class="w3-modal inmodal">
+  <div class="w3-modal-content w3-animate-right w3-card-4" style="width: 1235px!important;top: -40px">
+    <header class="w3-container w3-center w3-theme">
+      <span (click)="cirre_visor()" class="w3-button w3-display-topright">&times;</span>
+      <div class="w3-padding-16">
+        <h5>{{nombre_doc}}</h5>
+      </div>
+    </header>
+    <div class="">
+      <div class="embed-container w3-border-grey" style="padding-bottom: 100% !important">
+        <iframe class="ulat-scroll" id="iframe" [hidden]="!pdf" src="" style="position: absolute;top: 0;left: 0; width: 100%;height: 100%; border:none"></iframe>
+        <img id="imagenes" [hidden]="!img" src="" style="width:100%" />
+        <div id="vdo" [hidden]="!vdo"></div>
+        <!-- <iframe width="560" height="415" frameborder="0" allowfullscreen [src]=" printPdf | htmlConvert"></iframe> -->
+      </div>
+    </div>
+  </div>
+</div>
+
+<div id="formulario_evidencia" class="w3-modal inmodal">
+  <div class="w3-modal-content w3-animate-right w3-card-4" style="width: 1235px!important;top: -40px">
+    <header class="w3-container w3-center w3-theme">
+      <span onclick="document.getElementById('formulario_evidencia').style.display = 'none'" class="w3-button w3-display-topright">&times;</span>
+      <div class="w3-padding-16">
+        <h5>Renombrar Archivo</h5>
+      </div>
+    </header>
+    <div class="">
+      <div class="w3-row w3-section w3-container">
+        <div class="w3-section w3-col m12">
+          <label class="w3-tag w3-small w3-theme">Nombre del archivo</label>
+          <input class="w3-input w3-border" type="text" [(ngModel)]="solicitud.descripcion" maxlength="50" placeholder="">
+        </div>
+        <div class="w3-section w3-col m12">
+          <button class="w3-button" onclick="document.getElementById('formulario_evidencia').style.display = 'none'">
+            Cerrar
+          </button>
+          <button *ngIf="permisos.registrar == 1" class="w3-button w3-theme" (click)="guardar()">
+            <i class="fa fa-save"></i> Guardar
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

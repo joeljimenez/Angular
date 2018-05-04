@@ -1,0 +1,177 @@
+<simple-notifications [options]="options"></simple-notifications>
+<control-skin [skin]="1" [estado]="flag_envio"></control-skin>
+
+
+<div class="contenedor" *ngIf="!loading">
+     <div *ngIf="!confirmacion">
+            <div class="w3-row-padding w3-padding-16 w3-animate-bottom">
+            <div class="w3-container w3-card w3-white w3-margin-bottom">
+                    <div>
+                    <h5>Evaluación</h5>
+                    </div>
+                    <hr>
+                    <div class="w3-row-padding">
+                        <div class="w3-col s12 m6 l6">
+                            <dl class="dl-horizontal">
+                                <!-- '?' verifica si los valores están presentes y luego mostrar -->
+                            <dt>Nombre de empleado: </dt>
+                            <dd>{{encabezado_pagina?.nombre}}</dd>
+                            <dt>Puesto: </dt>
+                            <dd>{{encabezado_pagina?.puesto}}</dd>
+                            <dt>Departamento:</dt>
+                            <dd>{{encabezado_pagina?.departamento}}</dd>
+                            <dt>Período de revisión:</dt>
+                            <dd>{{encabezado_pagina?.anno +'-'+ encabezado_pagina?.periodo}}</dd>
+                            </dl>
+                        </div>
+                        <div class="w3-col s12 m6 l6">
+                            <dl class="dl-horizontal">
+        
+                                <dt>Id. de empleado:</dt>
+                                <dd>{{encabezado_pagina?.idempleado}}</dd>
+                                <dt>Fecha:</dt>
+                                <dd> {{encabezado_pagina?.fecha_evaluacion | date:'MMM d, y h:mm:ss a'}}</dd>
+        
+                            </dl>
+                        </div>
+                    </div>
+        
+        
+                    <table class="w3-table w3-bordered" *ngFor="let a of form; let i = index">
+                        <thead>
+                            <tr>
+                                <th class="w3-center" [colSpan]="a.long + 1">
+                                    {{a.descripcion}}
+                                </th>
+                            </tr>
+                            <tr class="w3-light-grey">
+                                <th class="w3-center"style="width:30%">
+                                    ÁREA DE DESEMPEÑO
+                                <!--muestras-->
+                                <a class="w3-button w3-circle w3-white pull-right" (click)="muestra_info(a.encabezado)">
+                                    <i class="fa fa-question w3-text-teal"></i>
+                                </a>
+                                </th>
+                                <!-- enlista las opciones de respuesta -->
+                                <th style="width:190px" class="w3-center" *ngFor="let b of a.encabezado">
+                                {{b.nom_resp }}</th>
+                            </tr>
+                        </thead>
+                        <tbody *ngFor="let c of a.cuerpo">
+                            <tr class="w3-theme">
+                                <th class="w3-center" [colSpan]="a.long + 1">{{c.area_evaluacion}}</th>
+                            </tr>
+                            <tr *ngFor="let d of c.preguntas">
+                                <td class="w3-theme">{{d.pregunta}}</td>
+                                <td class="w3-center" *ngFor="let e of d.opciones | orderBy:'ord_resp'">
+                                    <span *ngIf="d.idtipo_respuesta != 3">
+                                        <div *ngIf="d.contesta_evaluado == 1">
+                                            <i class="w3-text-blue fa fa-check" *ngIf="e.respuesta == true"></i>
+                                            <span *ngIf="e.respuesta == false">
+                                                    <i style="cursor:pointer" class="fa fa-circle-o-notch" (click)="inserte_respuesta_evaluacion(e)"></i>
+                                            </span>
+        
+                                        </div>
+                                        <div *ngIf="d.contesta_evaluado == 0">
+                                            <i class="w3-text-blue fa fa-check" *ngIf="e.respuesta == true"></i>
+                                        </div>
+                                    </span>
+                                    <span *ngIf="d.idtipo_respuesta == 3">
+                                        <div *ngIf="d.contesta_evaluado == 1">
+                                            <textarea type="text" placeholder="Respuesta" class="w3-input" maxlength="2000" rows="4" [(ngModel)]="e.resouesta_texto"></textarea>
+                                            <span *ngIf="e.envio == 0 && confirmacion == false">
+                                                <label class="w3-button w3-circle w3-theme"  (click)="inserte_respuesta_evaluacion(e)"><i class="fa fa-save"></i></label>
+                                            </span>
+                                        </div>
+                                        <div *ngIf="d.contesta_evaluado == 0">
+                                            <textarea type="text" placeholder="Respuesta" class="w3-input" maxlength="2000" rows="4" [(ngModel)]="e.resouesta_texto" disabled></textarea>
+                                        </div>
+                                    </span>
+                                </td>
+                                <th class="w3-center w3-theme" *ngIf="d.idtipo_respuesta != 3">
+                                        <samp>{{d.pts_resp}}</samp>
+                                </th>
+                            </tr>
+                            </tbody>
+                            <thead *ngIf="a.idtipo_respuesta != 3">
+                                <tr class="bg-muted">
+                                    <th class="w3-center">
+                                        <!-- {{'ÁREA DE DESEMPEÑO'}}
+                                            <button type="button" class="btn btn-primary btn-circle pull-right" data-toggle="modal" data-target="#myModal" ng-click="muestra_info($index)">
+                                                <i class="fa fa-question"></i>
+                                            </button> -->
+                                    </th>
+                                    <th style="width:150px" class="w3-center" *ngFor="let b of a.encabezado">
+                                        <!-- {{b.nom_resp }} -->
+                                    </th>
+                                    <th class="text-center bg-primary">
+                                        <samp>{{a.puntaje}}</samp>
+                                    </th>
+                                </tr>
+                            </thead>
+                    </table>
+        
+        
+                    <div class="w3-row-padding w3-padding-16 w3-center">
+                        <button class="w3-button w3-theme" (click)="muestra_confirmacion()" *ngIf="activa_btn_enviar">
+                            Confirmación
+                        </button>
+                    </div>
+            </div>
+            </div>
+        
+            <div id="info" class="w3-modal inmodal">
+                <div class="w3-modal-content w3-animate-right w3-card-4">
+                    <header class="w3-container w3-center w3-theme">
+                    <span onclick="document.getElementById('info').style.display='none'" class="w3-button w3-display-topright">&times;</span>
+                    <div class="w3-padding-16">
+                        <i class="fa fa-laptop modal-icon"></i>
+                        <h4 class="modal-title">{{titulo_modal}}</h4>
+                        <small class="font-bold">{{mensaje}}</small>
+                    </div>
+                    </header>
+                    <div class="w3-container">
+                        <div class="w3-row w3-row-padding w3-margin-bottom">
+                            <table class="w3-table w3-striped">
+                                <thead>
+                                        <tr>
+                                            <th>Opción</th>
+                                            <th>Descripción</th>
+                                            <th>Puntos</th>
+                                        </tr>
+                                </thead>
+                                <tr *ngFor="let c of filtro_opcion">
+                                        <td>{{c.nom_resp}}</td>
+                                        <td>{{c.desc_resp}}</td>
+                                        <td>{{c.pts_resp + ' pts.'}}</td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div id="confirmacion" class="w3-modal inmodal">
+                <div class="w3-modal-content w3-animate-right w3-card-4">
+                    <header class="w3-container w3-center w3-theme">
+                    <span onclick="document.getElementById('confirmacion').style.display='none'" class="w3-button w3-display-topright">&times;</span>
+                    <div class="w3-padding-16">
+                        <i class="fa fa-laptop modal-icon"></i>
+                        <h4 class="modal-title">{{titulo_modal}}</h4>
+                    </div>
+                    </header>
+                    <div class="w3-container">
+                        <div class="w3-row w3-row-padding w3-margin-bottom">
+                            <p [innerHTML] ="mensaje"></p>
+                        </div>
+                    <button class="w3-btn w3-medium"onclick="document.getElementById('confirmacion').style.display='none'"> Cerrar</button>
+                    <button class="w3-btn w3-medium w3-theme w3-margin" (click)="run()" *ngIf="!flag_envio"><i class="fa fa-save"></i> Ok</button>
+                    </div>
+                </div>
+            </div>
+     </div>
+    <div class="" *ngIf="confirmacion">
+        <div class="embed-container w3-border-grey">
+            <iframe width="560" height="415" frameborder="0" allowfullscreen [src]=" printPdf | htmlConvert"></iframe>
+        </div>
+    </div>
+</div>

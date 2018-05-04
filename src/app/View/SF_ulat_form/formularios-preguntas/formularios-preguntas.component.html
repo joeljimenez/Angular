@@ -1,0 +1,247 @@
+<simple-notifications [options]="options"></simple-notifications>
+<control-skin [skin]="1" [estado]="flag_envio"></control-skin>
+<app-nav [titulo]="titulo" [breadcrumb]="breadcrumbArray"></app-nav>
+
+  
+<!-- matriz -->
+<div class="w3-container w3-animate-bottom">
+    <div class="w3-panel w3-padding-32 w3-white w3-card">
+        <div class="w3-row">
+            <div class="w3-responsive">
+                <table class="w3-table w3-bordered">
+                    <tr class="w3-theme">
+                        <th colspan="2">
+                            Crear area de evaluacion
+                            <a class="w3-button w3-circle w3-white pull-right" title="Crear area de evaluación" (click)="crear_area_evaluacion()" *ngIf="permisos.registrar == 1">
+                                <i class="fa fa-plus w3-text-teal"></i>
+                            </a>
+                        </th>
+                    </tr>
+                    
+                    <tr class="w3-theme-d1" *ngFor="let ar of areas">
+                        <th class="w3-center">
+                            {{ar.area_evaluacion}}
+                            <a (click)="elimina_area_evaluacion(ar)" class="w3-button w3-white w3-circle pull-right text-primary" title="Eliminar area de evaluación" *ngIf="permisos.eliminar == 1">
+                                <i class="fa fa-trash" style="color:#ff0000"></i>
+                            </a>
+                            <a (click)="editar_area_evaluacion(ar)" class="w3-button w3-white w3-circle pull-right text-primary" title="Editar area de evaluación" *ngIf="permisos.actualizar == 1">
+                                <i class="fa fa-edit" style="color:#005589"></i>
+                            </a>
+                        </th>
+                        <th class="text-center" style="width:190px" >
+                            Crear Pregunta
+                            <a (click)="crear_preguntas(ar)" class="w3-button w3-white w3-circle pull-right text-primary" title="Crear Preguntas" *ngIf="permisos.registrar == 1">
+                                <i class="fa fa-plus" style="color:#005589"></i>
+                            </a>
+                        </th>
+                    </tr>
+                </table>
+            </div>
+            <div class="w3-responsive">
+                <table class="w3-table w3-bordered w3-border" *ngFor="let a of form; let i = index">
+                    <thead>
+                        <!-- Descripcion de las opciones -->
+                        <tr>
+                            <th class="w3-center" [colSpan]="a.long + 1">
+                                {{a.descripcion}}
+                            </th>
+                        </tr>
+                        <!-- encabezado del formulario -->
+                        <tr class="w3-light-grey">
+                            <th class="w3-center"style="width:30%">
+                                ÁREA DE DESEMPEÑO
+                                <!-- boton de ayuda muestra las puntuaciones por opcion-->
+                                <a class="w3-button w3-circle w3-white pull-right" (click)="muestra_info(a.encabezado)" title="Muestra Información">
+                                        <i class="fa fa-question w3-text-teal"></i>
+                                </a>
+                            </th>
+                            <!-- enlista las opciones de respuesta -->
+                            <th class="w3-center" style="width:190px" *ngFor="let b of a.encabezado"> 
+                                {{b.nom_resp}}
+                            </th>
+                            <th class="text-center" style="width:150px"></th>
+                        </tr>
+                    </thead>
+                    <tbody *ngFor="let c of a.cuerpo| orderBy:'orden'"><!--order by-->
+                        <!-- edita area de evaluacion con preguntas -->
+                        <tr class="w3-theme">
+                            <th class="w3-center" [colSpan]="a.long + 1">
+                                {{c.area_evaluacion}}
+                                <a class="w3-button w3-circle w3-white pull-right" (click)="editar_area_evaluacion(c)" title="Editar area de evaluación" *ngIf="permisos.actualizar == 1">
+                                    <i class="fa fa-edit w3-text-teal"></i>
+                                </a>
+                            </th>
+                            <!-- crea pregunta en el area -->
+                            <th class="w3-center">
+                                Crear Pregunta
+                                <a class="w3-button w3-circle w3-white pull-right" (click)="crear_preguntas(c)" title="Crear preguntas" *ngIf="permisos.registrar == 1">
+                                    <i class="fa fa-plus w3-text-teal"></i>
+                                </a>
+                            </th>
+                        </tr>
+                        <!-- Enlista las preguntas 1234 -->
+                        <tr *ngFor="let d of c.preguntas">
+                            <!-- Preguntas -->
+                            <td class="">{{d.pregunta}}</td>
+                            <td  class="w3-center" *ngFor="let e of d.opciones| orderBy:'ord_resp'">
+                                <span  *ngIf="d.idtipo_respuesta !== 3">
+                                    <!-- respuesta seleccionada-->
+                                    <i class="text-danger fa fa-times" *ngIf="e.respuesta == true"></i>
+                                    <!-- respuesta no seleccionada -->
+                                    <i class="fa fa-minus" *ngIf="e.respuesta == false"></i>
+                                </span>
+                                <span  *ngIf="d.idtipo_respuesta == 3">
+                                    <textarea type="text" placeholder="Respuesta" class="w3-input" maxlength="2000" rows="4"></textarea>
+                                </span>
+                            </td>
+                            
+                            <th class="w3-center w3-theme" style="width:15%" >
+                                Pregunta
+                                <a class="w3-button w3-circle w3-white pull-right" (click)="elimina_pregunta(d)" title="Elimina pregunta" *ngIf="permisos.eliminar == 1">
+                                    <i class="fa fa-trash w3-text-red"></i>
+                                </a>
+                                <a class="w3-button w3-circle w3-white pull-right" (click)="editar_preguntas(d)" title="Editar pregunta" *ngIf="permisos.actualizar == 1">
+                                    <i class="fa fa-edit w3-text-teal"></i>
+                                </a>
+                            </th>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<!-- ventanas modals -->
+
+<div id="info" class="w3-modal inmodal">
+    <div class="w3-modal-content w3-animate-right w3-card-4">
+        <header class="w3-container w3-center w3-theme"> 
+        <span onclick="document.getElementById('info').style.display='none'" class="w3-button w3-display-topright">&times;</span>
+        <div class="w3-padding-16">
+            <i class="fa fa-laptop modal-icon"></i>
+            <h4 class="modal-title">{{titulo_modal}}</h4>
+            <small class="font-bold">{{mensaje}}</small>
+        </div>
+        </header>
+        <div class="w3-container">
+            <div class="w3-row w3-row-padding w3-margin-bottom">
+                <table class="w3-table w3-striped">
+                    <thead>
+                            <tr>
+                                <th>Opción</th>
+                                <th>Descripción</th>
+                                <th>Puntos</th>
+                            </tr>
+                    </thead>
+                    <tr *ngFor="let c of filtro_opcion">
+                            <td>{{c.nom_resp}}</td>
+                            <td>{{c.desc_resp}}</td>
+                            <td>{{c.pts_resp + ' pts.'}}</td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="eliminar" class="w3-modal inmodal">
+        <div class="w3-modal-content w3-animate-right w3-card-4">
+            <header class="w3-container w3-center w3-theme"> 
+            <span onclick="document.getElementById('eliminar').style.display='none'" class="w3-button w3-display-topright">&times;</span>
+            <div class="w3-padding-16">
+                <i class="fa fa-users modal-icon"></i>
+                <h4 class="modal-title">{{titulo_modal}}</h4>
+            </div>
+            </header>
+            <div class="w3-container">
+                <div class="w3-panel w3-margin w3-padding-24 w3-light-grey">
+                    <div class="w3-row w3-section  w3-row-padding">
+                            {{mensaje}}
+                    </div>
+                </div>
+                <button class="w3-btn w3-medium"onclick="document.getElementById('eliminar').style.display='none'"> NO</button>
+                <button class="w3-btn w3-medium w3-theme w3-margin" (click)="run()" *ngIf="!flag_envio">SI</button>      
+            </div>
+        </div>
+</div>
+
+<div id="area_evaluacion" class="w3-modal inmodal">
+        <div class="w3-modal-content w3-animate-right w3-card-4">
+            <header class="w3-container w3-center w3-theme"> 
+            <span onclick="document.getElementById('area_evaluacion').style.display='none'" class="w3-button w3-display-topright">&times;</span>
+            <div class="w3-padding-16">
+                <i class="fa fa-globe modal-icon"></i>
+                <h4 class="modal-title">{{titulo_modal}}</h4>
+            </div>
+            </header>
+            <div class="w3-container">
+              <div class="w3-panel w3-margin w3-padding-24 w3-light-grey">
+                  <div class="w3-row w3-section  w3-row-padding">
+                      <div class="w3-col l12 m12">
+                        <label>Nombre del área</label>
+                        <input class="w3-input" type="text" maxlength="100" placeholder="Nombre del área" [(ngModel)]="solicitud.nombre">
+                      </div>
+                  </div>
+                  <div class="w3-row w3-section  w3-row-padding">
+                        <div class="w3-col l12 m12">
+                            <label>Posiscion del area</label>
+                            <input class="w3-input" type="number" maxlength="3" placeholder="Posiscion del area"[(ngModel)]="solicitud.orden">
+                        </div>
+                  </div>
+              </div>
+              <button class="w3-btn w3-medium"onclick="document.getElementById('area_evaluacion').style.display='none'"> Cerrar</button>
+              <button class="w3-btn w3-medium w3-theme w3-margin" (click)="run()" *ngIf="!flag_envio"><i class="fa fa-save"></i> Guardar</button>
+    
+            </div>
+        </div>
+</div>
+
+<div id="preguntas" class="w3-modal inmodal">
+        <div class="w3-modal-content w3-animate-right w3-card-4">
+            <header class="w3-container w3-center w3-theme"> 
+            <span onclick="document.getElementById('preguntas').style.display='none'" class="w3-button w3-display-topright">&times;</span>
+            <div class="w3-padding-16">
+                <i class="fa fa-globe modal-icon"></i>
+                <h4 class="modal-title">{{titulo_modal}}</h4>
+                <small>{{mensaje}}</small>
+            </div>
+            </header>
+            <div class="w3-container">
+              <div class="w3-panel w3-margin w3-padding-24 w3-light-grey">
+                    <div class="w3-row w3-section  w3-row-padding">
+                        <div class="w3-col l12 m12">
+                            <label>Tipo de Formulario</label>
+                            <select class="w3-select" name="tipoFormulario" [(ngModel)]="solicitud.idtipo_respuesta">
+                                <option value="0" disabled selected> - Seleccione - </option>
+                                <option *ngFor="let a of tipo_respuesta| orderBy: '-cantidad'" [value]="a.idtipo_respuesta">{{a.nombre}}</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="w3-row w3-section  w3-row-padding">
+                            <div class="w3-col l12 m12">
+                                <label>Pregunta</label>
+                                <input [(ngModel)]="solicitud.nombre" class="w3-input" type="text"  placeholder="Pregunta">
+                            </div>
+                    </div>
+                    <div class="w3-row w3-section  w3-row-padding">
+                            <div class="w3-col l12 m12">
+                                <strong>Active si esta pregunta la contestara el Evaluado.</strong>
+                                <br>
+                                <label class="switch">
+                                    <input type="checkbox" [(ngModel)]="solicitud.contesta_evaluado">
+                                    <span class="slider round"></span>
+                                </label>
+                            </div>
+                    </div>
+              </div>
+              <button class="w3-btn w3-medium"onclick="document.getElementById('preguntas').style.display='none'"> Cerrar</button>
+              <button class="w3-btn w3-medium w3-theme w3-margin" (click)="run()" *ngIf="!flag_envio"><i class="fa fa-save"></i> Guardar</button>
+    
+            </div>
+        </div>
+</div>
+
+

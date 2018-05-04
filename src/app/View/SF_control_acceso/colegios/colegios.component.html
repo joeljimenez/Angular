@@ -1,0 +1,158 @@
+<simple-notifications [options]="options"></simple-notifications>
+<control-skin [skin]="1" [estado]="flag_envio"></control-skin>
+<app-nav [titulo]="titulo" [breadcrumb]="breadcrumbArray" [btnCrear]="true" (Crear)="crear()"></app-nav>
+<!-- <app-nav [titulo]="titulo" [breadcrumb]="breadcrumbArray" [btnCrear]="true" (Crear)="crear()"></app-nav> -->
+<!-- para agreghar los permisos agregar otrio imput para enviarle el tru o el false -->
+<div class="w3-container w3-animate-bottom">
+  <div class="w3-panel w3-padding-32 w3-white w3-card">
+    <div class="w3-row">
+      <div class="w3-section w3-row-padding w3-half">
+        <div class="w3-col" style="width:50px">
+          <i class="w3-xxlarge fa fa-search" style="color: #0182c0"></i>
+        </div>
+        <div class="w3-rest">
+          <input type="text" placeholder="Buscar Compañia" class="w3-input w3-border" [(ngModel)]="filtro">
+        </div>
+      </div>
+      <table class="w3-table w3-striped w3-border w3-hoverable">
+
+
+        <tr class="w3-theme-d5">
+          <th>Nombre de Compañia</th>
+          <th>Siglas</th>
+          <th class="w3-center">Sedes</th>
+          <th class="w3-center" colspan="2">Eventos</th>
+        </tr>
+
+        <tr *ngFor="let a of respuesta|orderBy:'idsede'|filterBy: ['nombre', 'siglas']: filtro">
+          <td>{{a.nombre}}</td>
+          <td>{{a.siglas}}</td>
+          <td class="w3-center">
+            <button class="w3-button w3-theme" (click)="open(a)">
+              <i class="fa fa-plus"></i>
+            </button>
+          </td>
+          <td class="w3-center">
+
+            <button class="w3-button w3-theme" (click)="editar(a)" *ngIf="permisos.actualizar == 1">
+              <i class="fa fa-pencil"></i>
+            </button>
+            <button class="w3-button w3-theme" (click)="eliminar(a)" *ngIf="permisos.eliminar == 1">
+              <i class="fa fa-trash-o"></i>
+            </button>
+          </td>
+        </tr>
+      </table>
+    </div>
+  </div>
+</div>
+
+<div id="formulario" class="w3-modal">
+  <div class="w3-modal-content w3-animate-right w3-card-4">
+    <header class="w3-container w3-theme-d5 w3-margin-bottom">
+      <span onclick="document.getElementById('formulario').style.display='none'" class="w3-button w3-display-topright">&times;</span>
+      <h2>{{titulo_modal}}</h2>
+    </header>
+
+    <div class="w3-container">
+      <div class="">
+
+        <div class="w3-row w3-section  w3-row-padding">
+          <div class="w3-col l8 m8">
+            <label>Nombre del colegio</label>
+            <input class="w3-input" type="text" [(ngModel)]="solicitud.nombre" maxlength="150" placeholder="Nombre del colegio">
+          </div>
+          <div class="w3-col l4 m4">
+            <label>Siglas</label>
+            <input class="w3-input" type="text" [(ngModel)]="solicitud.siglas" maxlength="60" placeholder="Siglas del colegio">
+          </div>
+        </div>
+
+        <div class="w3-row w3-section  w3-row-padding">
+          <div class="w3-col l12 m12">
+            <label>Registro fiscal</label>
+            <input class="w3-input" type="text" [(ngModel)]="solicitud.registro_fiscal" maxlength="150" placeholder="Registro fiscal">
+          </div>
+        </div>
+        <div class="w3-row w3-section  w3-row-padding">
+          <div class="w3-col l8 m8">
+            <label>Email</label>
+            <input class="w3-input" type="text" [(ngModel)]="solicitud.email" maxlength="60" placeholder="Email">
+          </div>
+          <div class="w3-col l4 m4">
+            <label>Teléfono</label>
+            <input class="w3-input" type="text" [(ngModel)]="solicitud.telefono" maxlength="25" placeholder="Teléfono">
+          </div>
+        </div>
+        <div class="w3-row w3-section  w3-row-padding">
+          <div class="w3-col l12 m12">
+            <label>Dirección</label>
+            <input class="w3-input" type="text" [(ngModel)]="solicitud.direccion" maxlength="150" placeholder="Dirección">
+          </div>
+        </div>
+        <div class="w3-row w3-section  w3-row-padding">
+          <div class="w3-col l4 m4">
+            <label>Web</label>
+            <input class="w3-input" type="text" [(ngModel)]="solicitud.web" maxlength="60" placeholder="Dirección web">
+          </div>
+          <div class="w3-col l4 m4">
+            <label>Facebook</label>
+            <input class="w3-input" type="text" [(ngModel)]="solicitud.facebook" maxlength="150" placeholder="Dirección de Facebook">
+          </div>
+          <div class="w3-col l4 m4">
+            <label>Twitter</label>
+            <input class="w3-input" type="text" [(ngModel)]="solicitud.twitter" maxlength="150" placeholder="Dirección de Twitter">
+          </div>
+        </div>
+        <div class="w3-row w3-section  w3-row-padding">
+          <div class="w3-col l4 m4">
+            <label>Color Primario</label>
+            <input class="w3-input" type="text" [(ngModel)]="solicitud.color_primario" maxlength="25" placeholder="Color Primario">
+          </div>
+          <div class="w3-col l4 m4">
+            <label>Color Secundario</label>
+            <input class="w3-input" type="text" [(ngModel)]="solicitud.color_secundario" maxlength="25" placeholder="Color Secundario">
+          </div>
+          <div class="w3-col l4 m4">
+            <label>Color Extra</label>
+            <input class="w3-input" type="text" [(ngModel)]="solicitud.color_extra" maxlength="25" placeholder="Color Extra">
+          </div>
+        </div>
+        <div class="w3-row w3-section  w3-row-padding">
+          <div class="w3-col l12 m12">
+            <label>Ruta de imagen</label>
+            <input class="w3-input" type="text" [(ngModel)]="solicitud.ruta_imagen" maxlength="25" placeholder="Ruta de la imagen">
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+
+
+    <button class="w3-button w3-medium w3-theme w3-margin" (click)="run()" *ngIf="!flag_envio">
+      <i class="fa fa-save"></i> Guardar</button>
+    <div class="w3-panel w3-orange">
+      <h2 class="w3-opacity">{{mensaje_error}}</h2>
+    </div>
+  </div>
+</div>
+
+<div id="eliminar" class="w3-modal">
+  <div class="w3-modal-content w3-animate-right w3-card-4">
+    <header class="w3-container w3-theme-d5 w3-margin-bottom">
+      <span onclick="document.getElementById('eliminar').style.display='none'" class="w3-button w3-display-topright">&times;</span>
+      <h2>{{titulo_modal}}</h2>
+    </header>
+
+    <div class="w3-container">
+      <p>Desea Eliminar el Colegio: {{solicitud.nombre}}</p>
+
+    </div>
+
+    <button class="w3-button w3-medium w3-theme w3-margin" (click)="run()" *ngIf="!flag_envio">
+      <i class="fa fa-trash-o"></i> Eliminar</button>
+    <control-skin [estado]="flag_envio" [skin]="1"></control-skin>
+
+  </div>
+</div>

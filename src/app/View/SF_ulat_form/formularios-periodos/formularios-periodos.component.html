@@ -1,0 +1,159 @@
+<control-skin [skin]="1" [estado]="flag_envio"></control-skin>
+<simple-notifications [options]="options"></simple-notifications>
+<app-nav [titulo]="titulo" [breadcrumb]="breadcrumbArray" [btnCrear]="true" (Crear)="crear()"></app-nav>
+
+
+<div class="w3-container w3-animate-bottom">
+    <div class="w3-panel w3-padding-32 w3-white w3-card">
+        <div class="w3-row">
+            <div class="w3-row w3-section  w3-row-padding">
+                <div class="w3-col l8 m8">
+                    <input class="w3-input" type="text" [(ngModel)]="filtro" placeholder="Año">
+                </div>
+                <a class="w3-btn w3-theme">
+                    <i class="fa fa-search"></i> Search
+                </a>
+            </div>
+        </div>
+        <div class="w3-row">
+                <div class="w3-container  w3-margin-bottom" *ngFor="let a of periodos | orderBy:'-anno' | filterBy: ['anno']: filtro">
+                    <!-- PERSONAL A EVALUAR -->
+                    <h3 class="w3-text-grey w3-padding-16">
+                        Año: {{a.anno}}
+                    </h3>
+                    
+                    <div class="w3-panel w3-center w3-light-grey">
+                        <div class="w3-card w3-white w3-col s11 m11 l2 w3-margin" *ngFor="let b of a.periodos">
+            
+                            <i class="fa fa-circle pull-left" style="color:#00ff21; cursor:pointer" (click)="cambia_estado(b)" *ngIf="b.estado == 1"> <strong>Periodo Activo</strong></i>
+                            <i class="fa fa-circle-o pull-left" style="cursor:pointer" (click)="cambia_estado(b)" *ngIf="b.estado == 0"></i>
+            
+                            <div class="w3-dropdown-hover w3-right">
+                                <button class="w3-btn w3-theme"><i class="fa fa-ellipsis-v"></i></button>
+                                <div class="w3-dropdown-content w3-bar-block w3-border" style="right:0">
+                                    <a (click)="eliminar(b)" *ngIf="permisos.eliminar == 1" class="w3-bar-item w3-button"><i class="fa fa-remove"></i> Eliminar</a>
+                                    <a (click)="aviso(b)" *ngIf="b.estado == 1" class="w3-bar-item w3-button"><i class="fa fa-envelope"></i> Enviar Aviso</a>
+                                    <a (click)="open(b)" *ngIf="b.cantidad > 0" class="w3-bar-item w3-button"><i class="fa fa-folder"></i> Evaluaciones</a>
+                                </div>
+                                </div>
+                                <br>
+                            <div class="w3-text-grey w3-padding">
+                                <h5><strong>Evaluaciones:<br> {{b.cantidad}}</strong></h5>
+                                <div class="font-bold">
+                                    Periodo {{b.periodo}}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <hr>
+                </div>
+        </div>
+    </div>
+</div>
+
+<div id="eliminar" class="w3-modal inmodal">
+        <div class="w3-modal-content w3-animate-right w3-card-4">
+            <header class="w3-container w3-center w3-theme"> 
+            <span onclick="document.getElementById('eliminar').style.display='none'" class="w3-button w3-display-topright">&times;</span>
+            <div class="w3-padding-16">
+                <i class="fa fa-list-alt modal-icon"></i>
+                <h4 class="modal-title">{{titulo_modal}}</h4>
+            </div>
+            </header>
+            <div class="w3-container">
+              <div class="w3-panel w3-margin w3-padding-24 w3-light-grey">
+                  <div class="w3-row w3-section  w3-row-padding">
+                        {{mensaje}}
+                  </div>
+              </div>
+    
+    
+              <button class="w3-btn w3-medium"onclick="document.getElementById('eliminar').style.display='none'"> NO</button>
+              <button class="w3-btn w3-medium w3-theme w3-margin" (click)="run()"> Si</button>
+                  <control-skin [estado]="flag_envio" [skin]="1"></control-skin>
+            </div>
+        </div>
+</div>
+
+<div id="aviso" class="w3-modal inmodal">
+        <div class="w3-modal-content w3-animate-right w3-card-4">
+            <header class="w3-container w3-center w3-theme"> 
+            <span onclick="document.getElementById('aviso').style.display='none'" class="w3-button w3-display-topright">&times;</span>
+            <div class="w3-padding-16">
+                <i class="fa fa-list-alt modal-icon"></i>
+                <h4 class="modal-title">CORREOS DE EVALUADORES</h4>
+            </div>
+            </header>
+            <div class="w3-container">
+              <div class="w3-panel w3-margin w3-padding-24 w3-light-grey">
+                  <div class="w3-row w3-section  w3-row-padding">
+                    <p>
+                        Enviar correo para el periodo {{solicitud.periodo}} del año {{solicitud.anno}}
+                    </p>
+                    <p>
+                        Estos son los correos de todos los evaluadores de esta universidad, copie el contenido, péguelo en el destino del correo y envíelo.
+                    </p>
+                    <p>{{correos}}</p>    
+                    <br>Mensaje:
+                    <p>Buenos “días o tarde”  jefes de departamento.</p>
+                    <p>Ya se encuentra activo el periodo {{solicitud.periodo}} del año {{solicitud.anno}} , para la evaluación al personal.</p>
+                    <p>Atte. </p>
+
+                  </div>
+              </div>
+              <button class="w3-btn w3-medium w3-theme w3-margin" onclick="document.getElementById('aviso').style.display='none'"> Listo</button>
+                  <control-skin [estado]="flag_envio" [skin]="1"></control-skin>
+            </div>
+        </div>
+</div>
+
+
+<div id="formulario" class="w3-modal inmodal">
+        <div class="w3-modal-content w3-animate-right w3-card-4">
+            <header class="w3-container w3-center w3-theme"> 
+            <span onclick="document.getElementById('formulario').style.display='none'" class="w3-button w3-display-topright">&times;</span>
+            <div class="w3-padding-16">
+                <i class="fa fa-list-alt modal-icon"></i>
+                <h4 class="modal-title">{{titulo_modal}}</h4>
+            </div>
+            </header>
+            <div class="w3-container">
+              <div class="w3-panel w3-margin w3-padding-24 w3-light-grey">
+                  <div class="w3-row w3-section  w3-row-padding">
+                      <div class="w3-col l12 m12">
+                        <label>Periodo</label>
+                        <select class="w3-select" name="tipoFormulario"  [(ngModel)]="solicitud.periodo">
+                            <option value="">- Seleccione Periodo -</option>
+                            <option *ngFor="let a of num_periodo|orderBy:['-cantidad']" value="{{a}}">Periodo {{a}}</option> 
+                        </select>
+                      </div>
+                  </div>
+                  <div class="w3-row w3-section  w3-row-padding">
+                      <div class="w3-col l12 m12">
+                          <label>Año del periodo</label>
+                          <input class="w3-input" type="number" [(ngModel)]="solicitud.anno" placeholder="Año del periodo">
+                      </div>
+                  </div>
+                  <div class="w3-row w3-section  w3-row-padding">
+                        <div class="w3-col l12 m12">
+                            <strong>Estado</strong>
+                            <br>
+                            <label class="switch">
+                                <input type="checkbox" [(ngModel)]="solicitud.estado">
+                                <span class="slider round"></span>
+                            </label>
+                            <!-- <ui-switch [(ngModel)]="solicitud.estado" size="small"></ui-switch> -->
+                        </div>
+                </div>
+              </div>
+    
+    
+              <button class="w3-btn w3-medium"onclick="document.getElementById('formulario').style.display='none'"> Cerrar</button>
+              <button class="w3-btn w3-medium w3-theme w3-margin" (click)="run()" *ngIf="!flag_envio"><i class="fa fa-save"></i> Guardar</button>
+
+                  <control-skin [estado]="flag_envio" [skin]="1"></control-skin>
+            </div>
+        </div>
+</div>
+
+

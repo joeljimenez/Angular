@@ -1,0 +1,125 @@
+<simple-notifications [options]="options"></simple-notifications>
+<control-skin [skin]="1" [estado]="flag_envio"></control-skin>
+<app-nav [titulo]="titulo" [breadcrumb]="breadcrumbArray" [btnCrear]="true" (Crear)="crear()"></app-nav>
+
+<div class="w3-container w3-animate-bottom">
+  <div class="w3-panel w3-padding-32 w3-white w3-card">
+    <div class="w3-row">
+      <div class="w3-section w3-row-padding w3-half">
+        <div class="w3-col" style="width:50px">
+          <i class="w3-xxlarge fa fa-search" style="color: #0182c0"></i>
+        </div>
+        <div class="w3-rest">
+          <input type="text" placeholder="Buscar Menu" class="w3-input w3-border" [(ngModel)]="filtro">
+        </div>
+      </div>
+      <div class="w3-section w3-row-padding">
+        <button class="w3-button w3-theme" (click)="filter = ''">
+          <i class="fa fa-circle-thin "></i> Todos
+        </button>
+        <button *ngFor="let a of respuesta | orderBy:'orden'| filterBy: ['idtipo_menu']: 2" class="w3-button w3-theme" (click)="filter = a.idmenu"
+          ng-show="registra">
+          <i class="fa fa-circle-thin "></i> {{a.menu}}
+        </button>
+      </div>
+
+
+      <table class="w3-table w3-striped w3-border w3-hoverable">
+        <tr class="w3-theme-d5">
+          <th>Menu</th>
+          <th class="w3-center">Estado</th>
+          <th class="w3-center">Crea registro</th>
+          <th class="w3-center">Actualiza registro</th>
+          <th class="w3-center">Elimina registro</th>
+          <th class="w3-center">Principal</th>
+          <th class="w3-center" colspan="2">Eventos</th>
+        </tr>
+
+        <tr *ngFor="let b of respuesta| orderBy:'orden' | filterBy: ['idpadre']: filter| filterBy: ['menu']: filtro">
+          <td>{{b.menu}}</td>
+
+          <td class="w3-center">
+            <input class="w3-check" type="checkbox" [(ngModel)]="b.estado">
+          </td>
+
+          <td class="w3-center">
+            <input class="w3-check" type="checkbox" [(ngModel)]="b.crear">
+          </td>
+
+          <td class="w3-center">
+            <input class="w3-check" type="checkbox" [(ngModel)]="b.editar">
+          </td>
+
+          <td class="w3-center">
+            <input class="w3-check" type="checkbox" [(ngModel)]="b.eliminar">
+          </td>
+
+          <td class="w3-center">
+            <input class="w3-check" type="checkbox" [(ngModel)]="b.principal">
+          </td>
+
+          <td class="w3-center" *ngIf="permisos.actualizar == 1">
+            <button class="w3-button w3-theme" (click)="editar(b)">
+              <i class="fa fa-save"></i>
+            </button>
+            <button class="w3-button w3-theme" (click)="eliminar(b)" *ngIf="permisos.eliminar == 1">
+              <i class="fa fa-trash-o"></i>
+            </button>
+          </td>
+          <!-- <td class="w3-center" *ngIf="permisos.actualizar == 1 && b.id_roles != null"><button class="w3-button w3-theme"  (click)="editar(b)"><i class="fa fa-pencil"></i></button></td> -->
+
+        </tr>
+
+      </table>
+    </div>
+  </div>
+</div>
+
+<div id="formulario" class="w3-modal">
+  <div class="w3-modal-content w3-animate-right w3-card-4">
+    <header class="w3-container w3-theme-d5 w3-margin-bottom">
+      <span onclick="document.getElementById('formulario').style.display='none'" class="w3-button w3-display-topright">&times;</span>
+      <h2>{{titulo_modal}}</h2>
+    </header>
+
+    <div class="w3-container">
+      <div class="w3-row">
+        <div class="w3-col l8">
+          <label>Seleccione el menu</label>
+          <select class="w3-select" name="menu" [(ngModel)]="solicitud.idmenu">
+            <option value="0" selected>Seleccione</option>
+            <option *ngFor="let a of menus" [value]="a.idmenu">{{a.nombre}}</option>
+          </select>
+        </div>
+      </div>
+
+    </div>
+
+
+    <button class="w3-button w3-medium w3-theme w3-margin" (click)="run()" *ngIf="!flag_envio">
+      <i class="fa fa-save"></i> Guardar</button>
+    <div class="w3-panel w3-orange">
+      <h2 class="w3-opacity">{{mensaje_error}}</h2>
+    </div>
+    <control-skin [estado]="flag_envio" [skin]="1"></control-skin>
+  </div>
+</div>
+
+<div id="eliminar" class="w3-modal">
+  <div class="w3-modal-content w3-animate-right w3-card-4">
+    <header class="w3-container w3-theme-d5 w3-margin-bottom">
+      <span onclick="document.getElementById('eliminar').style.display='none'" class="w3-button w3-display-topright">&times;</span>
+      <h2>{{titulo_modal}}</h2>
+    </header>
+
+    <div class="w3-container">
+      <p>Desea Eliminar el Rol: {{solicitud.nombre}}</p>
+
+    </div>
+
+    <button class="w3-button w3-medium w3-theme w3-margin" (click)="run()" *ngIf="!flag_envio">
+      <i class="fa fa-trash-o"></i> Eliminar</button>
+    <control-skin [estado]="flag_envio" [skin]="1"></control-skin>
+
+  </div>
+</div>

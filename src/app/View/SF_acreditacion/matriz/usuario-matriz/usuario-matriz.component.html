@@ -1,0 +1,36 @@
+
+<div id="usuarioMatriz" class="w3-modal">
+  <div class="w3-modal-content w3-animate-right w3-card-4">
+    <header class="w3-container w3-theme-d5 w3-margin-bottom" style="padding-right: 5px">
+      <span onclick="document.getElementById('usuarioMatriz').style.display = 'none'" style="cursor: pointer" class="w3-right w3-padding fa fa-remove w3-hover-text-red"
+        title="Cerrar"></span>
+      <h5>{{tituloModal}}</h5>
+    </header>
+
+    <div class="w3-container">
+      <div class="w3-row w3-section w3-row-padding">
+        <div class="w3-col l12">
+          <input class="w3-input w3-border" type="text" maxlength="45" placeholder="Buscar Usuario..." [(ngModel)]="filtro">
+        </div>
+      </div>
+      <hr>
+      <div class="w3-row w3-section w3-row-padding">
+        <div class="w3-col l12">
+          <ul class="w3-ul">
+            <li *ngFor="let a of matriz_usuario | orderBy:'nombre' |filterBy: ['nombre']: filtro">
+              <strong>
+                {{a.nombre +' '+ a.apellido}}
+              </strong>
+              <div class="w3-right">
+                <label class="switch" for="{{a.id_usuario}}">
+                  <input type="checkbox" id="{{a.id_usuario}}" [(ngModel)]="a.estado" (click)="activa_usuario(a)">
+                  <span class="slider round"></span>
+                </label>
+              </div>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

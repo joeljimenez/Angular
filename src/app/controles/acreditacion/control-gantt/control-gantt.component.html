@@ -1,0 +1,6 @@
+<h5 class="">Periodos activos</h5>
+<div class="w3-bar">
+  <span *ngFor="let a of periodos">
+    <button class="w3-bar-item w3-button w3-border w3-border-blue {{a.color}}" *ngIf="a.estatus == true" (click)="cambio_periodo(a)">{{a.periodo}}</button>
+  </span>
+</div>

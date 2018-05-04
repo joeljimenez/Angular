@@ -1,0 +1,102 @@
+<simple-notifications [options]="options"></simple-notifications>
+<control-skin [skin]="1" [estado]="flag_envio"></control-skin>
+<app-nav [titulo]="titulo" [breadcrumb]="breadcrumbArray" [btnCrear]="true" (Crear)="crear()"></app-nav>
+<!-- <div class="w3-container">
+  <div class="w3-section">
+    <a class="w3-btn w3-circle w3-theme pull-right" style="font-size: 20px;" *ngIf="permisos.registrar" (click)="crear()">
+      <i class="fa fa-plus"></i>
+    </a>
+  </div>
+</div> -->
+
+
+<div class="w3-container w3-animate-left">
+  <div class="w3-panel w3-padding-16 w3-white w3-card">
+    <div class="w3-row">
+      <div class="w3-half">
+        <div class="w3-col" style="width:50px">
+          <i class="w3-xxlarge fa fa-search" style="color: #0182c0"></i>
+        </div>
+        <div class="w3-rest">
+          <input type="text" placeholder="Buscar Matriz" class="w3-input w3-border" [(ngModel)]="filtro">
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="w3-container w3-animate-left">
+
+  <!-- lista de la matriz -->
+  <div class="w3-row w3-section" *ngFor="let a of matriz|filterBy: ['nombre']: filtro">
+    <div class="panel w3-white w3-card">
+      <div class="w3-container">
+        <div class="w3-row w3-padding-16">
+          <div class="w3-col" style="width:80px">
+            <img src="assets/img/Logo_Acreditacion-01.png" class="w3-bar-item w3-circle" style="width:60px">
+          </div>
+          <div class="w3-rest">
+            <h3> {{a.nombre}}</h3>
+          </div>
+        </div>
+        <div class="">
+          <small>{{a.descripcion}}</small>
+        </div>
+        <div class="w3-row w3-padding">
+          <div class="w3-row w3-row-padding w3-right">
+            <button class="w3-text-white w3-border w3-theme w3-padding" (click)="open(a, 'autoevaluacion')"> Auto Evaluación </button>
+            <button class="w3-text-white w3-border w3-theme w3-padding" (click)="open(a, 'proyectos')"> PMI y PMIA </button>
+          </div>
+        </div>
+      </div>
+      <footer class="w3-border-top">
+        <div class="w3-row">
+          <div class="w3-half">
+            <div class="w3-container">
+              <div class="w3-row w3-row-padding">
+                <div class="w3-padding-16">
+                  <strong>Activar matriz</strong>
+                  <span class="w3-right" *ngIf="!permisos.actualizar">
+                    <i *ngIf="a.estado == 1"> Activo</i>
+                    <i *ngIf="a.estado == 0"> Inactivo</i>
+                  </span>
+                  <label class="switch" for="{{a.idmatriz}}" *ngIf="permisos.actualizar">
+                    <input type="checkbox" id="{{a.idmatriz}}" [(ngModel)]="a.estado" (click)="actualiza_estado_matriz(a)">
+                    <span class="slider round"></span>
+                  </label>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="w3-half">
+            <div class="w3-container">
+              <div class="w3-row w3-row-padding w3-right">
+                <div class="w3-bar w3-padding-16">
+                  <a (click)="addperson(a)" *ngIf="permisos.registrar" title="Agregar usuarios a la matriz" style="cursor: pointer;">
+                    <i class="fa fa-user-plus w3-text-cyan w3-large w3-padding"></i>
+                  </a>
+                  <a (click)="eliminar(a)" *ngIf="permisos.eliminar" title="Eliminar matriz" style="cursor: pointer;">
+                    <i class="fa fa-trash-o w3-text-red w3-large w3-padding"></i>
+                  </a>
+                  <a (click)="editar(a)" *ngIf="permisos.actualizar" title="Editar matriz" style="cursor: pointer;">
+                    <i class="fa fa-edit w3-text-green w3-large w3-padding"></i>
+                  </a>
+                  <!-- <a title="Ver contenido" style="cursor: pointer;">
+                    <i class="fa fa-eye w3-text-blue w3-large w3-padding"></i>
+                  </a> -->
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </footer>
+    </div>
+  </div>
+
+</div>
+
+<!-- gestiona la matriz, Crear, Editar desde una ventana modal  -->
+<app-crear-matriz [tituloModal]="titulo_modal" [solicitud]="solicitud" (guardar)="guardar($event)"></app-crear-matriz>
+
+<!-- gestiona los permisos de usuarios a la martiz  -->
+<app-usuario-matriz [tituloModal]="titulo_modal"></app-usuario-matriz>

@@ -1,0 +1,30 @@
+.contenedor-logo{
+    background-image: url('../../../assets/img/Logo-latina.png');
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+    width: 100%;
+    height: 100%;
+    z-index: -1;
+    position: fixed;
+    opacity: 0.1;
+}
+.w3-quarter{
+    padding-bottom:5px; 
+}
+
+
+.icono_sf{
+    font-size: 100px;
+}
+
+
+.menuSofware .icono_sf{
+    font-size: 50px;
+}
+.menuSofware .nombre{
+    font-size: 8px;
+}
+.menuSofware .contenedor-logo{
+display: none; 
+}

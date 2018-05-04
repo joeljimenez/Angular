@@ -1,0 +1,78 @@
+<div id="formulario" class="w3-modal">
+  <div class="w3-modal-content w3-animate-right w3-card-4">
+    <header class="w3-container w3-theme-d5 w3-margin-bottom" style="padding-right: 5px">
+      <span (click)="cerrar()" style="cursor: pointer" class="w3-right w3-padding fa fa-remove w3-hover-text-red" title="Cerrar"></span>
+      <!-- <span class="w3-right w3-padding fa fa-recycle w3-hover-text-yellow" (click)="limpiar()" style="cursor: pointer" title="Limpiar"></span> -->
+      <h5>{{tituloModal}}</h5>
+    </header>
+
+    <div class="w3-container">
+      <div class="w3-row w3-section w3-row-padding">
+        <div class="w3-col m6">
+          <label class="w3-tag w3-small w3-theme">Lista de Piezas</label>
+          <select class="w3-select w3-border" name="piezas" [(ngModel)]="solicitud.idpieza_proyecto" (change)="controlador_formulario()">
+            <option *ngFor="let a of piezas_proyecto2|filterBy:['act_pieza_contenedor_reporte']:es_contenedor" value="{{a.idpieza_proyecto}}">{{a.nombre}}</option>
+          </select>
+        </div>
+
+        <div class="w3-col m6">
+          <label class="w3-tag w3-small w3-theme">Orden</label>
+          <input class="w3-input w3-border" type="text" [(ngModel)]="solicitud.orden" maxlength="3" />
+        </div>
+      </div>
+
+      <hr>
+
+      <div class="w3-row w3-section w3-row-padding">
+
+        <div class="w3-col l12" *ngIf="vista_nombre">
+          <label class="w3-tag w3-small w3-theme">Nombre</label>
+          <textarea class="w3-input w3-border" type="text" maxlength="250" placeholder="" [(ngModel)]="solicitud.nombre"></textarea>
+        </div>
+
+        <div class="w3-col l12" *ngIf="vista_anexo_1">
+          <label class="w3-tag w3-small w3-theme">{{nom_anexo_1}}</label>
+          <textarea class="w3-input w3-border" rows="5" type="text" maxlength="2000" placeholder="" [(ngModel)]="solicitud.anexo_1"></textarea>
+        </div>
+
+        <div class="w3-col l12" *ngIf="vista_anexo_2">
+          <label class="w3-tag w3-small w3-theme">{{nom_anexo_2}}</label>
+          <textarea class="w3-input w3-border" rows="5" type="text" maxlength="2000" placeholder="" [(ngModel)]="solicitud.anexo_2"></textarea>
+        </div>
+
+        <div class="w3-col l12" *ngIf="vista_anexo_3">
+          <label class="w3-tag w3-small w3-theme">{{nom_anexo_3}}</label>
+          <textarea class="w3-input w3-border" rows="5" type="text" maxlength="2000" placeholder="" [(ngModel)]="solicitud.anexo_3"></textarea>
+        </div>
+
+        <div class="w3-col l12" *ngIf="vista_descripcion">
+          <label class="w3-tag w3-small w3-theme">Descripcion de la Matriz</label>
+          <textarea class="w3-input w3-border" rows="5" type="text" maxlength="2000" placeholder="" [(ngModel)]="solicitud.descripcion"></textarea>
+        </div>
+
+      </div>
+
+      <div class="w3-row w3-section w3-row-padding">
+        <div class="w3-col m12" *ngIf="vista_objetivo">
+          <label class="w3-tag w3-small w3-theme">Objetivo</label>
+          <textarea class="w3-input w3-border" type="text" rows="5" maxlength="2000" placeholder="" [(ngModel)]="solicitud.objetivo"></textarea>
+        </div>
+      </div>
+
+      <div class="w3-row w3-section w3-row-padding">
+        <div class="w3-col m3" *ngIf="vista_presupuesto">
+          <label class="w3-tag w3-small w3-theme">Presupuesto</label>
+          <input class="w3-input w3-border" type="text" maxlength="12" placeholder="" [(ngModel)]="solicitud.presupuesto">
+        </div>
+      </div>
+
+      <div class="w3-row w3-section w3-row-padding">
+        <div class="w3-col l12">
+          <button class="w3-button w3-section w3-block w3-padding w3-theme" (click)="guarda_valida_matriz_proyecto()" *ngIf="!flag_envio">
+            <i class="fa fa-save"></i> Guardar</button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>

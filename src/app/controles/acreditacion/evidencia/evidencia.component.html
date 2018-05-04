@@ -1,0 +1,284 @@
+<simple-notifications [options]="options"></simple-notifications>
+<control-skin [skin]="1" [estado]="flag_envio"></control-skin>
+
+<div class="w3-row-padding w3-small">
+
+  <div class="w3-col s12 m12 l4">
+    <div class="w3-panel w3-padding-16 w3-white w3-card">
+      <div class="w3-small">
+
+        <div class="Titulo">
+          <div>
+            <h4 class="w3-center">{{Encabezado.titulo}}</h4>
+            <hr>
+          </div>
+        </div>
+
+
+        <div class="w3-hide-small w3-hide-medium" style="height: 635px; overflow: auto;">
+
+
+
+          <div class="Encabezado">
+            <h5 class="w3-center">{{Encabezado.nombre1}}</h5>
+            <p class="w3-justify" [innerHTML]="Encabezado.nombre2"></p>
+          </div>
+          <hr>
+
+
+          <div class="Carpetas">
+            <!-- control-carpetas -->
+            <div class="w3-padding-16">
+              <app-control-carpetas [vistaActual]="vistaActual" [gestionar]="gestionar" [carpetas]="carpetas" [idcarpeta]="idcarpeta" [barra]="barra" [cantidad_root]="cantidad_root"
+                (cambioCarpeta)="select_file($event)" (guardaR)="guardar_Cambios($event)"></app-control-carpetas>
+            </div>
+          </div>
+
+
+
+
+          <div class="cuadro_autoevaluacion" *ngIf="autoevaluacion">
+
+            <div *ngIf="!gestionar">
+
+              <h5 class="w3-center">Etiquetas</h5>
+              <ul class="w3-ul">
+                <li *ngIf="data_visor.act_cripterio == 1">
+                  <a>
+                    <i class="fa fa-bookmark ">
+                    </i>
+                    Criterio
+                    <span class="w3-button w3-orange w3-text-white w3-tiny w3-right w3-hover-orange" style="padding: 1px 5px !important;">
+                      {{data_visor.nom_cripterio}}
+                    </span>
+                    <!-- <span class="w3-tag w3-orange w3-tiny w3-text-white w3-right">{{data_visor.nom_cripterio}}</span> -->
+                  </a>
+                </li>
+                <li *ngIf="data_visor.act_categoria == 1">
+                  <a>
+                    <i class="fa fa-bookmark ">
+                    </i>
+                    Categoría
+                    <span class="w3-button w3-orange w3-text-white w3-tiny w3-right w3-hover-orange" style="padding: 1px 5px !important;">
+                      {{data_visor.nom_categoria}}
+                    </span>
+                    <!-- <span class="w3-tag w3-orange w3-tiny w3-text-white w3-right">{{data_visor.nom_categoria}}</span> -->
+                  </a>
+                </li>
+              </ul>
+              <hr>
+
+              <div *ngIf="data_visor.act_descripcion == 1">
+                <h5 class="w3-center"> Descripción </h5>
+                <p class="w3-justify">
+                  {{' ' +data_visor.descripcion}}
+                </p>
+                <hr>
+              </div>
+
+              <div *ngIf="data_visor.act_anexo_1 == 1">
+                <h5 class="w3-center"> {{data_visor.nom_anexo_1}}</h5>
+                <p class="w3-justify">
+                  {{data_visor.anexo_1}}
+                </p>
+                <hr>
+              </div>
+
+              <div *ngIf="data_visor.act_anexo_2 == 1">
+                <h5 class="w3-center"> {{data_visor.nom_anexo_2}} </h5>
+                <p class="w3-justify">
+                  {{data_visor.anexo_2}}
+                </p>
+                <hr>
+              </div>
+
+              <div *ngIf="data_visor.act_hallasgo == 1">
+                <h3 class="w3-center">
+                  <strong> AUTO EVALUACIÓN </strong>
+                </h3>
+                <ul class="w3-ul">
+                  <li>
+                    <a>
+                      <i class="fa fa-bookmark">
+                      </i>
+                      {{data_visor.nom_cualitativa}}
+                    </a>
+                  </li>
+                  <li>
+                    <a>
+                      <i class="fa fa-bookmark">
+                      </i>
+                      Puntuación
+                      <span class="w3-button w3-orange w3-text-white w3-tiny w3-right w3-hover-orange gestionar">
+                        {{data_visor.puntuacion}}
+                      </span>
+                      <!-- <span class="w3-tag w3-orange w3-tiny w3-text-white w3-right">{{data_visor.puntuacion}}</span> -->
+                    </a>
+                  </li>
+                </ul>
+
+                <h4 class="w3-center">
+                  <strong> Hallazgo </strong>
+                </h4>
+                <p class="w3-justify">
+                  {{' ' +data_visor.hallasgo}}
+                </p>
+              </div>
+
+            </div>
+            <div *ngIf="gestionar">
+
+            </div>
+          </div>
+
+
+
+        </div>
+
+        <div class="w3-hide-large w3-row-padding" *ngIf="!gestionar && autoevaluacion">
+
+          <div class="w3-col s12 m4">
+            <div *ngIf="data_visor.act_anexo_1 == 1">
+              <h5 class="w3-center"> {{data_visor.nom_anexo_1}}</h5>
+              <p class="w3-justify">
+                {{data_visor.anexo_1}}
+              </p>
+              <hr>
+            </div>
+
+            <div *ngIf="data_visor.act_anexo_2 == 1">
+              <h5 class="w3-center"> {{data_visor.nom_anexo_2}} </h5>
+              <p class="w3-justify">
+                {{data_visor.anexo_2}}
+              </p>
+              <hr>
+            </div>
+          </div>
+          <div class="w3-col s12 m4">
+            <div *ngIf="data_visor.act_hallasgo == 1">
+              <h3 class="w3-center">
+                <strong> AUTO EVALUACIÓN </strong>
+              </h3>
+              <ul class="w3-ul">
+                <li>
+                  <a>
+                    <i class="fa fa-bookmark">
+                    </i>
+                    {{data_visor.nom_cualitativa}}
+                  </a>
+                </li>
+                <li>
+                  <a>
+                    <i class="fa fa-bookmark">
+                    </i>
+                    Puntuación
+                    <span class="w3-button w3-orange w3-text-white w3-tiny w3-right w3-hover-orange gestionar">
+                      {{data_visor.puntuacion}}
+                    </span>
+                    <!-- <span class="w3-tag w3-orange w3-tiny w3-text-white w3-right">{{data_visor.puntuacion}}</span> -->
+                  </a>
+                </li>
+              </ul>
+
+              <h4 class="w3-center">
+                <strong> Hallazgo </strong>
+              </h4>
+              <p class="w3-justify">
+                {{' ' +data_visor.hallasgo}}
+              </p>
+            </div>
+          </div>
+          <div class="w3-col s12 m4">
+            <app-control-carpetas [vistaActual]="vistaActual" [gestionar]="gestionar" [idcarpeta]="idcarpeta" [barra]="barra" [cantidad_root]="cantidad_root"
+              (cambioCarpeta)="select_file($event)" (guardaR)="guardar_Cambios($event)"></app-control-carpetas>
+          </div>
+
+        </div>
+        <div class="w3-hide-large w3-row-padding" *ngIf="gestionar && autoevaluacion">
+
+          <div class="w3-col s12 m4">
+            <div *ngIf="data_visor.act_anexo_1 == 1">
+              <h5 class="w3-center"> {{data_visor.nom_anexo_1}}</h5>
+              <p class="w3-justify">
+                {{data_visor.anexo_1}}
+              </p>
+              <hr>
+            </div>
+
+            <div *ngIf="data_visor.act_anexo_2 == 1">
+              <h5 class="w3-center"> {{data_visor.nom_anexo_2}} </h5>
+              <p class="w3-justify">
+                {{data_visor.anexo_2}}
+              </p>
+              <hr>
+            </div>
+          </div>
+          <div class="w3-col s12 m4">
+            <div *ngIf="data_visor.act_hallasgo == 1">
+              <h3 class="w3-center">
+                <strong> AUTO EVALUACIÓN </strong>
+              </h3>
+              <ul class="w3-ul">
+                <li>
+                  <a>
+                    <i class="fa fa-bookmark">
+                    </i>
+                    {{data_visor.nom_cualitativa}}
+                  </a>
+                </li>
+                <li>
+                  <a>
+                    <i class="fa fa-bookmark">
+                    </i>
+                    Puntuación
+                    <span class="w3-button w3-orange w3-text-white w3-tiny w3-right w3-hover-orange gestionar">
+                      {{data_visor.puntuacion}}
+                    </span>
+                    <!-- <span class="w3-tag w3-orange w3-tiny w3-text-white w3-right">{{data_visor.puntuacion}}</span> -->
+                  </a>
+                </li>
+              </ul>
+
+              <h4 class="w3-center">
+                <strong> Hallazgo </strong>
+              </h4>
+              <p class="w3-justify">
+                {{' ' +data_visor.hallasgo}}
+              </p>
+            </div>
+          </div>
+          <div class="w3-col s12 m4">
+            <app-control-carpetas [vistaActual]="vistaActual" [gestionar]="gestionar" [idcarpeta]="idcarpeta" [barra]="barra" [cantidad_root]="cantidad_root"
+              (cambioCarpeta)="select_file($event)" (guardaR)="guardar_Cambios($event)"></app-control-carpetas>
+          </div>
+
+        </div>
+        
+      </div>
+
+    </div>
+  </div>
+
+  <div class="w3-col s12 m12 l8">
+    <div class="w3-panel w3-padding-16 w3-white w3-card">
+      <div class="">
+        <div>
+          <ul class="breadcrumb w3-light-grey w3-padding-16" style="margin-top: 0;">
+            <li>
+              <a (click)="select_barra(-1)">ROOT...</a>
+            </li>
+            <li *ngFor="let c of barra">
+              <a (click)="select_barra(c.id)">{{c.nombre}}</a>
+            </li>
+          </ul>
+
+          <div class="w3-table-responsive" style="height: 635px; overflow: auto;">
+            <app-control-evidencia [vistaActual]="vistaActual" [gestionar]="gestionar" [evidencias]="evidencias" [idcarpeta]="idcarpeta" (guardaE)="guardar_Cambios_evidencia($event)"></app-control-evidencia>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+</div>

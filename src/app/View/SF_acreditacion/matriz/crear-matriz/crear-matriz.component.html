@@ -1,0 +1,65 @@
+
+<div id="formulario" class="w3-modal">
+  <div class="w3-modal-content w3-animate-right w3-card-4">
+    <header class="w3-container w3-theme-d5 w3-margin-bottom" style="padding-right: 5px">
+      <span (click)="cerrar()" style="cursor: pointer" class="w3-right w3-padding fa fa-remove w3-hover-text-red" title="Cerrar"></span>
+      <span class="w3-right w3-padding fa fa-recycle w3-hover-text-yellow"(click)="limpiar()" style="cursor: pointer" title="Limpiar"></span>
+      <h5>{{tituloModal}}</h5>
+    </header>
+
+    <div class="w3-container">
+      <div class="w3-row w3-section w3-row-padding">
+        <div class="w3-col l12">
+          <label class="w3-tag w3-small w3-theme">Lista de Entidades</label>
+          <select class="w3-select w3-border" name="entidades" [(ngModel)]="solicitud.identidad" (change)="cambio_entiidad()">
+            <option value="null" selected>- SELECCIONE ENTIDAD -</option>
+            <option *ngFor="let a of entidades" value="{{a.identidad}}">{{a.nombre}}</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="w3-row w3-section w3-row-padding">
+        <div class="w3-col l12">
+          <label class="w3-tag w3-small w3-theme">Lista de Esquemas</label>
+          <select class="w3-select w3-border" name="esquemas" [(ngModel)]="solicitud.idesquema">
+            <option value="null" selected>- SELECCIONE ESQUEMA -</option>
+            <option *ngFor="let a of esquemas" [value]="a.idesquema">{{a.nombre}}</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="w3-row w3-section w3-row-padding">
+        <div class="w3-col l12">
+          <label class="w3-tag w3-small w3-theme">Nombre de la Matriz</label>
+          <input class="w3-input w3-border" type="text" maxlength="45" placeholder="" [(ngModel)]="solicitud.nombre">
+        </div>
+      </div>
+      <div class="w3-row w3-section w3-row-padding">
+        <div class="w3-col l12">
+          <label class="w3-tag w3-small w3-theme">Descripcion de la Matriz</label>
+          <input class="w3-input w3-border" type="text" maxlength="2000" placeholder="" [(ngModel)]="solicitud.descripcion">
+        </div>
+      </div>
+      <div class="w3-row w3-section w3-row-padding">
+        <div class="w3-col l12">
+          <label class="w3-tag w3-small w3-theme">Año De Inicio</label>
+          <input class="w3-input w3-border" type="text" maxlength="4" placeholder="2000" [(ngModel)]="solicitud.vigencia_inicio">
+        </div>
+      </div>
+      <div class="w3-row w3-section w3-row-padding">
+        <div class="w3-col l12">
+          <label class="w3-tag w3-small w3-theme">Año de Cierre</label>
+          <input class="w3-input w3-border" type="text" maxlength="4" placeholder="2000" [(ngModel)]="solicitud.vigencia_fin">
+        </div>
+      </div>
+      
+      <div class="w3-row w3-section w3-row-padding">
+          <div class="w3-col l12">
+              <button class="w3-button w3-section w3-block w3-padding w3-theme" (click)="guardar_valida()" *ngIf="!flag_envio">
+                <i class="fa fa-save"></i> Guardar</button>
+          </div>
+      </div>
+      
+    </div>
+  </div>
+</div>

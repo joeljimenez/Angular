@@ -1,0 +1,137 @@
+<control-skin [skin]="1" [estado]="flag_envio"></control-skin>
+<simple-notifications [options]="options"></simple-notifications>
+<app-nav [titulo]="titulo" [breadcrumb]="breadcrumbArray" [btnCrear]="true" (Crear)="formulario()"></app-nav>
+
+
+
+<div class="w3-container w3-animate-bottom">
+    <div class="w3-panel w3-padding-32 w3-white w3-card">
+        <div class="w3-row">
+            <h5 class="w3-text-grey w3-padding-16">
+                Evaluaciones del empleado: {{respuesta.nombre}} {{respuesta.apellido}}
+            </h5>
+            <hr>
+            <div class="w3-padding-16">
+                <div class="w3-panel w3-light-grey">
+                    <p>Valide que el correo sea el institucional antes de registrarlo. De lo contrario edítelo
+                        <strong>
+                            <span *ngIf="respuesta.email == null">NO TIENE CORREO ASIGNADO</span>
+                            <span *ngIf="respuesta.email != null">{{respuesta.email}}</span>
+                        </strong>
+                        <i (click)="edita_evaluado()" *ngIf="permisos.actualizar == 1" class="w3-button w3-circle w3-white fa fa-pencil w3-text-teal"
+                            title="Editar correo"></i>
+                    </p>
+                </div>
+            </div>
+            <div class="w3-row">
+                <div class="w3-section w3-row-padding w3-half">
+                    <div class="w3-col" style="width:50px">
+                        <i class="w3-xxlarge fa fa-search" style="color: #0182c0"></i>
+                    </div>
+                    <div class="w3-rest">
+                        <input type="text" placeholder="Buscar Formulario" class="w3-input w3-border" [(ngModel)]="filtro">
+                    </div>
+                </div>
+            </div>
+            <div class="w3-padding-16">
+
+                <div class="w3-card w3-white w3-col m3 l3 w3-margin" *ngFor="let a of encuestas_empleado|filterBy: ['nombre_from', 'anno', 'nombre_evaluador']: filtro">
+                    <div class="w3-dropdown-hover w3-right">
+                        <button class="w3-btn w3-theme">
+                            <i class="fa fa-ellipsis-v"></i>
+                        </button>
+                        <div class="w3-dropdown-content w3-bar-block w3-border" style="right:0">
+                            <a (click)="open(a)" class="w3-bar-item w3-button">
+                                <i class="fa fa-eye"></i> Abrir Formulario</a>
+                        </div>
+                    </div>
+                    <br>
+                    <div class="w3-text-grey w3-center w3-padding">
+                        <h5>
+                            <strong>{{a.nombre_from}}</strong>
+                        </h5>
+                        <div class="fw3-display-container">
+                            <img (dblclick)="open(a)" *ngIf="a.confirmacion == 0" alt="Doble Clic para cargar imagen" style="width:50%" src="./assets/img/form.png">
+                            <img (dblclick)="open(a)" *ngIf="a.confirmacion == 1" alt="Doble Clic para cargar imagen" style="width:50%" src="./assets/img/from_cofirmado.png">
+                        </div>
+                        <strong>Periodo {{a.anno|maxLength:4}} - {{a.periodo}}</strong>
+                        <br>
+                        <small>Evaluador: {{ a.nombre_evaluador}}</small>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<div id="formulario" class="w3-modal inmodal">
+    <div class="w3-modal-content w3-animate-right w3-card-4">
+        <header class="w3-container w3-center w3-theme">
+            <span onclick="document.getElementById('formulario').style.display='none'" class="w3-button w3-display-topright">&times;</span>
+            <div class="w3-padding-16">
+                <i class="fa fa-list-alt modal-icon"></i>
+                <h4 class="modal-title">CREA EVALUACIÓN</h4>
+                <small>Solo aparecerán los formularios de evaluaciones activos y que posean periodos activos. Si tiene algún inconveniente
+                    consulte al administrador de sistemas. </small>
+            </div>
+        </header>
+        <div class="w3-container">
+            <div class="w3-panel w3-margin w3-padding-24 w3-light-grey">
+                <div class="w3-row w3-section  w3-row-padding">
+                    <div class="w3-col l12 m12">
+                        <label>Formulario</label>
+                        <select class="w3-select" name="tipoFormulario" #selectElem (change)="select_formulario(selectElem.value)">
+                            <option value="0">-Selectcione Formulario-</option>
+                            <option *ngFor="let a of formularios" value="{{a.idformulario}}">{{a.anno + '-' + a.periodo + ' ' + a.nombre}}</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="w3-row w3-section  w3-row-padding">
+                    <div class="w3-col l12 m12">
+                        <strong>Estado</strong>
+                        <br>
+                        <label class="switch">
+                            <input type="checkbox" [(ngModel)]="solicitud.estado">
+                            <span class="slider round"></span>
+                        </label>
+                    </div>
+                </div>
+            </div>
+            <button class="w3-btn w3-medium" onclick="document.getElementById('formulario').style.display='none'"> Cerrar</button>
+            <button class="w3-btn w3-medium w3-theme w3-margin" (click)="run()" *ngIf="!flag_envio">
+                <i class="fa fa-save"></i> Guardar</button>
+        </div>
+    </div>
+</div>
+
+
+
+<div id="evaluado" class="w3-modal inmodal">
+    <div class="w3-modal-content w3-animate-right w3-card-4">
+        <header class="w3-container w3-center w3-theme">
+            <span onclick="document.getElementById('evaluado').style.display='none'" class="w3-button w3-display-topright">&times;</span>
+            <div class="w3-padding-16">
+                <i class="fa fa-list-alt modal-icon"></i>
+                <h4 class="modal-title">EDITA DATOS DEL EVALUADO</h4>
+            </div>
+        </header>
+        <div class="w3-container">
+            <div class="w3-panel w3-margin w3-padding-24 w3-light-grey">
+                <div class="w3-row w3-section  w3-row-padding">
+                    <div class="w3-col l12 m12">
+                        <label>{{respuesta.nombre}} - {{respuesta.idempleado }}</label>
+                        <br>
+                        <label>Correo </label>
+                        <input type="text" placeholder="Nombre del Empleado" [(ngModel)]="solicitud.email" class="w3-input">
+                    </div>
+                </div>
+            </div>
+            <button class="w3-btn w3-medium" onclick="document.getElementById('evaluado').style.display='none'"> Cerrar</button>
+            <button class="w3-btn w3-medium w3-theme w3-margin" (click)="edita_empleado()" *ngIf="!flag_envio">
+                <i class="fa fa-save"></i> Guardar</button>
+
+        </div>
+    </div>
+</div>

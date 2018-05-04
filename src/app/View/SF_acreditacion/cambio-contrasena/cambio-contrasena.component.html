@@ -1,0 +1,45 @@
+<simple-notifications [options]="options"></simple-notifications>
+<control-skin [skin]="1" [estado]="flag_envio"></control-skin>
+
+
+<div id="formulario" class="w3-modal">
+  <div class="w3-modal-content w3-animate-right w3-card-4">
+    <header class="w3-container w3-center w3-theme-d5 w3-margin-bottom" style="padding-right: 5px">
+      <h5>{{tituloModal}}</h5>
+    </header>
+
+    <div class="w3-container">
+
+      <div class="w3-row w3-section w3-row-padding">
+        <div class="w3-col m12">
+          <label class="w3-tag w3-small w3-theme">Contraseña Actual</label>
+          <input class="w3-input w3-border" type="password" placeholder="Contraseña Actual" [(ngModel)]="solicitud.password">
+        </div>
+      </div>
+
+      <div class="w3-row w3-section w3-row-padding">
+        <div class="w3-col m12">
+          <label class="w3-tag w3-small w3-theme">Nueva Contraseña</label>
+          <input class="w3-input w3-border" type="password" placeholder="Nueva Contraseña" [(ngModel)]="solicitud.new_password">
+        </div>
+      </div>
+
+      <div class="w3-row w3-section w3-row-padding">
+        <div class="w3-col m12">
+          <label class="w3-tag w3-small w3-theme">Valida Contraseña</label>
+          <input class="w3-input w3-border" type="password" placeholder="Valida Contraseña" [(ngModel)]="solicitud.nombre">
+        </div>
+      </div>
+      <div class="w3-row w3-section w3-row-padding">
+        <div class="w3-col m12">
+          <button type="button" class="w3-button w3-theme w3-block" (click)="ejecuta_cambio_password()" title="Guardar"><i class="fa fa-save"></i></button>
+        </div>
+      </div>
+      <div class="w3-row w3-section w3-row-padding">
+        <div class="w3-col m12">
+          <button type="button" class="w3-button w3-light-grey w3-block" title="Cerrar" (click)="cerrar()"><i class="fa fa-close"></i></button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

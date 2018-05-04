@@ -1,0 +1,402 @@
+<control-skin [skin]="1" [estado]="flag_envio"></control-skin>
+<simple-notifications [options]="options"></simple-notifications>
+<app-nav [titulo]="titulo" [breadcrumb]="breadcrumbArray" (SelectSede)="Cambio_sede()" [sede]="true"></app-nav>
+
+<div class="w3-container w3-animate-bottom">
+    <div class="w3-panel w3-padding-32 w3-white w3-card">
+        <div class="w3-row">
+            <div class="w3-col m4 l4 w3-padding">
+                <select class="w3-select w3-border" [(ngModel)]="id_departamento">
+                    <option value="" selected> - DEPARTAMENTOS - </option>
+                    <option *ngFor="let a of departamentos" value="{{a.RH27COD}}">{{a.RH27DES|corrector}}</option>
+                </select>
+            </div>
+
+            <form class="w3-col m4 l4 w3-padding" (ngSubmit)="consulta_empleado(idempleado)">
+                <div class="w3-col m11 l11">
+                    <input type="text" placeholder="ID de Empleado" class="w3-input w3-border" [(ngModel)]="idempleado" name="idempleado">
+                </div>
+                <!-- <div class="w3-col m1 l1">
+                    <a type="submit" class="w3-button w3-theme">
+                        <i class="w3-padding fa fa-search"></i>
+                    </a>
+                </div> -->
+            </form>
+
+            <div class="w3-col m4 l4 w3-padding w3-right">
+                <div class="w3-right">
+                    <a class="w3-button w3-theme" href="javascript:void(0)" (click)="regresoHome()">
+                        <i class="w3-padding fa fa-home"></i>
+                    </a>
+                    <a class="w3-button" href="javascript:void(0)" *ngIf="btnRegresopadre" (click)="regresopadre()">Anterior
+                        <i class="w3-padding fa fa-mail-reply"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+        <hr>
+        <div class="w3-row w3-margin">
+            <div class="w3-col m4 l4 list-emp">
+                <div class="w3-section">
+                    <div class="w3-rest">
+                        <input type="text" placeholder="Filtrar Usuario" class="w3-input w3-border" [(ngModel)]="filtro">
+                    </div>
+                </div>
+                <ul class="w3-ul">
+                    <li class="w3-bar w3-hover-light-grey w3-blue" *ngIf="activa_data_evaluador">
+                        <a href="javascript:void(0)" (click)="openEmp(data_evaluador)">
+                            <div class="w3-row">
+                                <div class="w3-col m2 l2 left w3-center">
+                                    <img *ngIf="data_evaluador.sexo == 'M'" class="w3-round left" src="assets/img/avatar_masculino.png" style="width:85%;">
+                                    <img *ngIf="data_evaluador.sexo == 'F'" class="w3-round left" src="assets/img/avatar_femenino.png" style="width:85%;">
+                                    <sup *ngIf="data_evaluador.estado == 'A'" class="w3-green">Activo </sup>
+                                    <sup *ngIf="data_evaluador.estado == 'E'" class="w3-red">Eliminado </sup>
+                                    <sup *ngIf="data_evaluador.estado == 'I'" class="w3-yellow">Inactivo </sup>
+                                </div>
+                                <div class="w3-col m10 l10">
+                                    <span class="w3-opacity w3-large">{{data_evaluador.nombre}} {{data_evaluador.nombre2}} {{data_evaluador.apellido}} {{data_evaluador.apellido2}}</span>
+                                    <br>
+                                    <sup>ID empleado:
+                                        <strong>{{data_evaluador.idempleado}}</strong>
+                                    </sup>
+                                    <br>
+                                </div>
+                                <div class="w3-col m12 l12">
+                                    <sup>{{data_evaluador.RH27DES}}</sup>
+                                    <br>
+                                    <sup>Cargo: {{data_evaluador.RH28DES}}</sup>
+                                    <span class="w3-tag w3-right w3-tiny w3-green" title="Dependientes">{{'Dependiaentes: ' + data_evaluador.dependientes}}</span>
+                                    <br>
+                                </div>
+                            </div>
+                        </a>
+                    </li>
+                    <li class="w3-bar w3-hover-light-grey" *ngFor="let a of respuesta| orderBy: 'nombre' |filterBy: ['RH27COD']: id_departamento|filterBy: ['nombre','nombre2','apellido','apellido2']: filtro">
+                        <a href="javascript:void(0)" (click)="openEmp(a)">
+                            <div class="w3-row">
+                                <div class="w3-col m2 l2 left w3-center">
+                                    <img *ngIf="a.sexo == 'M'" class="w3-round left" src="assets/img/avatar_masculino.png" style="width:85%;">
+                                    <img *ngIf="a.sexo == 'F'" class="w3-round left" src="assets/img/avatar_femenino.png" style="width:85%;">
+                                    <sup *ngIf="a.estado == 'A'" class="w3-green">Activo </sup>
+                                    <sup *ngIf="a.estado == 'E'" class="w3-red">Eliminado </sup>
+                                    <sup *ngIf="a.estado == 'I'" class="w3-yellow">Inactivo </sup>
+                                </div>
+                                <div class="w3-col m10 l10">
+                                    <span class="w3-opacity w3-large">{{a.nombre}} {{a.nombre2}} {{a.apellido}} {{a.apellido2}}</span>
+                                    <br>
+                                    <sup>ID empleado:
+                                        <strong>{{a.idempleado}}</strong>
+                                    </sup>
+                                    <br>
+                                </div>
+                                <div class="w3-col m12 l12">
+                                    <sup>{{a.RH27DES}}</sup>
+                                    <br>
+                                    <sup>Cargo: {{a.RH28DES}}</sup>
+                                    <span class="w3-tag w3-right w3-tiny w3-green" title="Dependientes" *ngIf="a.dependientes > 0">{{'Dependiaentes: ' + a.dependientes}}</span>
+                                    <br>
+                                </div>
+                            </div>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="w3-col m8 l8 desc-emp">
+
+                <div id="{{visor_tarjeta.idempleado}}" class="w3-container emp w3-animate-left" *ngIf="visor_tarjeta.idempleado != 0">
+                    <div id="Borge" class="w3-container person">
+                        <div class="w3-row">
+                            <div class="w3-col m2 l2 w3-center">
+                                <img *ngIf="visor_tarjeta.sexo == 'M'" class="w3-round left" src="assets/img/avatar_masculino.png" style="width:100%;">
+                                <img *ngIf="visor_tarjeta.sexo == 'F'" class="w3-round left" src="assets/img/avatar_femenino.png" style="width:100%;">
+                                <h6 class="w3-opacity" style="margin: 0;">
+                                    <strong>{{visor_tarjeta.idempleado}}</strong>
+                                </h6>
+                                <p *ngIf="visor_tarjeta.estado == 'A'">
+                                    <span class="w3-tag w3-green">Activo</span>
+                                </p>
+                                <p *ngIf="visor_tarjeta.estado == 'E'">
+                                    <span class="w3-tag w3-red">Eliminado</span>
+                                </p>
+                                <p *ngIf="visor_tarjeta.estado == 'I'">
+                                    <span class="w3-tag w3-yellow">Inactivo</span>
+                                </p>
+                            </div>
+                            <div class="w3-col m10 l10">
+                                <h4 class="w3-opacity" style="margin: 0;">{{visor_tarjeta.nombre}} {{visor_tarjeta.nombre2}} {{visor_tarjeta.apellido}} {{visor_tarjeta.apellido2}}</h4>
+                                <h5 class="w3-opacity" style="margin: 0;">{{visor_tarjeta.RH27DES}}</h5>
+                                <h5 class="w3-opacity" style="margin: 0;">{{visor_tarjeta.RH28DES}}</h5>
+                            </div>
+                        </div>
+                        <div class="w3-row">
+                            <!-- <a class="w3-button w3-theme" href="javascript:void(0)" title="Dependientes" *ngIf="visor_tarjeta.dependientes != 0" (click)="dependientes(visor_tarjeta)">
+                                Dependientes
+                                <span class="w3-padding w3-tag w3-tiny w3-green">{{visor_tarjeta.dependientes}}</span>
+                            </a> -->
+                            <a class="w3-button w3-green" href="javascript:void(0)" *ngIf="permisos.actualizar == 1" title="Editar" (click)="editar(visor_tarjeta)">
+                                <i class="w3-padding fa fa-pencil"></i>
+                            </a>
+                            <a class="w3-button w3-theme" href="javascript:void(0)" *ngIf="permisos.actualizar == 1" title="Cambiar Evaluador" (click)="cambioEvaluador(visor_tarjeta)">
+                                <i class="w3-padding fa fa-exchange"></i>
+                            </a>
+                            <a class="w3-button w3-theme" href="javascript:void(0)" *ngIf="permisos.registrar == 1" title="Agregar nuevo Evaluado" (click)="nuevoEvaluador(visor_tarjeta)">
+                                <i class="w3-padding fa fa-user-plus"></i>
+                            </a>
+                            <a class="w3-button w3-red" href="javascript:void(0)" *ngIf="permisos.eliminar == 1  && visor_tarjeta.dependientes > 0" title="Eliminar Evaluador"
+                                (click)="eliminar_evaluador(visor_tarjeta)">
+                                <i class="w3-padding fa fa-remove"></i>
+                            </a>
+                        </div>
+                        <hr>
+                        <div class="w3-row">
+                            <div class="w3-col m12 l12">
+                                <dl class="dl-horizontal">
+
+                                    <dt>Cedula:</dt>
+                                    <dd>{{visor_tarjeta.cedula}}</dd>
+                                    <dt>Sexo: </dt>
+                                    <dd>
+                                        <span *ngIf="visor_tarjeta.sexo === 'F'">Femenino</span>
+                                        <span *ngIf="visor_tarjeta.sexo === 'M'">Masculino</span>
+                                        <span *ngIf="visor_tarjeta.sexo === null || visor_tarjeta.sexo === ''">-</span>
+                                    </dd>
+                                    <dt>email institucional:</dt>
+                                    <dd>
+                                        <a href="mailto:{{visor_tarjeta.email}}">{{visor_tarjeta.email}}</a>
+                                        <span *ngIf="visor_tarjeta.email === null || visor_tarjeta.email === ''">-</span>
+                                    </dd>
+                                </dl>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+            </div>
+        </div>
+    </div>
+</div>
+<div id="editar" class="w3-modal inmodal">
+    <div class="w3-modal-content w3-animate-right w3-card-4">
+        <header class="w3-container w3-center w3-theme">
+            <span onclick="document.getElementById('editar').style.display='none'" class="w3-button w3-display-topright">&times;</span>
+            <div class="w3-padding-16">
+                <h4 class="modal-title">FORMULARIO DE EMPLEADOS</h4>
+            </div>
+        </header>
+        <div class="w3-container">
+            <div class="w3-row w3-row-padding">
+                <div class="">
+
+                    <div class="w3-row w3-section  w3-row-padding">
+                        <div class="w3-col l6 m6">
+                            <label>Departamento</label>
+                            <select class="w3-select w3-border" name="departamento" [(ngModel)]="solicitud.RH27COD" (change)="seccionaCargo(solicitud.RH27COD)">
+                                <option value="0" selected>- TODOS -</option>
+                                <option *ngFor="let a of departamentos_arr" [value]="a.RH27COD">{{a.departamento}}</option>
+                            </select>
+                        </div>
+                        <div class="w3-col l6 m6">
+                            <label>Cargo</label>
+                            <select class="w3-select w3-border" name="Cargos" [(ngModel)]="solicitud.RH28COD">
+                                <option value="0" selected>- TODOS -</option>
+                                <option *ngFor="let a of cargos" [value]="a.RH28COD">{{a.cargo}}</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="w3-row w3-section  w3-row-padding">
+                        <div class="w3-col l3 m3">
+                            <label>ID Empleado</label>
+                            <input class="w3-input" type="text" [(ngModel)]="solicitud.idempleado" maxlength="50" placeholder="" disabled>
+                        </div>
+                        <div class="w3-col l3 m3">
+                            <label>Cedula</label>
+                            <input class="w3-input" type="text" [(ngModel)]="solicitud.cedula" maxlength="50" placeholder="" disabled>
+                        </div>
+                        <div class="w3-col l3 m3">
+                            <label>Estado</label>
+                            <select class="w3-select w3-border" name="estado" [(ngModel)]="solicitud.estadoText">
+                                <option value="" selected>- Secciona -</option>
+                                <option value="A">Activo</option>
+                                <option value="E">Eliminado</option>
+                                <option value="I">Inactivo</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="w3-row w3-section  w3-row-padding">
+                        <div class="w3-col l3 m3">
+                            <label>Primer Nombre</label>
+                            <input class="w3-input" type="text" [(ngModel)]="solicitud.nombre" maxlength="50" placeholder="">
+                        </div>
+                        <div class="w3-col l3 m3">
+                            <label>Segundo Nombre</label>
+                            <input class="w3-input" type="text" [(ngModel)]="solicitud.nombre2" maxlength="50" placeholder="">
+                        </div>
+                        <div class="w3-col l3 m3">
+                            <label>Primer Apellido</label>
+                            <input class="w3-input" type="text" [(ngModel)]="solicitud.apellido" maxlength="50" placeholder="">
+                        </div>
+                        <div class="w3-col l3 m3">
+                            <label>Segundo Apellido</label>
+                            <input class="w3-input" type="text" [(ngModel)]="solicitud.apellido2" maxlength="50" placeholder="">
+                        </div>
+                    </div>
+
+                    <div class="w3-row w3-section  w3-row-padding">
+                        <div class="w3-col l6 m6">
+                            <label>Correo Institucional</label>
+                            <input class="w3-input" type="text" [(ngModel)]="solicitud.email" maxlength="60" placeholder="">
+                        </div>
+                    </div>
+
+                    <div class="w3-row w3-section  w3-row-padding">
+                        <div class="w3-col l3 m3">
+                            <label>Sexo</label>
+                            <select class="w3-select w3-border" name="sexo" [(ngModel)]="solicitud.sexo">
+                                <option value="" selected>- Secciona -</option>
+                                <option value="F">Femenino</option>
+                                <option value="M">Masculino</option>
+                            </select>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+            <button class="w3-btn w3-medium" onclick="document.getElementById('editar').style.display='none'"> Cerrar</button>
+            <button class="w3-btn w3-medium w3-theme w3-margin" (click)="run()" *ngIf="!flag_envio">
+                <i class="fa fa-save"></i> Guardar</button>
+        </div>
+    </div>
+</div>
+
+<div id="cambioEvaluador" class="w3-modal inmodal">
+    <div class="w3-modal-content w3-animate-right w3-card-4">
+        <header class="w3-container w3-center w3-theme">
+            <span onclick="document.getElementById('cambioEvaluador').style.display='none'" class="w3-button w3-display-topright">&times;</span>
+            <div class="w3-padding-16">
+                <h4 class="modal-title">Cambio de Evaluador</h4>
+            </div>
+        </header>
+        <div class="w3-container">
+            <div class="w3-row w3-row-padding">
+                <div class="">
+
+                    <div class="w3-row w3-section  w3-row-padding" *ngFor="let a of evaluadores_Emp">
+                        <div class="w3-col l6 m6">
+                            <select class="w3-select w3-border" name="evaluadores" [(ngModel)]="a.idevaluador">
+                                <option value="0" selected>- TODOS -</option>
+                                <option *ngFor="let b of evaluadores" [value]="b.idempleado">{{b.nombre}} {{b.apellido}}</option>
+                            </select>
+                        </div>
+                        <div class="w3-col l6 m6">
+                            <a class="w3-button  w3-green" href="javascript:void(0)" (click)="guardaCambioEvaluador(a)">
+                                <i class="w3-padding fa fa-check"></i>
+                            </a>
+                            <a class="w3-button  w3-red" href="javascript:void(0)" (click)="eliminarEvaluador(a)" *ngIf="eliminarEvaluadorbtn == true && permisos.eliminar == 1">
+                                <i class="w3-padding fa fa-user-times"></i>
+                            </a>
+                        </div>
+                    </div>
+                    <hr>
+                </div>
+            </div>
+            <button class="w3-btn w3-medium w3-margin" onclick="document.getElementById('cambioEvaluador').style.display='none'"> Cerrar</button>
+        </div>
+    </div>
+</div>
+
+<div id="nuevoEvaluado" class="w3-modal inmodal">
+    <div class="w3-modal-content w3-animate-right w3-card-4">
+        <header class="w3-container w3-center w3-theme">
+            <span onclick="document.getElementById('nuevoEvaluado').style.display='none'" class="w3-button w3-display-topright">&times;</span>
+            <div class="w3-padding-16">
+                <h4 class="modal-title">Nuevo Evaluado para {{nuevoEvaluadorN}}</h4>
+            </div>
+        </header>
+        <div class="w3-container">
+            <div class="w3-row w3-row-padding">
+                <div class="">
+
+                    <form class="w3-row w3-section  w3-row-padding" (ngSubmit)="empleadoParaEvaluador(idempleado)">
+                        <div class="w3-col m11 l11">
+                            <input type="text" placeholder="ID de Empleado" class="w3-input" [(ngModel)]="idempleado" name="idempleadoAdd">
+                        </div>
+                        <!-- <div class="w3-col m1 l1">
+                            <a class="w3-button w3-theme" (click)="empleadoParaEvaluador(idempleado)">
+                                <i class="w3-padding fa fa-search"></i>
+                            </a>
+                        </div> -->
+                    </form>
+
+                    <div class="w3-row w3-section  w3-row-padding">
+                        <div class="w3-row">
+                            <div class="w3-col m12">
+                                <h4>Usuario a evaluar</h4>
+                            </div>
+                            <div class="w3-row w3-section" *ngFor="let a of emp_evaluador">
+                                <div class="w3-col m2 l2 left w3-center">
+                                    <img *ngIf="a.sexo == 'M'" class="w3-round left" src="assets/img/avatar_masculino.png" style="width:85%;">
+                                    <img *ngIf="a.sexo == 'F'" class="w3-round left" src="assets/img/avatar_femenino.png" style="width:85%;">
+                                    <sup *ngIf="a.estado == 'A'" class="w3-green">Activo </sup>
+                                    <sup *ngIf="a.estado == 'E'" class="w3-red">Eliminado </sup>
+                                    <sup *ngIf="a.estado == 'I'" class="w3-yellow">Inactivo </sup>
+                                </div>
+                                <div class="w3-col m4 l4">
+                                    <span class="w3-opacity w3-large">{{a.nombre}} {{a.nombre2}} {{a.apellido}} {{a.apellido2}}</span>
+                                    <br>
+                                    <sup>ID empleado:
+                                        <strong>{{a.idempleado}}</strong>
+                                    </sup>
+                                    <br>
+                                    <br>
+                                    <span class="w3-opacity w3-large">{{a.RH27DES}}</span>
+                                    <br>
+                                    <span class="w3-opacity w3-large">{{a.RH28DES}}</span>
+                                    <br>
+                                </div>
+                                <div class="w3-col m4 l4">
+                                    <button class="w3-btn w3-medium w3-theme" (click)="inserta_empleado(a.idempleado)" *ngIf="!flag_envio">
+                                        <i class="fa fa-save"></i> Guardar</button>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+            <button class="w3-btn w3-medium w3-margin" onclick="document.getElementById('nuevoEvaluado').style.display='none'"> Cerrar</button>
+        </div>
+    </div>
+</div>
+
+
+<div id="eliminaEvaluador" class="w3-modal inmodal">
+    <div class="w3-modal-content w3-animate-right w3-card-4">
+        <header class="w3-container w3-center w3-theme">
+            <span onclick="document.getElementById('eliminaEvaluador').style.display='none'" class="w3-button w3-display-topright">&times;</span>
+            <div class="w3-padding-16">
+                <h4 class="modal-title">Eliminar Evaluador {{solicitud.nombre}}</h4>
+            </div>
+        </header>
+        <div class="w3-container">
+            <div class="w3-row w3-row-padding">
+                <div class="w3-padding-16">
+                        <p class="w3-text-red"><strong> * </strong>  El evaluador mantiene dependientes activos</p>
+                        <p>Si desea eliminar al evaluador {{solicitud.nombre}} proceda a  <strong>cambiar de evaluador</strong>  a sus dependientes.</p>
+                </div>
+                <p>Cambio de evaluador: </p>
+                <select class="w3-select w3-border" name="evaluadores" [(ngModel)]="solicitud.evaluador">
+                    <option value="" selected>- TODOS LOS EVALUADORES -</option>
+                    <option *ngFor="let b of evaluadores" [value]="b.idempleado">{{b.nombre}} {{b.apellido}}</option>
+                </select>
+                <hr>
+            </div>
+            <button class="w3-btn w3-medium w3-margin" onclick="document.getElementById('eliminaEvaluador').style.display='none'"> Cerrar</button>
+            <button class="w3-btn w3-medium w3-theme w3-margin" (click)="run()" onclick="document.getElementById('eliminaEvaluador').style.display='none'" *ngIf="!flag_envio" [disabled]="solicitud.evaluador == solicitud.idempleado"><i class="fa fa-save"></i> Guardar</button>
+        </div>
+    </div>
+</div>

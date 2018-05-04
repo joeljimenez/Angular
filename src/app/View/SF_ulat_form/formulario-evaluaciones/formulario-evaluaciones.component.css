@@ -1,0 +1,29 @@
+.btn-inicio{
+    width:60px;
+    height:60px;
+    right:0;
+    bottom:50%;
+    position:fixed;
+    margin-right:16px;
+    margin-bottom:16px;
+    font-size:30px; 
+    z-index: 2030;
+    border: 3px #aeaa17 solid;
+
+    -webkit-transform-origin: 0 0;
+    -ms-transform-origin: 0 0;
+    transform-origin: 0 0;
+
+    -webkit-animation: leaves 1s ease-in-out infinite alternate;
+    animation: leaves 1s ease-in-out infinite alternate;
+}
+
+@-webkit-keyframes leaves {
+    0% {-webkit-transform: scale(1.0);}
+    100% {-webkit-transform: scale(1.1);}
+}
+
+@keyframes leaves {
+    0% {transform: scale(1.0);}
+    100% {transform: scale(1.1);}
+}

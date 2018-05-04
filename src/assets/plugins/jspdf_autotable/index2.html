@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title></title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link href="css/style.css" rel="stylesheet">
+    </head>
+    <body>
+  <div class="grafico-wrapper">
+  <div class="grafico-fuera">
+    <div id="grafico" class="grafico">
+    </div>
+  </div>
+</div>
+    </body>
+
+
+    <style>
+    
+.grafico-wrapper {
+    /*Espacios con el gráfico*/
+    padding: 25px 5px 20px 55px;
+    /*Un pequeño borde*/
+    border: 1px solid #EEE;
+    /*Anchura máxima, se irá haciendo más pequeño con el contenedor*/
+    max-width: 800px;
+    /*Lo centramos*/
+    margin: 0 auto;
+}
+.grafico-fuera {
+    /*Separación desde el bisel derecho hasta la columna más a la izda*/
+    padding-right: 15px;
+    /*Lo ocultamos -> Lo mostraremos con el script*/
+    display: none;
+    position: relative;
+}
+.lt-ie9 .grafico-fuera {
+    padding-right: 0;
+}
+/*Fondo de abajo y lateral derecho*/
+.grafico-fuera::before {
+    content: "";
+    /*Que sean tan altos como la parte externa del gráfico*/
+    height: 100%;
+    /*10px de alto*/
+    width: 10px;
+    /*Lo posicionamos a la derecha*/
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    /*El fondo semitransparente*/
+    background: rgba(0, 0, 0, .15);
+    /*Jugamos con el z-index para la profundidad -> El gráfico 2, la parte externa y las líneas 1*/
+    z-index: 1;
+}
+.grafico-fuera::after {
+    content: "";
+
+    position: absolute;
+    /*Tan ancho como el gráfico*/
+    width: 100%;
+    /*10px de alto*/
+    height: 10px;
+    /*Lo posicionamos abajo*/
+    left: 0;
+    bottom: 0;
+    /*Fondo semitransparente*/
+    background: rgba(0, 0, 0, .1);
+    z-index: 1;
+}
+/*los biseles de la columna
+  Tened en cuenta que la anchura de los biseles de la izda y la altura de los superiores tiene que ser iguales (en este caso 10px) para que "encajen"
+*/
+
+/*Bisel de arriba*/
+.column::before {
+    content: "";
+    position: absolute;
+    /*Lo posicionamos encima del todo*/
+    bottom: 100%;
+    left:0;
+    /*10px de alto, tan ancho como la columna*/
+    width:100%;
+    height: 10px;
+    /*Fondo azulado*/
+    background-color: #538CC6;
+    background-color: rgba(83,140,198,.8)
+}
+/*Bisel de la izda*/
+.column::after {
+    content: "";
+    position: absolute;
+    /*tan alto como la columna*/
+    height: 100%;
+    width: 10px;
+    /*A la izda del todo*/
+    right: 100%;
+    bottom: 0;
+    /*El fondo*/
+    background-color: #2D5986;
+    background-color:rgba(45,89,134,.8);
+}
+/*
+  Aquí aplicamos las transformaciones para el efecto
+*/
+.column::before, .grafico-fuera::after {
+    -webkit-transform:skewX(45deg);
+       -moz-transform:skewX(45deg);
+        -ms-transform:skewX(45deg);
+         -o-transform:skewX(45deg);
+            transform:skewX(45deg);
+    /*Para evitar transladar*/
+    -webkit-transform-origin:0 100%;
+       -moz-transform-origin:0 100%;
+        -ms-transform-origin:0 100%;
+         -o-transform-origin:0 100%;
+            transform-origin:0 100%;
+}
+.column::after, .grafico-fuera::before {
+    -webkit-transform-origin:100% 0;
+       -moz-transform-origin:100% 0;
+        -ms-transform-origin:100% 0;
+         -o-transform-origin:100% 0;
+            transform-origin:100% 0;
+    -webkit-transform:skewY(45deg);
+       -moz-transform:skewY(45deg);
+        -ms-transform:skewY(45deg);
+         -o-transform:skewY(45deg);
+            transform:skewY(45deg);
+}
+/*La altura del gráfico*/
+.grafico {
+    height: 200px;
+    z-index: 2;
+}
+/*Las líneas*/
+.grafico-linea {
+    position: absolute;
+    left: 0;
+    width: 100%;
+    height: 1px;
+    background-color: #777;
+    z-index:1;
+    /*En los navegadores soportados movemos las líneas hacia arriba y hacia la izda para que coincidan con las de el efecto 3d*/
+    -webkit-transform:translate(-10px,-10px);
+       -moz-transform:translate(-10px,-10px);
+        -ms-transform:translate(-10px,-10px);
+         -o-transform:translate(-10px,-10px);
+            transform:translate(-10px,-10px);
+}
+/*Éste (el número de la línea) nos interesa mantenerlo*/
+.grafico-linea:before {
+    content: attr(data-porcentaje)" %";
+    position: absolute;
+    top:-7.5px;
+    left: -37px;
+}
+/*Las columnas*/
+.column {
+    background: #8CB3D9;
+    background:rgba(140,179,217,.9);
+    text-align: center;
+    z-index: 2;
+}
+/*El texto del valor, que nos interesa centrar aproximadamente*/
+.value {
+    position: relative;
+    top: 40%;
+    padding: 4px;
+}
+    </style>
+
+
+    <script>
+        
+(function(){
+
+      setGraph({
+    valores:{ 
+       "PHP" : 13.18,
+       "Javascript": 42.85,
+       "Java": 20.87,
+       "C#": 23.07
+       //....
+    }
+  })
+/* =Función de ayuda
+--------------------- */
+function forEach(arr, fn){
+    for(var i = 0, len = arr.length; i < len; i++){
+        fn.call(null, arr[i], i)
+    }
+}
+/* =Gráfico
+--------------------- */
+function setGraph(opciones){
+var opciones = opciones || {},
+    // El gráfico
+    graph = opciones.idContenedor ? 
+                (typeof opciones.idContenedor === "string" ? 
+                    document.getElementById(opciones.idContenedor) : 
+                    opciones.idContenedor) :
+                document.getElementById("grafico"),
+    // Se han pasado valores para generarlo ?
+    valores = opciones.valores,
+    // Qué porcentaje del espacio totañ deberíamos ocupar?
+    espacioOcupado = opciones.espacioOcupado || 80,
+    // Cada qué porcentaje queremos que se pongan las líneas
+    porcentajeLineas = opciones.porcentajeLineas || 25,
+    // El contenedor del gráfico
+    parent = graph.parentNode,
+    // Las columnas (si hay)
+    childs = graph.childNodes || graph.children,
+    columns = [],
+    collen, incremento, props, linea;
+
+    for (var i = 0; i <= 100; i+=porcentajeLineas){
+        var linea = document.createElement("div");
+        linea.className = "grafico-linea"
+        linea.style.top = i + "%"
+        linea.setAttribute("data-porcentaje", (100 - i))
+        parent.appendChild(linea)
+    }
+    
+    // Si hemos pasado valores para generar el gráfico
+    if ( valores && typeof valores === "object" ){
+        graph.innerHTML = "";
+        for ( var valor in valores ){
+            (function(){
+                var val = valores[valor],
+                    div = document.createElement("div");
+                div.className = "column";
+                graph.appendChild(div)
+                columns.push({
+                    el: div,
+                    name: valor,
+                    value: val
+                })
+            })()
+        }
+    } else {
+        // Filtramos entre los elementos
+        forEach(childs, function(child){
+            if(child.nodeType === 3 || !child.getAttribute){return}
+            var value = child.getAttribute("data-value"),
+                name = child.getAttribute("data-name");
+            if( value === null || name === null){return}
+            columns.push({
+                el: child,
+                value: value,
+                name: name
+            })
+        });
+    }
+
+    collen = columns.length;
+    incremento = 100 / collen;
+    // El espacio un poco más pequeño que el  incremento (que sería un 100%)
+    espacioOcupado = espacioOcupado / collen;// Ocupar un porcentaje del contenedor
+    // Incremento - espacioOcupado => espacio en blanco por cada columna hacia abajo
+    //Collen -1 => el número de columnas que tendrán espacio (la última no la tiene)
+    incremento += (incremento - espacioOcupado)/(collen - 1)
+
+    forEach(columns, function(col,i){
+        var style = col.el.style;
+        col.el.innerHTML = '<span class="value">' + col.name + ' ('+ col.value + '%)</span>';
+        
+        style.position = "absolute";
+
+        style.width = espacioOcupado + "%";
+        style.height = col.value + "%";
+
+        style.left = (i * incremento) + "%";
+        style.bottom = 0;
+
+    })
+    graph.style.position = "relative";
+    parent.style.display = "block";
+}
+// Hacemos la función global
+window.setGraph = setGraph;
+
+})()
+    </script>
+</html>

@@ -1,0 +1,103 @@
+<!-- Top container -->
+<div class="w3-bar w3-top w3-theme-d5 w3-large" style="z-index:4">
+  <button class="w3-bar-item w3-button w3-hide-large w3-hover-none w3-hover-text-light-grey" (click)="w3_open();"><i class="fa fa-bars"></i>  Menu</button>
+  
+  
+  
+  <a  (click)="app_open();" class="w3-bar-item w3-button w3-padding-large w3-hover-white" title="Aplicaciones"><i class="fa fa-th-large"></i></a>
+  <a  href="#" class="w3-bar-item w3-button w3-hide-small w3-padding-large w3-hover-white w3-hide" title="News"><i class="fa fa-globe"></i></a>
+  <a href="#" class="w3-bar-item w3-button w3-hide-small w3-padding-large w3-hover-white w3-hide" title="Account Settings"><i class="fa fa-user"></i></a>
+  <a href="#" class="w3-bar-item w3-button w3-hide-small w3-padding-large w3-hover-white w3-hide" title="Messages"><i class="fa fa-envelope"></i></a>
+  <div class="w3-dropdown-hover w3-hide-small w3-hide">
+    <button class="w3-button w3-padding-large" title="Notifications"><i class="fa fa-bell"></i><span class="w3-badge w3-right w3-small w3-green">3</span></button>     
+    <div class="w3-dropdown-content w3-card-4 w3-bar-block" style="width:300px;position: fixed">
+      <a  class="w3-bar-item w3-button">One new friend request</a>
+      <a  class="w3-bar-item w3-button">John Doe posted on your wall</a>
+      <a  class="w3-bar-item w3-button">Jane likes your post</a>
+    </div>
+  </div>
+  
+  <a class="w3-bar-item w3-right" [routerLink]="['/login']"><i class="fa fa-sign-out"></i></a>
+
+</div>
+
+<!-- Sidebar/menu -->
+<nav class="w3-sidebar w3-collapse w3-white w3-animate-left" style="z-index:3;width:300px; border: 1.2px #aeaa17 solid;" id="mySidebar"><br>
+  <div class="w3-container w3-row">
+    <div class="w3-col s4">
+      <img src="assets/img/Logo-latina.png" class="w3-margin-right" style="width:55px">
+    </div>
+    <div class="w3-col s8 w3-bar">
+      <span>Bienvenido(a), <strong>{{nombre}}</strong></span><br>
+      <a  class="w3-bar-item w3-button w3-theme"><i class="fa fa-envelope"></i></a>
+      <a  class="w3-bar-item w3-button w3-theme"><i class="fa fa-user"></i></a>
+      <a  class="w3-bar-item w3-button w3-theme"><i class="fa fa-cog"></i></a>
+    </div>
+  </div>
+  <hr>
+  <!-- <div class="w3-container">
+    <h5>Dashboard</h5>
+  </div> -->
+  <div class="w3-bar-block ">
+    <div *ngFor="let a of menu | orderBy:'orden'">
+      <div *ngIf="a.idtipo_menu == 2">
+        <a (click)="myAccFunc(a.idmenu)" class="w3-bar-item w3-button w3-padding w3-hover-theme"> <i class="fa fa-bars w3-padding"></i> {{a.nombre}} <i class="fa fa-caret-down"></i></a>
+        <div id="demoAcc{{a.idmenu}}" class="w3-bar-block w3-hide w3-padding-large w3-medium">
+          <div *ngFor="let b of a.menu | orderBy:'orden'">
+            <a  *ngIf="b.muestra == 1" [routerLink]="['./' + b.link ]" class="w3-bar-item w3-button w3-hover-theme">{{b.nombre}}</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- menu -->
+      <div *ngIf="a.idtipo_menu == 1">
+          <a  *ngIf="a.muestra == 1" [routerLink]="['./' + a.link ]" class="w3-bar-item w3-button w3-padding w3-hover-theme"> <i class="fa fa-bars w3-padding"></i> {{a.nombre}}</a>          
+      </div>
+    
+    </div>
+  <br><br>
+
+    <!-- <a class="w3-bar-item w3-button w3-padding-16 w3-hide-large w3-dark-grey w3-hover-black" (click)="w3_close()" title="close menu"><i class="fa fa-remove fa-fw"></i>  Close Menu</a>
+    <a [routerLink]="['./dashboard']" class="w3-bar-item w3-button w3-padding w3-blue"><i class="fa fa-users fa-fw"></i>  Overview</a>
+    <a href="#" class="w3-bar-item w3-button w3-padding"><i class="fa fa-eye fa-fw"></i>  Views</a>
+    <a href="#" class="w3-bar-item w3-button w3-padding"><i class="fa fa-users fa-fw"></i>  Traffic</a>
+    <a href="#" class="w3-bar-item w3-button w3-padding"><i class="fa fa-bullseye fa-fw"></i>  Geo</a>
+    <a href="#" class="w3-bar-item w3-button w3-padding"><i class="fa fa-diamond fa-fw"></i>  Orders</a>
+    <a href="#" class="w3-bar-item w3-button w3-padding"><i class="fa fa-bell fa-fw"></i>  News</a>
+    <a href="#" class="w3-bar-item w3-button w3-padding"><i class="fa fa-bank fa-fw"></i>  General</a>
+    <a href="#" class="w3-bar-item w3-button w3-padding"><i class="fa fa-history fa-fw"></i>  History</a>
+    <a (click)="myAccFunc('1')" class="w3-bar-item w3-button w3-padding"> <i class="fa fa-history fa-fw"></i> Jeans <i class="fa fa-caret-down"></i></a>
+    <div id="demoAcc1" class="w3-bar-block w3-hide w3-padding-large w3-medium w3-show">
+      <a href="#" class="w3-bar-item w3-button">Skinny</a>
+      <a href="#" class="w3-bar-item w3-button">Relaxed</a>
+      <a href="#" class="w3-bar-item w3-button">Bootcut</a>
+      <a href="#" class="w3-bar-item w3-button">Straight</a>
+    </div>
+    <a href="#" class="w3-bar-item w3-button w3-padding"><i class="fa fa-eye fa-fw"></i>  Views</a>
+    <a href="#" class="w3-bar-item w3-button w3-padding"><i class="fa fa-users fa-fw"></i>  Traffic</a>
+    <a href="#" class="w3-bar-item w3-button w3-padding"><i class="fa fa-bullseye fa-fw"></i>  Geo</a>
+    <a href="#" class="w3-bar-item w3-button w3-padding"><i class="fa fa-diamond fa-fw"></i>  Orders</a>
+    <a href="#" class="w3-bar-item w3-button w3-padding"><i class="fa fa-bell fa-fw"></i>  News</a>
+    <a href="#" class="w3-bar-item w3-button w3-padding"><i class="fa fa-bank fa-fw"></i>  General</a>
+    <a href="#" class="w3-bar-item w3-button w3-padding"><i class="fa fa-history fa-fw"></i>  History</a>
+    <a href="#" class="w3-bar-item w3-button w3-padding"><i class="fa fa-cog fa-fw"></i>  Settings</a><br><br> -->
+
+  </div>
+</nav>
+
+
+  
+<!-- Overlay effect when opening sidebar on small screens -->
+<div class="w3-overlay w3-hide-large w3-animate-opacity" (click)="w3_close()" style="cursor:pointer" title="close side menu"
+  id="myOverlay"></div>
+
+
+<!-- Sidebar APP -->
+<div class="w3-sidebar w3-bar-block w3-animate-left" style="display:none;z-index:5;width:400px;" id="SidebarApp">
+  <!-- recibimos el evento ActMenu y lanzamos el método actualizaMenu del componente menu. -->
+  <app-software (ActMenu)="actualizaMenu()"></app-software>
+</div> 
+
+<!-- Overlay effect when opening App -->
+<div class="w3-overlay w3-animate-opacity" (click)="app_close()" style="cursor:pointer" title="Apps"
+id="AppOverlay"></div>

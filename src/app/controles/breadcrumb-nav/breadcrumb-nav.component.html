@@ -1,0 +1,17 @@
+<div class="w3-container">
+    <div class="">
+        <select class="w3-select w3-col l2 m2 w3-right w3-white w3-padding w3-card" name="sedes" *ngIf="sede" #selectElem (change)="selecSede(selectElem.value)">
+                <option class="w3-white" *ngFor="let a of sedes" value="{{a.id}}" [selected]="a.id == idsedeSession">{{a.nombre}}</option>
+        </select>
+        <a class="w3-btn w3-circle w3-theme pull-right" style="font-size: 20px;"  *ngIf="btnCrear == true && permisos.registrar == 1" (click)="crear()">
+            <i class="fa fa-plus"></i>
+        </a>
+        <h3 class="" style="color: #0182c0;">
+            <!-- <i class="fa fa-list-ul w3-margin-right w3-xlarge"></i> -->
+            {{titulo}}
+        </h3>
+        <ul class="breadcrumb" style="padding-left: 0px;">
+            <li *ngFor="let a of breadcrumb"><a (click)="seleccionaNav(a)" style="cursor: pointer;"> {{a.nombre}} </a></li>
+        </ul>
+    </div>
+</div>

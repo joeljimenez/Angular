@@ -1,0 +1,110 @@
+<simple-notifications [options]="options"></simple-notifications>
+<control-skin [skin]="1" [estado]="flag_envio"></control-skin>
+<app-nav [titulo]="titulo" [breadcrumb]="breadcrumbArray"></app-nav>
+
+<div class="w3-container w3-animate-bottom">
+    <div class="w3-panel w3-padding-32 w3-white w3-card">
+        <div class="w3-row">
+            <div class="w3-row w3-section  w3-row-padding">
+                <div class="w3-row w3-section w3-row-padding">
+                    <label>
+                        <b>Buscar por rango de fecha</b>
+                    </label>
+                </div>
+                <div class="w3-col l4 m4">
+                    <input class="w3-input" type="date" [(ngModel)]="solicitud.fecha_inicio" placeholder="Fecha">
+                    <!-- <md2-datepicker [(ngModel)]="solicitud.fecha_inicio"></md2-datepicker> -->
+                </div>
+                <div class="w3-col l4 m4">
+                    <input class="w3-input" type="date" [(ngModel)]="solicitud.fecha_fin" placeholder="Fecha">
+                    <!-- <md2-datepicker [(ngModel)]="solicitud.fecha_fin"></md2-datepicker> -->
+                </div>
+                <div class="w3-col l4 m4">
+                    <button class="w3-btn w3-theme" (click)="buscar_fecha()">
+                        <i class="fa fa-search"></i> Buscar</button>
+                </div>
+                <div class="w3-row w3-section  w3-row-padding" *ngIf="valida_fechas">
+                    <i style="color:red;">Fecha de inicio no puede ser mayor que la fecha final.</i>
+                </div>
+            </div>
+
+            <div class="w3-row w3-section  w3-row-padding">
+                <div class="w3-row w3-section  w3-row-padding">
+                    <label>
+                        <b>Buscar por cédula</b>
+                    </label>
+                </div>
+                <div class="w3-col l8 m8">
+                    <input class="w3-input" type="text" [(ngModel)]="solicitud.cedula_est" maxlength="50" placeholder="Buscar por Número de Cédula / Pasaporte">
+                </div>
+                <div class="w3-col l4 m4">
+                    <button class="w3-btn w3-theme" (click)="buscar()">
+                        <i class="fa fa-search"></i> Buscar</button>
+                </div>
+            </div>
+
+            <div class="w3-row w3-section  w3-row-padding">
+                <div class="w3-col l8 m8">
+                    <label>
+                        <b>Estados de la Solicitud</b>
+                    </label>
+                    <select class="w3-select" name="estado_solicitud" #selectElem (change)="selecEstado(selectElem.value)">
+                        <option value="" [selected]="estado == '1'">TODOS</option>
+                        <option *ngFor="let a of estados" [value]="a.estado_solicitud" [disabled]="a.estado_solicitud =='APE'">{{a.descripcion}}</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="w3-row w3-section  w3-row-padding">
+                <button class="w3-btn w3-theme" (click)="todos()">
+                    <i class="fa fa-refresh"></i> Actualizar</button>
+            </div>
+            <br>
+            <div class="w3-row w3-section w3-responsive w3-row-padding">
+                <div class="w3-section w3-row-padding w3-half">
+                    <div class="w3-col" style="width:50px">
+                        <i class="w3-xxlarge fa fa-search" style="color: #0182c0"></i>
+                    </div>
+                    <div class="w3-rest">
+                        <input type="text" placeholder="Buscar Solicitud por(Cédula, Nombre, Carrera)" class="w3-input w3-border" [(ngModel)]="filtro">
+                    </div>
+                </div>
+                <table class="w3-table w3-striped w3-border w3-hoverable">
+                    <tr class="w3-theme-d5">
+                        <th width="12%">Cédula</th>
+                        <th>Nombre</th>
+                        <th>Carrera</th>
+                        <th>Titulo</th>
+                        <th>Estado</th>
+                        <!-- <th>Ver</th> -->
+                    </tr>
+                    <tr *ngFor="let a of dataArr  | orderBy:'-id_solicitud'  |filterBy: ['estado_solicitud']: filter|filterBy: ['cedula', 'nombre_principal', 'carrera_nom']: filtro">
+                        <td>{{a.cedula}}</td>
+                        <td>{{a.nombre_principal|corrector}}</td>
+                        <td>{{a.carrera_nom}}</td>
+                        <td>{{a.titulo}}</td>
+                        <!-- <td [ngClass]="{'w3-blue': a.estado_solicitud == 'EMI','w3-green': a.estado_solicitud == 'ING','w3-indigo': a.estado_solicitud == 'PRA','w3-orange': a.estado_solicitud == 'RE1','w3-red': a.estado_solicitud == 'RTO'}">
+                            <i class="fa fa-exclamation-triangle"style="color:yellow" *ngIf="a.mensaje_estado_bool"></i> {{a.est_nom}}
+                        </td> -->
+                        <td (click)="open(a)" style="cursor:pointer" class="w3-center w3-tooltip w3-card-4" [ngClass]="{'w3-blue': a.estado_solicitud == 'EMI','w3-green': a.estado_solicitud == 'ING','w3-indigo': a.estado_solicitud == 'PRA','w3-orange': a.estado_solicitud == 'RE1','w3-red': a.estado_solicitud == 'RTO'}">
+                            <i class="fa fa-exclamation-triangle" style="color:yellow;position:absolute;left:0;" *ngIf="a.mensaje_estado_bool"></i>
+                            <span style="position:absolute;right:100%;bottom:0px;width:520%;height: 100%;" class="w3-text w3-text-white w3-tag w3-animate-zoom"
+                                [ngClass]="{'w3-blue': a.estado_solicitud == 'EMI','w3-green': a.estado_solicitud == 'ING','w3-indigo': a.estado_solicitud == 'PRA','w3-orange': a.estado_solicitud == 'RE1','w3-red': a.estado_solicitud == 'RTO'}">
+                                <em class="" style="position:absolute">{{a.est_nom}}</em>
+                            </span>
+                            <i *ngIf="a.estado_solicitud == 'EMI'" class="fa fa-tasks w3-xxlarge" aria-hidden="true"></i>
+                            <i *ngIf="a.estado_solicitud == 'ING'" class="fa fa-floppy-o w3-xxlarge" aria-hidden="true"></i>
+                            <i *ngIf="a.estado_solicitud == 'PRA'" class="fa fa-clock-o w3-xxlarge" aria-hidden="true"></i>
+                            <i *ngIf="a.estado_solicitud == 'RE1'" class="fa fa-comments w3-xxlarge w3-text-white" aria-hidden="true"></i>
+                            <i *ngIf="a.estado_solicitud == 'RTO'" class="fa fa-thumbs-down w3-xxlarge" aria-hidden="true"></i>
+                            <i *ngIf="a.estado_solicitud == 'APE'" class="fa fa-thumbs-up w3-xxlarge" aria-hidden="true"></i>
+                        </td>
+                        <!-- <td>
+                        <button class="w3-button w3-theme" (click)="open(a)"><i class="fa fa-plus"></i></button>
+                        </td> -->
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>

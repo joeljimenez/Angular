@@ -1,0 +1,163 @@
+<control-skin [skin]="1" [estado]="flag_envio"></control-skin>
+<simple-notifications [options]="options"></simple-notifications>
+<app-nav [titulo]="titulo" [breadcrumb]="breadcrumbArray" (SelectSede)="consulta_empleados(0, -1)" [sede]="true"></app-nav>
+
+
+<div class="w3-container w3-animate-bottom">
+    <div class="w3-panel w3-padding-32 w3-white w3-card">
+        <div class="w3-row">
+        <!-- PERSONAL A EVALUAR -->
+        <h5 class="w3-text-grey w3-padding-16">
+                PERSONAL A EVALUAR
+                <a class="w3-button w3-circle w3-theme pull-right" style="width: 35px;"  onclick="document.getElementById('info').style.display='block'" title="Muestra Información">
+                    <i class="fa fa-question"></i>
+                </a>
+            </h5>
+    
+            <div class="w3-padding-16">
+                <!-- <div class="w3-container  w3-margin-bottom">
+                    <hr>
+                    <h3 class="w3-center">R E G I S T R A R   -   E M P L E A D O  </h3>
+                    <hr>
+                </div> -->
+    
+                <div class="w3-row w3-section  w3-row-padding">
+                        <!-- <div class="w3-col l3 m3">
+                            <div class="w3-group">
+                                <input type="text" placeholder="ID de Empleado" class="w3-input" [(ngModel)]="idempleado">
+                            </div>
+                        </div>
+                        <div class="w3-col l1 m1">
+                            <span class="input-group-btn">
+                                    <button type="button" class="w3-button w3-theme" (click)="consulta_empleado(idempleado)"><i class="fa fa-search"></i></button>
+                            </span>
+                            <label class="alert alert-danger" *ngIf="error">ID de empleado no existe.</label>
+                        </div> -->
+    
+    
+                    <table class="w3-table-all w3-hoverable">
+                        <tbody>
+                            <tr *ngFor="let a of data">
+                                <td>
+                                        <span class="label label-primary" *ngIf="a.estado == 'A'">Activo</span>
+                                        <span class="label label-default" *ngIf="a.estado == 'E'">Inactivo</span>
+                                        <span class="label label-danger" *ngIf="a.estado == 'R'">Registrado</span>
+                                </td>
+                                <td>
+                                        <a ui-sref="project_detail">{{a.nombre + ' '+ a.nombre}}</a>
+                                        <br />
+                                        <small>{{a.email}}</small>
+                                </td>
+                                <td>
+                                        <span><strong>{{a.rH27DES}}</strong> </span>
+                                        <small class="text-danger" *ngIf="a.RH27COD == null">Pendiente Departamento. No puede ser registrado. comunique a RRHH</small>
+                                        <br />
+                                        <small>{{a.RH28DES}}</small>
+                                        <small class="text-danger" *ngIf="a.RH27COD == null">Pendiente Puesto. No puede ser registrado. comunique a RRHH</small>
+                                </td>
+                                <td>
+    
+                                </td>
+                                <td>
+                                        <a (click)="inserta_empleado(a.idempleado)" *ngIf="a.estado == 'A' && a.rH27COD != null && a.rH28COD != null" class="w3-button w3-theme"><i class="fa fa-plus"></i> </a>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>  
+                </div>
+    
+    
+    
+    
+    
+                <!-- R E G I S T R A D O S -->
+                <div class="w3-container">
+                    <hr>
+                    <h5 class="w3-center">R E G I S T R A D O S </h5>
+                    <hr>
+                </div>
+    
+                <div class="w3-row w3-section  w3-row-padding">
+                    <div class="w3-col l6 m6">
+                        <div class="w3-group">
+                            <input type="text" placeholder="Filtro por primer nombre" class="w3-input w3-border" [(ngModel)]="filtro">
+                        </div>
+                    </div>
+                    <div class="pull-right">
+                        <button type="button" class="w3-button w3-theme" (click)="consulta_empleados(0,-2)"> <i class="fa fa-home"></i></button>
+                        <button type="button" class="w3-button w3-theme" *ngIf="last.length > 0" (click)="after_empleado()"> <i class="fa fa-chevron-left"></i></button>
+                    </div>
+                </div>
+    
+                <div class="w3-padding-16">
+                    <table class="w3-table-all w3-hoverable">
+                        <tbody>
+                            <tr *ngFor="let a of empleados|orderBy:'estado'|filterBy: ['nombre']: filtro">
+                                <td>
+                                        <span class="label label-primary" *ngIf="a.estado == 'A'">Activo</span>
+                                        <span class="label label-default" *ngIf="a.estado == 'E'">Inactivo</span>
+                                </td>
+                                <td>
+                                        <a ui-sref="project_detail">{{a.nombre + ' '+ a.apellido}}</a>
+                                        <br />
+                                        <small>{{'Numero de empleado: ' + a.RH09EMP}}</small>
+                                </td>
+                                <td>
+                                        <span><strong>{{a.RH27DES}}</strong> </span>
+                                        <br />
+                                        <small>{{a.RH28DES}}</small>
+                                </td>
+                                <td width="1px"> 
+                                        <a (click)="consulta_empleados(a.RH09EMP, a.idempleado)" *ngIf="a.dependientes == true" class="w3-button w3-theme"><i class="fa fa-group"></i> </a>
+                                </td>
+                                <td width="1px">
+                                        <a (click)="open(a)" class="w3-button w3-theme"><i class="fa fa-folder"></i> </a>
+                                        <!-- [routerLink]="['../Evaluaciones-Empleado']" -->
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+    
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="info" class="w3-modal inmodal">
+    <div class="w3-modal-content w3-animate-right w3-card-4">
+        <header class="w3-container w3-center w3-theme"> 
+        <span onclick="document.getElementById('info').style.display='none'" class="w3-button w3-display-topright">&times;</span>
+        <div class="w3-padding-16">
+            <i class="fa fa-laptop modal-icon"></i>
+            <h4 class="modal-title">INFO</h4>
+            <small class="font-bold">En esta pantalla usted podrá evaluar a todos sus colaboradores. si algún colaborador no existe usted podrá buscarlo y registrarlo.</small>
+        </div>
+        </header>
+        <div class="w3-container">
+        <div class="w3-row w3-row-padding">
+            <div class="w3-col m6">
+                <hr />
+                <h3 class="w3-center">R E G I S T R A R   -   E M P L E A D O  </h3>
+                <hr />
+
+                <p>Lo único que necesita es el id del empleado. Ingréselo en la caja de texto que dice <span class="w3-grey">ID de Empleado</span>  y presiones el boton <a class="w3-button w3-theme w3-tiny"><i class="fa fa-search"></i></a> </p>
+                <p>
+                    Aparecerá el colaborador que está buscando, si el colaborador está <span class="w3-theme">Activo</span>, en la parte derecha del reglón aparecerá un botón como este <a class="w3-button w3-theme w3-tiny"><i class="fa fa-plus"></i> </a> presionelo para agregarlo. De lo contrario el colaborador aparecerá
+                    <span class="w3-grey">Inactivo</span> o
+                    <span class="w3-red">Registrado</span>
+                </p>
+                <p>Si el colaborador está <span class="w3-grey">Inactivo</span>, pero aun labora comuníquese con el departamento de RRHH para que activen al colaborador dentro de la empresa.</p>
+            
+            </div>
+            <div class="w3-col m6">
+                <hr />
+                <h3 class="w3-center">R E G I S T R A D O S </h3>
+                <hr />
+                <p>En esta sección usted tendrá todos los colaboradores bajo su cargo. Si desea buscar uno y la lista es extensa puede filtrarlo por el primer nombre para una búsqueda más rápida. </p>
+                <p>En la parte derecha del colaborador encontrará un botón con una carpeta <a class="w3-button w3-theme w3-tiny" title="Evaluaciones"><i class="fa fa-folder"></i></a>, si lo presiona se dirigirá a ver todas las evaluaciones que le ha creado al colaborador y poder crear nuevas. </p>
+            </div>
+        </div>
+        </div>
+    </div>
+</div>

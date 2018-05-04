@@ -1,0 +1,28 @@
+<div class="w3-container">
+  <div class="w3-modal" style="display: block">
+    <div class="w3-modal-content w3-card-4 w3-animate-zoom" style="max-width:600px">
+
+      <div class="w3-center"><br>
+        <img src="assets/img/Logo-latina.png" alt="Avatar" style="width:30%" class=" w3-margin-top">
+      </div>
+
+      <form class="w3-container" action="/action_page.php">
+        <div class="w3-section">
+          <label><b>Usuario</b></label>
+          <input class="w3-input w3-border w3-margin-bottom" type="text" placeholder="Usuario" name="usrname" required [(ngModel)]="login.correo">
+          <label><b>Contraseña</b></label>
+          <input class="w3-input w3-border" type="password" placeholder="Contraseña" name="psw" required  [(ngModel)]="login.password">
+          <input class="w3-check" type="checkbox" name="tipoUsuario"  [(ngModel)]="login.tipoUsuario">
+          <label>Usuario Externo</label>
+          <button class="w3-button w3-block w3-theme w3-section w3-padding" type="submit" (click)="autenticar()" >Autenticar</button>
+          <p class="w3-text-red">{{respuesta.mensaje}}</p>
+        </div>
+      </form>
+
+      <div class="w3-container w3-border-top w3-padding-16 w3-light-grey">
+        <button hidden  type="button" class="w3-button w3-hover-theme">Cancel</button>
+        <span hidden class="w3-right w3-padding w3-hide-small">Forgot <a href="#">password?</a></span>
+      </div>
+    </div>
+  </div>
+</div>

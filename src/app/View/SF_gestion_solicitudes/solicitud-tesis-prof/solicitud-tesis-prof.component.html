@@ -1,0 +1,145 @@
+<simple-notifications [options]="options"></simple-notifications>
+<control-skin [skin]="1" [estado]="flag_envio"></control-skin>
+<app-nav [titulo]="titulo" [breadcrumb]="breadcrumbArray"></app-nav>
+
+
+<div class="w3-container w3-animate-bottom">
+  <div class="w3-panel w3-padding-32 w3-white w3-card">
+    <div class="w3-row">
+      <div class="w3-section w3-row-padding w3-half">
+        <div class="w3-col" style="width:50px">
+          <i class="w3-xxlarge fa fa-search" style="color: #0182c0"></i>
+        </div>
+        <div class="w3-rest">
+          <input type="text" placeholder="Buscar Solicitud por(Nombre, Carrera)" class="w3-input w3-border" [(ngModel)]="filtro">
+        </div>
+      </div>
+        <table class="w3-table w3-striped w3-border w3-hoverable">
+          <tr class="w3-theme-d5">
+            <th>Estudiante</th>
+            <th>Carrera</th>
+            <th>Título</th>
+            <th>Estado</th>
+            <th>Editar</th>
+            <th>Enviar</th>
+            <th>Detalle</th>
+          </tr>
+
+          <tr *ngFor="let a of respuesta | orderBy:'-id_solicitud'|filterBy: ['nombre_principal', 'carrera_nom']: filtro">
+            <td>{{a.nombre_principal}}</td>
+            <td>{{a.carrera_nom}}</td>
+            <td>{{a.titulo}}</td>
+            <td>
+              <i class="fa fa-exclamation-triangle" style="color:yellow" *ngIf="a.mensaje_estado_bool"></i> {{a.est_nom}}
+            </td>
+            <!-- <td [ngClass]="{'w3-blue': a.estado_solicitud == 'EMI','w3-green': a.estado_solicitud == 'ING','w3-yellow': a.estado_solicitud == 'PRA','w3-orange': a.estado_solicitud == 'RE1','w3-red': a.estado_solicitud == 'RTO', 'w3-teal': a.estado_solicitud == 'APE'}">
+                        <i class="fa fa-exclamation-triangle"style="color:yellow" *ngIf="a.mensaje_estado_bool"></i> {{a.est_nom}}
+                    </td> -->
+            <td class="w3-center">
+              <button class="w3-button w3-theme" (click)="open(a)" *ngIf="a.estado_solicitud == 'EMI' || a.estado_solicitud == 'PRA'"
+                title="Editar solicitud">
+                <i class="fa fa-edit"></i>
+              </button>
+            </td>
+            <td class="w3-center">
+              <button class="w3-button w3-theme" (click)="enviar_solicitud(a)" *ngIf="a.estado_solicitud == 'EMI' || a.estado_solicitud == 'PRA'"
+                title="Enviar solicitud">
+                <i class="fa fa-envelope"></i>
+              </button>
+            </td>
+            <td class="w3-center">
+              <button class="w3-button w3-theme" (click)="detalle(a)" title="Detalle solicitud">
+                <i class="fa fa-plus"></i>
+              </button>
+            </td>
+          </tr>
+        </table>
+    </div>
+  </div>
+</div>
+
+<div id="mensaje" class="w3-modal">
+  <div class="w3-modal-content w3-card-4">
+    <header class="w3-container w3-theme-d5 w3-margin-bottom">
+      <span onclick="document.getElementById('mensaje').style.display='none'" class="w3-button w3-display-topright">&times;</span>
+      <h2>{{titulo_modal}}</h2>
+    </header>
+
+    <div class="w3-container">
+      <div class="">
+
+        <div class="w3-row w3-section  w3-row-padding">
+          <div class="w3-col l12 m12">
+            <p [innerHTML]="mensaje"></p>
+          </div>
+        </div>
+
+        <div *ngIf="solicitud.proceso == 7">
+
+          <div class="w3-row w3-section  w3-row-padding">
+            <div class="w3-col l12 m12">
+              <label>Tipo de respuestas</label>
+              <select class="w3-select" [(ngModel)]="solicitud.estado_sol">
+                <option value="" disabled> - Seleccione - </option>
+                <option *ngFor="let a of estados" [value]="a.id" title="{{a.nombre}}">{{a.nombre}}</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="w3-row w3-section  w3-row-padding">
+            <div class="w3-col l12 m12">
+              <label>Mensaje al Estudiante</label>
+              <textarea class="w3-input" type="text" [(ngModel)]="solicitud.mensaje" rows="3" maxlength="260"></textarea>
+            </div>
+          </div>
+
+          <button class="w3-button w3-medium w3-theme w3-margin" (click)="guardar_envio_solicitud()" *ngIf="!flag_envio">
+            <i class="fa fa-save"></i> Enviar</button>
+        </div>
+
+        <button class="w3-button w3-medium w3-theme w3-margin" onclick="document.getElementById('mensaje').style.display='none'"
+          *ngIf="solicitud.proceso == 0">
+          <i class="fa fa-check"></i> Ok</button>
+
+      </div>
+
+    </div>
+
+
+    <div class="w3-panel w3-orange">
+      <h2 class="w3-opacity">{{mensaje_error}}</h2>
+    </div>
+    <control-skin [estado]="flag_envio" [skin]="1"></control-skin>
+  </div>
+</div>
+
+<div id="alerta" class="w3-modal">
+  <div class="w3-modal-content w3-card-4">
+    <header class="w3-container w3-theme-d5 w3-margin-bottom">
+      <span onclick="document.getElementById('alerta').style.display='none'" class="w3-button w3-display-topright">&times;</span>
+      <h2>{{titulo_modal}}</h2>
+    </header>
+
+    <div class="w3-container">
+      <div class="">
+
+        <div class="w3-row w3-section  w3-row-padding">
+          <div class="w3-col l12 m12">
+            <p [innerHTML]="mensaje"></p>
+          </div>
+        </div>
+
+        <button class="w3-button w3-medium w3-theme w3-margin" onclick="document.getElementById('alerta').style.display='none'" *ngIf="solicitud.proceso == 0">
+          <i class="fa fa-check"></i> Ok</button>
+
+
+      </div>
+    </div>
+
+
+    <div class="w3-panel w3-orange">
+      <h2 class="w3-opacity">{{mensaje_error}}</h2>
+    </div>
+    <control-skin [estado]="flag_envio" [skin]="1"></control-skin>
+  </div>
+</div>

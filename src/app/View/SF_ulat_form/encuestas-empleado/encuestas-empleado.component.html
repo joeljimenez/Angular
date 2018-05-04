@@ -1,0 +1,79 @@
+<simple-notifications [options]="options"></simple-notifications>
+<app-nav [titulo]="titulo" [breadcrumb]="breadcrumbArray"></app-nav>
+
+<div class="w3-black">
+</div>
+
+<div class="w3-container w3-animate-bottom">
+    <div class="w3-panel w3-padding-32 w3-white w3-card">
+        <div class="w3-row">
+
+            <div class="w3-container  w3-margin-bottom">
+                <hr>
+                <h5 class="w3-center">{{nombreEvaluador}}</h5>
+                <hr>
+            </div>
+            <div class="w3-section w3-row-padding w3-half">
+                <div class="w3-col" style="width:50px">
+                    <i class="w3-xxlarge fa fa-search" style="color: #0182c0"></i>
+                </div>
+                <div class="w3-rest">
+                    <input type="text" placeholder="Buscar por nombre y cargo" class="w3-input w3-border" [(ngModel)]="filtro">
+                </div>
+            </div>
+            <div class="w3-row w3-padding">
+
+                <div class="w3-card w3-white w3-col w3-margin w3-center" style="width: 30%;" *ngFor="let a of encuestas_empleado|orderBy:'nombre_empleado'|filterBy: ['nombre_empleado', 'puesto']: filtro">
+                    <div class="w3-dropdown-hover w3-right">
+                        <button class="w3-btn w3-theme">
+                            <i class="fa fa-ellipsis-v"></i>
+                        </button>
+                        <div class="w3-dropdown-content w3-bar-block w3-border" style="right:0">
+                            <a (click)="consulta_form_evaluacion(a)" class="w3-bar-item w3-button">
+                                <i class="fa fa-eye"></i> Abrir Formulario</a>
+                        </div>
+                    </div>
+                    <br>
+                    <div class="w3-text-grey w3-center w3-padding">
+                        <h5>
+                            <strong>{{a.nombre_from}}</strong>
+                        </h5>
+                        <div class="fw3-display-container">
+                            <img *ngIf="a.confirmacion == 0" alt="Doble Clic para cargar imagen" style="width:50%; cursor:pointer" src="./assets/img/form.png"
+                                (dblclick)="consulta_form_evaluacion(a)">
+                            <img *ngIf="a.confirmacion == 1" alt="Doble Clic para cargar imagen" style="width:50%; cursor:pointer" src="./assets/img/from_cofirmado.png"
+                                (dblclick)="consulta_form_evaluacion(a)">
+                        </div>
+                        <strong>{{a.nombre_empleado}}</strong>
+                        <br>
+                        <small>{{a.sede_empleado}}</small>
+                        <br>
+                        <small>
+                            <b>{{a.puesto}}</b>
+                        </small>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+</div>
+
+
+
+<div id="reporte" class="w3-modal inmodal" style="top: -40px">
+    <div class="w3-modal-content w3-animate-right w3-card-4" style="width: 1235px!important;">
+        <header class="w3-container w3-center w3-theme">
+            <span onclick="document.getElementById('reporte').style.display='none'" class="w3-button w3-display-topright">&times;</span>
+            <div class="w3-padding-16">
+                <h5>Formulario de Evaluación - Confirmado por el evaluado: {{empleado_confirmado}}</h5>
+            </div>
+        </header>
+        <div class="">
+            <div class="embed-container w3-border-grey">
+                <iframe width="560" height="415" frameborder="0" allowfullscreen [src]=" printPdf | htmlConvert"></iframe>
+            </div>
+        </div>
+    </div>
+</div>

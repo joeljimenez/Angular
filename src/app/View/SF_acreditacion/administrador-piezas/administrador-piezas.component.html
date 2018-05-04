@@ -1,0 +1,895 @@
+<simple-notifications [options]="options"></simple-notifications>
+<control-skin [skin]="1" [estado]="flag_envio"></control-skin>
+<app-nav [titulo]="titulo" [breadcrumb]="breadcrumbArray" [btnCrear]="true" (Crear)="crear()"></app-nav>
+
+<div class="w3-row-padding w3-small">
+    <div class="w3-row w3-section  w3-animate-left w3-col l6 m6 s12" *ngFor="let a of piezas">
+        <div class="panel w3-white w3-card">
+
+            <div class="w3-row w3-padding">
+                <div class="w3-rest">
+                    <h5 *ngIf="permisos.actualizar != 1">{{'Pieza: ' + a.nombre}}</h5>
+                    <span *ngIf="permisos.actualizar == 1">
+                        <label class="w3-tag w3-small w3-theme">Pieza</label>
+                        <input type="text" class="w3-input w3-border" [(ngModel)]="a.nombre" placeholder="Nombre de la pieza" />
+                    </span>
+                </div>
+            </div>
+
+            <hr style="margin: 5px;">
+
+            <div class="w3-row w3-padding">
+                <div>
+                    <small *ngIf="permisos.actualizar != 1">
+                        Nombre de grupo: {{a.nombre_p}}
+                        <br /> {{a.descripcion}}
+                        <br />
+                    </small>
+                    <span *ngIf="permisos.actualizar == 1">
+                        <label class="w3-tag w3-small w3-theme">Nombre Plural de la pieza</label>
+                        <input type="text" class="w3-input w3-border" [(ngModel)]="a.nombre_p" placeholder="" />
+                        <br />
+                        <label class="w3-tag w3-small w3-theme">Descripción de la pieza</label>
+                        <input type="text" class="w3-input w3-border" [(ngModel)]="a.descripcion" placeholder="" />
+                        <br />
+                    </span>
+
+                    <ul class="w3-ul" style="padding: 0" *ngIf="prm.vista == 'pieza'">
+                        <li>
+                            <div class="Inbox">
+                                <i class="fa fa-code-fork ">
+                                </i>
+                                Es la Matriz de Inicio
+                                <span class="w3-right" *ngIf="permisos.actualizar != 1">
+                                    <i *ngIf="a.esmatriz == 1"> Activo</i>
+                                    <i *ngIf="a.esmatriz == 0"> Inactivo</i>
+                                </span>
+                                <div class="switch w3-right" *ngIf="permisos.actualizar == 1">
+                                    <label class="switch" for="{{'ida' + a.idpieza}}" *ngIf="permisos.actualizar">
+                                        <input type="checkbox" id="{{'ida' + a.idpieza}}" [(ngModel)]="a.esmatriz">
+                                        <span class="slider round"></span>
+                                    </label>
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="Inbox">
+                                <i class="fa fa-code-fork ">
+                                </i>
+                                Activar Nombre
+                                <span class="pull-right" *ngIf="permisos.actualizar != 1">
+                                    <i *ngIf="a.act_nombre == 1"> Activo</i>
+                                    <i *ngIf="a.act_nombre == 0"> Inactivo</i>
+                                </span>
+                                <div class="switch pull-right" *ngIf="permisos.actualizar == 1">
+                                    <label class="switch" for="{{'idb' + a.idpieza}}" *ngIf="permisos.actualizar">
+                                        <input type="checkbox" id="{{'idb' + a.idpieza}}" [(ngModel)]="a.act_nombre">
+                                        <span class="slider round"></span>
+                                    </label>
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="Inbox">
+                                <i class="fa fa-code-fork ">
+                                </i>
+                                Activar Descripción
+                                <span class="pull-right" *ngIf="permisos.actualizar != 1">
+                                    <i *ngIf="a.act_descripcion == 1"> Activo</i>
+                                    <i *ngIf="a.act_descripcion == 0"> Inactivo</i>
+                                </span>
+                                <div class="switch pull-right" *ngIf="permisos.actualizar == 1">
+                                    <label class="switch" for="{{'idc' + a.idpieza}}" *ngIf="permisos.actualizar">
+                                        <input type="checkbox" id="{{'idc' + a.idpieza}}" [(ngModel)]="a.act_descripcion">
+                                        <span class="slider round"></span>
+                                    </label>
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div>
+                                <i class="fa fa-code-fork ">
+                                </i>
+                                Activar pieza
+                                <span class="pull-right" *ngIf="permisos.actualizar != 1">
+                                    <i *ngIf="a.estado == 1"> Activo</i>
+                                    <i *ngIf="a.estado == 0"> Inactivo</i>
+                                </span>
+                                <div class="switch pull-right" *ngIf="permisos.actualizar == 1">
+                                    <div class="onoffswitch">
+                                        <label class="switch" for="{{'idd' + a.idpieza}}" *ngIf="permisos.actualizar">
+                                            <input type="checkbox" id="{{'idd' + a.idpieza}}" [(ngModel)]="a.estado">
+                                            <span class="slider round"></span>
+                                        </label>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </li>
+                        <li>
+                            <div>
+                                <i class="fa fa-code-fork ">
+                                </i>
+                                Activar Hallazgo
+                                <span class="pull-right" *ngIf="permisos.actualizar != 1">
+                                    <i *ngIf="a.act_hallasgo == 1"> Activo</i>
+                                    <i *ngIf="a.act_hallasgo == 0"> Inactivo</i>
+                                </span>
+                                <div class="switch pull-right" *ngIf="permisos.actualizar == 1">
+                                    <div class="onoffswitch">
+                                        <label class="switch" for="{{'ide' + a.idpieza}}" *ngIf="permisos.actualizar">
+                                            <input type="checkbox" id="{{'ide' + a.idpieza}}" [(ngModel)]="a.act_hallasgo">
+                                            <span class="slider round"></span>
+                                        </label>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </li>
+                        <li>
+                            <div>
+                                <i class="fa fa-code-fork ">
+                                </i>
+                                Activar categoria
+                                <span class="pull-right" *ngIf="permisos.actualizar != 1">
+                                    <i *ngIf="a.act_categoria == 1"> Activo</i>
+                                    <i *ngIf="a.act_categoria == 0"> Inactivo</i>
+                                </span>
+                                <div class="switch pull-right" *ngIf="permisos.actualizar == 1">
+                                    <label class="switch" for="{{'idf' + a.idpieza}}" *ngIf="permisos.actualizar">
+                                        <input type="checkbox" id="{{'idf' + a.idpieza}}" [(ngModel)]="a.act_categoria">
+                                        <span class="slider round"></span>
+                                    </label>
+                                </div>
+
+                            </div>
+                        </li>
+
+                        <li>
+                            <div>
+                                <i class="fa fa-code-fork ">
+                                </i>
+                                Activar evidencias
+                                <span class="pull-right" *ngIf="permisos.actualizar != 1">
+                                    <i *ngIf="a.act_evidencia == 1"> Activo</i>
+                                    <i *ngIf="a.act_evidencia == 0"> Inactivo</i>
+                                </span>
+                                <div class="switch pull-right" *ngIf="permisos.actualizar == 1">
+                                    <label class="switch" for="{{'idg' + a.idpieza}}" *ngIf="permisos.actualizar">
+                                        <input type="checkbox" id="{{'idg' + a.idpieza}}" [(ngModel)]="a.act_evidencia">
+                                        <span class="slider round"></span>
+                                    </label>
+                                </div>
+
+                            </div>
+                        </li>
+                        <li>
+                            <div>
+                                <i class="fa fa-code-fork ">
+                                </i>
+                                Activar Cripterio
+                                <span class="pull-right" *ngIf="permisos.actualizar != 1">
+                                    <i *ngIf="a.act_cripterio == 1"> Activo</i>
+                                    <i *ngIf="a.act_cripterio == 0"> Inactivo</i>
+                                </span>
+                                <div class="switch pull-right" *ngIf="permisos.actualizar == 1">
+                                    <label class="switch" for="{{'idh' + a.idpieza}}" *ngIf="permisos.actualizar">
+                                        <input type="checkbox" id="{{'idh' + a.idpieza}}" [(ngModel)]="a.act_cripterio">
+                                        <span class="slider round"></span>
+                                    </label>
+                                </div>
+
+                            </div>
+                        </li>
+                        <li>
+                            <div>
+                                <i class="fa fa-code-fork ">
+                                </i>
+                                <span *ngIf="permisos.actualizar != 1">
+                                    Activar anexo #1
+                                </span>
+                                <span *ngIf="permisos.actualizar == 1 && a.act_anexo_1 == 0">
+                                    Activar anexo #1
+                                </span>
+                                <span *ngIf="permisos.actualizar == 1 && a.act_anexo_1 == 1">
+                                    <input type="text" [(ngModel)]="a.nom_anexo_1" placeholder="Nombre del anexo 1" />
+                                </span>
+                                <span class="pull-right" *ngIf="permisos.actualizar != 1">
+                                    <i *ngIf="a.act_anexo_1 == 1"> Activo</i>
+                                    <i *ngIf="a.act_anexo_1 == 0"> Inactivo</i>
+                                </span>
+                                <div class="switch pull-right" *ngIf="permisos.actualizar == 1">
+                                    <label class="switch" for="{{'idi' + a.idpieza}}" *ngIf="permisos.actualizar">
+                                        <input type="checkbox" id="{{'idi' + a.idpieza}}" [(ngModel)]="a.act_anexo_1">
+                                        <span class="slider round"></span>
+                                    </label>
+                                </div>
+
+                            </div>
+                        </li>
+
+                        <li>
+                            <div>
+                                <i class="fa fa-code-fork ">
+                                </i>
+                                <span *ngIf="permisos.actualizar != 1">
+                                    Activar anexo #2
+                                </span>
+                                <span *ngIf="permisos.actualizar == 1 && a.act_anexo_2 == 0">
+                                    Activar anexo #2
+                                </span>
+                                <span *ngIf="permisos.actualizar == 1 && a.act_anexo_2 == 1">
+                                    <input type="text" [(ngModel)]="a.nom_anexo_2" placeholder="Nombre del anexo 2" />
+                                </span>
+                                <span class="pull-right" *ngIf="permisos.actualizar != 1">
+                                    <i *ngIf="a.act_anexo_2 == 1"> Activo</i>
+                                    <i *ngIf="a.act_anexo_2 == 0"> Inactivo</i>
+                                </span>
+                                <div class="switch pull-right" *ngIf="permisos.actualizar == 1">
+                                    <label class="switch" for="{{'idj' + a.idpieza}}" *ngIf="permisos.actualizar">
+                                        <input type="checkbox" id="{{'idj' + a.idpieza}}" [(ngModel)]="a.act_anexo_2">
+                                        <span class="slider round"></span>
+                                    </label>
+                                </div>
+
+                            </div>
+                        </li>
+                        <li>
+                            <div>
+                                <i class="fa fa-code-fork ">
+                                </i>
+                                piezas cotenedor en reportes
+
+                                <span class="pull-right" *ngIf="permisos.actualizar != 1">
+                                    <i *ngIf="a.act_cripterio == 1"> Activo</i>
+                                    <i *ngIf="a.act_cripterio == 0"> Inactivo</i>
+                                </span>
+                                <div class="switch pull-right" *ngIf="permisos.actualizar == 1">
+                                    <label class="switch" for="{{'idk' + a.idpieza}}" *ngIf="permisos.actualizar">
+                                        <input type="checkbox" id="{{'idk' + a.idpieza}}" [(ngModel)]="a.act_pieza_contenedor_reporte">
+                                        <span class="slider round"></span>
+                                    </label>
+                                </div>
+
+                            </div>
+                        </li>
+
+                        <li>
+                            <div tooltip-animation="true" uib-tooltip="" tooltip-placement="bottom">
+                                <i class="fa fa-code-fork ">
+                                </i>
+                                piezas evaluada en reportes
+                                <span class="pull-right" *ngIf="permisos.actualizar != 1">
+                                    <i *ngIf="a.act_pieza_evaluar_reporte == 1"> Activo</i>
+                                    <i *ngIf="a.act_pieza_evaluar_reporte == 0"> Inactivo</i>
+                                </span>
+                                <div class="switch pull-right" *ngIf="permisos.actualizar == 1">
+                                    <label class="switch" for="{{'idl' + a.idpieza}}" *ngIf="permisos.actualizar">
+                                        <input type="checkbox" id="{{'idl' + a.idpieza}}" [(ngModel)]="a.act_pieza_evaluar_reporte">
+                                        <span class="slider round"></span>
+                                    </label>
+                                </div>
+                            </div>
+                        </li>
+                    </ul>
+
+                    <ul class="w3-ul" style="padding: 0" *ngIf="prm.vista == 'pieza_proyecto'">
+                        <li>
+                            <div class="Inbox">
+                                <i class="fa fa-code-fork ">
+                                </i>
+                                Activar Nombre
+                                <span class="pull-right" *ngIf="permisos.actualizar != 1">
+                                    <i *ngIf="a.act_nombre == 1"> Activo</i>
+                                    <i *ngIf="a.act_nombre == 0"> Inactivo</i>
+                                </span>
+                                <div class="switch pull-right" *ngIf="permisos.actualizar == 1">
+                                    <label class="switch" for="{{'idb' + a.idpieza_proyecto}}" *ngIf="permisos.actualizar">
+                                        <input type="checkbox" id="{{'idb' + a.idpieza_proyecto}}" [(ngModel)]="a.act_nombre">
+                                        <span class="slider round"></span>
+                                    </label>
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="Inbox">
+                                <i class="fa fa-code-fork ">
+                                </i>
+                                Activar Descripción
+                                <span class="pull-right" *ngIf="permisos.actualizar != 1">
+                                    <i *ngIf="a.act_descripcion == 1"> Activo</i>
+                                    <i *ngIf="a.act_descripcion == 0"> Inactivo</i>
+                                </span>
+                                <div class="switch pull-right" *ngIf="permisos.actualizar == 1">
+                                    <label class="switch" for="{{'idc' + a.idpieza_proyecto}}" *ngIf="permisos.actualizar">
+                                        <input type="checkbox" id="{{'idc' + a.idpieza_proyecto}}" [(ngModel)]="a.act_descripcion">
+                                        <span class="slider round"></span>
+                                    </label>
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="Inbox">
+                                <i class="fa fa-code-fork ">
+                                </i>
+                                Activar gantt
+                                <span class="w3-right" *ngIf="permisos.actualizar != 1">
+                                    <i *ngIf="a.act_gantt == 1"> Activo</i>
+                                    <i *ngIf="a.act_gantt == 0"> Inactivo</i>
+                                </span>
+                                <div class="switch w3-right" *ngIf="permisos.actualizar == 1">
+                                    <label class="switch" for="{{'idf' + a.idpieza_proyecto}}" *ngIf="permisos.actualizar">
+                                        <input type="checkbox" id="{{'idf' + a.idpieza_proyecto}}" [(ngModel)]="a.act_gantt">
+                                        <span class="slider round"></span>
+                                    </label>
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div>
+                                <i class="fa fa-code-fork ">
+                                </i>
+                                Activar obejetivo
+                                <span class="pull-right" *ngIf="permisos.actualizar != 1">
+                                    <i *ngIf="a.act_objetivo == 1"> Activo</i>
+                                    <i *ngIf="a.act_objetivo == 0"> Inactivo</i>
+                                </span>
+                                <div class="switch pull-right" *ngIf="permisos.actualizar == 1">
+                                    <div class="onoffswitch">
+                                        <label class="switch" for="{{'idg' + a.idpieza_proyecto}}" *ngIf="permisos.actualizar">
+                                            <input type="checkbox" id="{{'idg' + a.idpieza_proyecto}}" [(ngModel)]="a.act_objetivo">
+                                            <span class="slider round"></span>
+                                        </label>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </li>
+                        <li>
+                            <div>
+                                <i class="fa fa-code-fork ">
+                                </i>
+                                Activar presupuesto
+                                <span class="pull-right" *ngIf="permisos.actualizar != 1">
+                                    <i *ngIf="a.act_presupuesto == 1"> Activo</i>
+                                    <i *ngIf="a.act_presupuesto == 0"> Inactivo</i>
+                                </span>
+                                <div class="switch pull-right" *ngIf="permisos.actualizar == 1">
+                                    <div class="onoffswitch">
+                                        <label class="switch" for="{{'idh' + a.idpieza_proyecto}}" *ngIf="permisos.actualizar">
+                                            <input type="checkbox" id="{{'idh' + a.idpieza_proyecto}}" [(ngModel)]="a.act_presupuesto">
+                                            <span class="slider round"></span>
+                                        </label>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </li>
+                        <li>
+                            <div>
+                                <i class="fa fa-code-fork ">
+                                </i>
+                                <span *ngIf="permisos.actualizar != 1">
+                                    Activar anexo #1
+                                </span>
+                                <span *ngIf="permisos.actualizar == 1 && a.act_anexo_1 == 0">
+                                    Activar anexo #1
+                                </span>
+                                <span *ngIf="permisos.actualizar == 1 && a.act_anexo_1 == 1">
+                                    <input type="text" [(ngModel)]="a.nom_anexo_1" placeholder="Nombre del anexo 1" />
+                                </span>
+                                <span class="pull-right" *ngIf="permisos.actualizar != 1">
+                                    <i *ngIf="a.act_anexo_1 == 1"> Activo</i>
+                                    <i *ngIf="a.act_anexo_1 == 0"> Inactivo</i>
+                                </span>
+                                <div class="switch pull-right" *ngIf="permisos.actualizar == 1">
+                                    <label class="switch" for="{{'idi' + a.idpieza_proyecto}}" *ngIf="permisos.actualizar">
+                                        <input type="checkbox" id="{{'idi' + a.idpieza_proyecto}}" [(ngModel)]="a.act_anexo_1">
+                                        <span class="slider round"></span>
+                                    </label>
+                                </div>
+
+                            </div>
+                        </li>
+
+                        <li>
+                            <div>
+                                <i class="fa fa-code-fork ">
+                                </i>
+                                <span *ngIf="permisos.actualizar != 1">
+                                    Activar anexo #2
+                                </span>
+                                <span *ngIf="permisos.actualizar == 1 && a.act_anexo_2 == 0">
+                                    Activar anexo #2
+                                </span>
+                                <span *ngIf="permisos.actualizar == 1 && a.act_anexo_2 == 1">
+                                    <input type="text" [(ngModel)]="a.nom_anexo_2" placeholder="Nombre del anexo 2" />
+                                </span>
+                                <span class="pull-right" *ngIf="permisos.actualizar != 1">
+                                    <i *ngIf="a.act_anexo_2 == 1"> Activo</i>
+                                    <i *ngIf="a.act_anexo_2 == 0"> Inactivo</i>
+                                </span>
+                                <div class="switch pull-right" *ngIf="permisos.actualizar == 1">
+                                    <label class="switch" for="{{'idj' + a.idpieza_proyecto}}" *ngIf="permisos.actualizar">
+                                        <input type="checkbox" id="{{'idj' + a.idpieza_proyecto}}" [(ngModel)]="a.act_anexo_2">
+                                        <span class="slider round"></span>
+                                    </label>
+                                </div>
+
+                            </div>
+                        </li>
+                        <li>
+                            <div>
+                                <i class="fa fa-code-fork ">
+                                </i>
+                                <span *ngIf="permisos.actualizar != 1">
+                                    Activar anexo #3
+                                </span>
+                                <span *ngIf="permisos.actualizar == 1 && a.act_anexo_3 == 0">
+                                    Activar anexo #3
+                                </span>
+                                <span *ngIf="permisos.actualizar == 1 && a.act_anexo_3 == 1">
+                                    <input type="text" [(ngModel)]="a.nom_anexo_3" placeholder="Nombre del anexo 3" />
+                                </span>
+                                <span class="pull-right" *ngIf="permisos.actualizar != 1">
+                                    <i *ngIf="a.act_anexo_3 == 1"> Activo</i>
+                                    <i *ngIf="a.act_anexo_3 == 0"> Inactivo</i>
+                                </span>
+                                <div class="switch pull-right" *ngIf="permisos.actualizar == 1">
+                                    <label class="switch" for="{{'idm' + a.idpieza_proyecto}}" *ngIf="permisos.actualizar">
+                                        <input type="checkbox" id="{{'idm' + a.idpieza_proyecto}}" [(ngModel)]="a.act_anexo_3">
+                                        <span class="slider round"></span>
+                                    </label>
+                                </div>
+
+                            </div>
+                        </li>
+                        <li>
+                            <div>
+                                <i class="fa fa-code-fork ">
+                                </i>
+                                piezas cotenedor en reportes
+
+                                <span class="pull-right" *ngIf="permisos.actualizar != 1">
+                                    <i *ngIf="a.act_cripterio == 1"> Activo</i>
+                                    <i *ngIf="a.act_cripterio == 0"> Inactivo</i>
+                                </span>
+                                <div class="switch pull-right" *ngIf="permisos.actualizar == 1">
+                                    <label class="switch" for="{{'idk' + a.idpieza_proyecto}}" *ngIf="permisos.actualizar">
+                                        <input type="checkbox" id="{{'idk' + a.idpieza_proyecto}}" [(ngModel)]="a.act_pieza_contenedor_reporte">
+                                        <span class="slider round"></span>
+                                    </label>
+                                </div>
+
+                            </div>
+                        </li>
+
+                        <li>
+                            <div tooltip-animation="true" uib-tooltip="" tooltip-placement="bottom">
+                                <i class="fa fa-code-fork ">
+                                </i>
+                                piezas evaluada en reportes
+                                <span class="pull-right" *ngIf="permisos.actualizar != 1">
+                                    <i *ngIf="a.act_pieza_evaluar_reporte == 1"> Activo</i>
+                                    <i *ngIf="a.act_pieza_evaluar_reporte == 0"> Inactivo</i>
+                                </span>
+                                <div class="switch pull-right" *ngIf="permisos.actualizar == 1">
+                                    <label class="switch" for="{{'idl' + a.idpieza_proyecto}}" *ngIf="permisos.actualizar">
+                                        <input type="checkbox" id="{{'idl' + a.idpieza_proyecto}}" [(ngModel)]="a.act_pieza_evaluar_reporte">
+                                        <span class="slider round"></span>
+                                    </label>
+                                </div>
+                            </div>
+                        </li>
+                    </ul>
+
+                </div>
+            </div>
+
+            <footer class="w3-border-top">
+                <div class="w3-row">
+                    <div class="w3-container">
+                        <div class="w3-row w3-row-padding w3-right">
+                            <div class="w3-bar">
+                                <a (click)="eliminar(a)" *ngIf="permisos.eliminar" title="Eliminar Pieza">
+                                    <i class="fa fa-trash-o w3-text-red w3-large w3-padding"></i>
+                                </a>
+                                <a (click)="editar(a)" *ngIf="permisos.actualizar" title="Editar Pieza">
+                                    <i class="fa fa-edit w3-text-green w3-large w3-padding"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </footer>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+<div id="formulario" class="w3-modal inmodal">
+    <div class="w3-modal-content w3-animate-right w3-card-4" style="width: 1235px!important;top: -40px">
+        <header class="w3-container w3-center w3-theme">
+            <span onclick="document.getElementById('formulario').style.display = 'none'" class="w3-button w3-display-topright">&times;</span>
+            <div class="w3-padding-16">
+                <h5>{{titulo_modal}}</h5>
+            </div>
+        </header>
+        <div class="w3-row w3-container w3-row-padding">
+
+            <div class="w3-section w3-col s12 m6 l6">
+                <div class="w3-secction">
+                    <label class="w3-tag w3-small w3-theme">Nombre de la pieza</label>
+                    <input class="w3-input w3-border" type="text" [(ngModel)]="solicitud.nombre" placeholder="Nombre de la pieza">
+                </div>
+                <div class="w3-secction">
+                    <label class="w3-tag w3-small w3-theme">Nombre Plural de la pieza</label>
+                    <input class="w3-input w3-border" type="text" [(ngModel)]="solicitud.nombre_p" placeholder="Nombre Plural de la pieza">
+                </div>
+                <div class="w3-secction">
+                    <label class="w3-tag w3-small w3-theme">Descripción de la pieza</label>
+                    <input class="w3-input w3-border" type="text" [(ngModel)]="solicitud.descripcion" placeholder="Descripción de la pieza">
+                </div>
+
+            </div>
+
+            <div class="w3-section w3-col s12 m6 l6">
+
+                <ul class="w3-ul" style="padding: 0" *ngIf="prm.vista == 'pieza'">
+                    <li>
+                        <div class="Inbox">
+                            <i class="fa fa-code-fork ">
+                            </i>
+                            Es la Matriz de Inicio
+                            <div class="switch w3-right">
+                                <label class="switch" for="{{'ida'}}">
+                                    <input type="checkbox" id="{{'ida'}}" [(ngModel)]="solicitud.esmatriz">
+                                    <span class="slider round"></span>
+                                </label>
+                            </div>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="Inbox">
+                            <i class="fa fa-code-fork ">
+                            </i>
+                            Activar Nombre
+                            <div class="switch pull-right">
+                                <label class="switch" for="{{'idb'}}">
+                                    <input type="checkbox" id="{{'idb'}}" [(ngModel)]="solicitud.act_nombre">
+                                    <span class="slider round"></span>
+                                </label>
+                            </div>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="Inbox">
+                            <i class="fa fa-code-fork ">
+                            </i>
+                            Activar Descripción
+                            <div class="switch pull-right">
+                                <label class="switch" for="{{'idc'}}">
+                                    <input type="checkbox" id="{{'idc'}}" [(ngModel)]="solicitud.act_descripcion">
+                                    <span class="slider round"></span>
+                                </label>
+                            </div>
+                        </div>
+                    </li>
+                    <li>
+                        <div>
+                            <i class="fa fa-code-fork ">
+                            </i>
+                            Activar pieza
+                            <div class="switch pull-right">
+                                <label class="switch" for="{{'idd'}}">
+                                    <input type="checkbox" id="{{'idd'}}" [(ngModel)]="solicitud.estado">
+                                    <span class="slider round"></span>
+                                </label>
+                            </div>
+
+                        </div>
+                    </li>
+                    <li>
+                        <div>
+                            <i class="fa fa-code-fork ">
+                            </i>
+                            Activar Hallazgo
+                            <div class="switch pull-right">
+                                <label class="switch" for="{{'ide'}}">
+                                    <input type="checkbox" id="{{'ide'}}" [(ngModel)]="solicitud.act_hallasgo">
+                                    <span class="slider round"></span>
+                                </label>
+                            </div>
+
+                        </div>
+                    </li>
+                    <li>
+                        <div>
+                            <i class="fa fa-code-fork ">
+                            </i>
+                            Activar categoria
+                            <div class="switch pull-right">
+                                <label class="switch" for="{{'idf'}}">
+                                    <input type="checkbox" id="{{'idf'}}" [(ngModel)]="solicitud.act_categoria">
+                                    <span class="slider round"></span>
+                                </label>
+                            </div>
+
+                        </div>
+                    </li>
+
+                    <li>
+                        <div>
+                            <i class="fa fa-code-fork ">
+                            </i>
+                            Activar evidencias
+                            <div class="switch pull-right">
+                                <label class="switch" for="{{'idg'}}">
+                                    <input type="checkbox" id="{{'idg'}}" [(ngModel)]="solicitud.act_evidencia">
+                                    <span class="slider round"></span>
+                                </label>
+                            </div>
+
+                        </div>
+                    </li>
+                    <li>
+                        <div>
+                            <i class="fa fa-code-fork ">
+                            </i>
+                            Activar Cripterio
+                            <div class="switch pull-right">
+                                <label class="switch" for="{{'idh'}}">
+                                    <input type="checkbox" id="{{'idh'}}" [(ngModel)]="solicitud.act_cripterio">
+                                    <span class="slider round"></span>
+                                </label>
+                            </div>
+
+                        </div>
+                    </li>
+                    <li>
+                        <div>
+                            <i class="fa fa-code-fork ">
+                            </i>
+                            <span *ngIf="solicitud.act_anexo_1 == 0">
+                                Activar anexo #1
+                            </span>
+                            <span *ngIf="solicitud.act_anexo_1">
+                                <input type="text" [(ngModel)]="solicitud.nom_anexo_1" placeholder="Nombre del anexo 1" />
+                            </span>
+                            <div class="switch pull-right">
+                                <label class="switch" for="{{'idi'}}">
+                                    <input type="checkbox" id="{{'idi'}}" [(ngModel)]="solicitud.act_anexo_1">
+                                    <span class="slider round"></span>
+                                </label>
+                            </div>
+
+                        </div>
+                    </li>
+
+                    <li>
+                        <div>
+                            <i class="fa fa-code-fork ">
+                            </i>
+                            <span *ngIf="solicitud.act_anexo_2 == 0">
+                                Activar anexo #2
+                            </span>
+                            <span *ngIf="solicitud.act_anexo_2 == 1">
+                                <input type="text" [(ngModel)]="solicitud.nom_anexo_2" placeholder="Nombre del anexo 2" />
+                            </span>
+                            <div class="switch pull-right">
+                                <label class="switch" for="{{'idj'}}">
+                                    <input type="checkbox" id="{{'idj'}}" [(ngModel)]="solicitud.act_anexo_2">
+                                    <span class="slider round"></span>
+                                </label>
+                            </div>
+
+                        </div>
+                    </li>
+
+                    <li>
+                        <div>
+                            <i class="fa fa-code-fork ">
+                            </i>
+                            piezas cotenedor en reportes
+                            <div class="switch pull-right">
+                                <label class="switch" for="{{'idk'}}">
+                                    <input type="checkbox" id="{{'idk'}}" [(ngModel)]="solicitud.act_pieza_contenedor_reporte">
+                                    <span class="slider round"></span>
+                                </label>
+                            </div>
+
+                        </div>
+                    </li>
+
+                    <li>
+                        <div tooltip-animation="true" uib-tooltip="" tooltip-placement="bottom">
+                            <i class="fa fa-code-fork ">
+                            </i>
+                            piezas evaluada en reportes
+                            <div class="switch pull-right">
+                                <label class="switch" for="{{'idl'}}">
+                                    <input type="checkbox" id="{{'idl'}}" [(ngModel)]="solicitud.act_pieza_evaluar_reporte">
+                                    <span class="slider round"></span>
+                                </label>
+                            </div>
+                        </div>
+                    </li>
+                </ul>
+
+                <ul class="w3-ul" style="padding: 0" *ngIf="prm.vista == 'pieza_proyecto'">
+                    <li>
+                        <div class="Inbox">
+                            <i class="fa fa-code-fork ">
+                            </i>
+                            Activar Nombre
+                            <div class="switch pull-right" *ngIf="permisos.actualizar == 1">
+                                <label class="switch" for="{{'idb'}}" *ngIf="permisos.actualizar">
+                                    <input type="checkbox" id="{{'idb'}}" [(ngModel)]="solicitud.act_nombre">
+                                    <span class="slider round"></span>
+                                </label>
+                            </div>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="Inbox">
+                            <i class="fa fa-code-fork ">
+                            </i>
+                            Activar Descripción
+                            <div class="switch pull-right" *ngIf="permisos.actualizar == 1">
+                                <label class="switch" for="{{'idc'}}" *ngIf="permisos.actualizar">
+                                    <input type="checkbox" id="{{'idc'}}" [(ngModel)]="solicitud.act_descripcion">
+                                    <span class="slider round"></span>
+                                </label>
+                            </div>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="Inbox">
+                            <i class="fa fa-code-fork ">
+                            </i>
+                            Activar gantt
+                            <div class="switch w3-right" *ngIf="permisos.actualizar == 1">
+                                <label class="switch" for="{{'idf'}}" *ngIf="permisos.actualizar">
+                                    <input type="checkbox" id="{{'idf'}}" [(ngModel)]="solicitud.act_gantt">
+                                    <span class="slider round"></span>
+                                </label>
+                            </div>
+                        </div>
+                    </li>
+                    <li>
+                        <div>
+                            <i class="fa fa-code-fork ">
+                            </i>
+                            Activar obejetivo
+                            <div class="switch pull-right" *ngIf="permisos.actualizar == 1">
+                                <div class="onoffswitch">
+                                    <label class="switch" for="{{'idg'}}" *ngIf="permisos.actualizar">
+                                        <input type="checkbox" id="{{'idg'}}" [(ngModel)]="solicitud.act_objetivo">
+                                        <span class="slider round"></span>
+                                    </label>
+                                </div>
+                            </div>
+
+                        </div>
+                    </li>
+                    <li>
+                        <div>
+                            <i class="fa fa-code-fork ">
+                            </i>
+                            Activar presupuesto
+                            <div class="switch pull-right" *ngIf="permisos.actualizar == 1">
+                                <div class="onoffswitch">
+                                    <label class="switch" for="{{'idh'}}" *ngIf="permisos.actualizar">
+                                        <input type="checkbox" id="{{'idh'}}" [(ngModel)]="solicitud.act_presupuesto">
+                                        <span class="slider round"></span>
+                                    </label>
+                                </div>
+                            </div>
+
+                        </div>
+                    </li>
+                    <li>
+                        <div>
+                            <i class="fa fa-code-fork ">
+                            </i>
+                            <span *ngIf="solicitud.act_anexo_1 == 0">
+                                Activar anexo #1
+                            </span>
+                            <span *ngIf="solicitud.act_anexo_1">
+                                <input type="text" [(ngModel)]="solicitud.nom_anexo_1" placeholder="Nombre del anexo 1" />
+                            </span>
+                            <div class="switch pull-right">
+                                <label class="switch" for="{{'idi'}}">
+                                    <input type="checkbox" id="{{'idi'}}" [(ngModel)]="solicitud.act_anexo_1">
+                                    <span class="slider round"></span>
+                                </label>
+                            </div>
+
+                        </div>
+                    </li>
+
+                    <li>
+                        <div>
+                            <i class="fa fa-code-fork ">
+                            </i>
+                            <span *ngIf="solicitud.act_anexo_2 == 0">
+                                Activar anexo #2
+                            </span>
+                            <span *ngIf="solicitud.act_anexo_2 == 1">
+                                <input type="text" [(ngModel)]="solicitud.nom_anexo_2" placeholder="Nombre del anexo 2" />
+                            </span>
+                            <div class="switch pull-right">
+                                <label class="switch" for="{{'idj'}}">
+                                    <input type="checkbox" id="{{'idj'}}" [(ngModel)]="solicitud.act_anexo_2">
+                                    <span class="slider round"></span>
+                                </label>
+                            </div>
+
+                        </div>
+                    </li>
+                    <li>
+                        <div>
+                            <i class="fa fa-code-fork ">
+                            </i>
+                            <span *ngIf="solicitud.act_anexo_3 == 0">
+                                Activar anexo #3
+                            </span>
+                            <span *ngIf="solicitud.act_anexo_3 == 1">
+                                <input type="text" [(ngModel)]="solicitud.nom_anexo_3" placeholder="Nombre del anexo 3" />
+                            </span>
+                            <div class="switch pull-right">
+                                <label class="switch" for="{{'idm'}}">
+                                    <input type="checkbox" id="{{'idm'}}" [(ngModel)]="solicitud.act_anexo_3">
+                                    <span class="slider round"></span>
+                                </label>
+                            </div>
+
+                        </div>
+                    </li>
+                    <li>
+                        <div>
+                            <i class="fa fa-code-fork ">
+                            </i>
+                            piezas cotenedor en reportes
+                            <div class="switch pull-right" *ngIf="permisos.actualizar == 1">
+                                <label class="switch" for="{{'idk'}}" *ngIf="permisos.actualizar">
+                                    <input type="checkbox" id="{{'idk'}}" [(ngModel)]="solicitud.act_pieza_contenedor_reporte">
+                                    <span class="slider round"></span>
+                                </label>
+                            </div>
+
+                        </div>
+                    </li>
+
+                    <li>
+                        <div tooltip-animation="true" uib-tooltip="" tooltip-placement="bottom">
+                            <i class="fa fa-code-fork ">
+                            </i>
+                            piezas evaluada en reportes
+                            <div class="switch pull-right" *ngIf="permisos.actualizar == 1">
+                                <label class="switch" for="{{'idl'}}" *ngIf="permisos.actualizar">
+                                    <input type="checkbox" id="{{'idl'}}" [(ngModel)]="solicitud.act_pieza_evaluar_reporte">
+                                    <span class="slider round"></span>
+                                </label>
+                            </div>
+                        </div>
+                    </li>
+                </ul>
+
+            </div>
+
+            <div class="w3-section w3-col l12">
+                <button class="w3-button" onclick="document.getElementById('formulario').style.display = 'none'">
+                    Cerrar
+                </button>
+                <button *ngIf="permisos.registrar == 1" class="w3-button w3-theme" (click)="Consulta_piezas()">
+                    <i class="fa fa-save"></i> Guardar
+                </button>
+            </div>
+
+        </div>
+    </div>
+</div>
