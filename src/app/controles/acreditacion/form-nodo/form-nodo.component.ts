@@ -193,7 +193,7 @@ export class FormNodoComponent implements OnInit {
                 }
               }
             }
-
+console.log(1)
             if (this.piezas_esquema[i].act_categoria != 1) {
 
               for (const cat in this.categorias) {
