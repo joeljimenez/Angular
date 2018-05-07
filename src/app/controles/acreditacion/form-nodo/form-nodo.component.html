@@ -1,5 +1,5 @@
-<div id="formulario" class="w3-modal">
-  <div class="w3-modal-content w3-animate-right w3-card-4">
+<div id="formulario" class="w3-modal" style="padding-top: 50px">
+  <div class="w3-modal-content w3-animate-right w3-card-4" style="width: 80% !important; ">
     <header class="w3-container w3-theme-d5 w3-margin-bottom" style="padding-right: 5px">
       <span (click)="cerrar()" style="cursor: pointer" class="w3-right w3-padding fa fa-remove w3-hover-text-red" title="Cerrar"></span>
       <!-- <span class="w3-right w3-padding fa fa-recycle w3-hover-text-yellow" (click)="limpiar()" style="cursor: pointer" title="Limpiar"></span> -->
@@ -7,113 +7,127 @@
     </header>
 
     <div class="w3-container">
-        <div class="w3-col m4">
-            <ul *ngFor="let item of solicitud.hijos">
-              <li> <small>{{item.nombre}}</small> </li>
-            </ul>
+
+      <div class="w3-row">
+        <div class="w3-col m3">
+          <h4>{{n_pieza + ' Creados'}}</h4>
+          <ul *ngFor="let item of solicitud.hijos">
+            <li>
+              <small>{{item.nombre_pieza +' ' + item.orden + ': '}}</small> <br>
+              <small>{{item.nombre}}</small>
+            </li>
+          </ul>
+        </div>
+        <div class="w3-col m9">
+          <div class="w3-section w3-row-padding">
+            <div class="w3-col m6">
+              <label class="w3-tag w3-small w3-theme">Lista de Piezas</label>
+              <select class="w3-select w3-border" name="piezas" [(ngModel)]="solicitud.idpieza" (change)="ctr_formulario(solicitud.idpieza)">
+                <option *ngFor="let a of piezas_esquema2" value="{{a.idpieza}}">{{a.nombre}}</option>
+              </select>
+            </div>
+
+            <div class="w3-col m6">
+              <label class="w3-tag w3-small w3-theme">Orden</label>
+              <input class="w3-input w3-border" type="text" [(ngModel)]="solicitud.orden" maxlength="3" />
+            </div>
           </div>
-      
-      <div class="w3-section w3-row-padding">
-        <div class="w3-col m6">
-          <label class="w3-tag w3-small w3-theme">Lista de Piezas</label>
-          <select class="w3-select w3-border" name="piezas" [(ngModel)]="solicitud.idpieza" (change)="ctr_formulario(solicitud.idpieza)">
-            <option *ngFor="let a of piezas_esquema2" value="{{a.idpieza}}">{{a.nombre}}</option>
-          </select>
-        </div>
 
-        <div class="w3-col m6">
-          <label class="w3-tag w3-small w3-theme">Orden</label>
-          <input class="w3-input w3-border" type="text" [(ngModel)]="solicitud.orden" maxlength="3" />
-        </div>
-      </div>
+          <hr>
 
-      <hr>
+          <div class="w3-section w3-row-padding" *ngIf="vista_cripterio">
+            <div class="w3-col m6">
+              <label class="w3-tag w3-small w3-theme">Lista de Cripterios</label>
+              <select class="w3-select w3-border" name="piezas" [(ngModel)]="solicitud.idcripterio" (change)="ctr_formulario(solicitud.idcripterio)">
+                <option value="" selected>- SELECCIONE CRITERIO -</option>
+                <option *ngFor="let a of cripterios" value="{{a.idcripterio}}">{{a.nombre}}</option>
+              </select>
+            </div>
 
-      <div class="w3-section w3-row-padding" *ngIf="vista_cripterio">
-        <div class="w3-col m6">
-          <label class="w3-tag w3-small w3-theme">Lista de Cripterios</label>
-          <select class="w3-select w3-border" name="piezas" [(ngModel)]="solicitud.idcripterio" (change)="ctr_formulario(solicitud.idcripterio)">
-            <option value="" selected>- SELECCIONE CRITERIO -</option>
-            <option *ngFor="let a of cripterios" value="{{a.idcripterio}}">{{a.nombre}}</option>
-          </select>
-        </div>
-
-        <div class="w3-col m6">
-          <label class="w3-tag w3-small w3-theme">Lista de Categorías</label>
-          <select class="w3-select w3-border" name="piezas" [(ngModel)]="solicitud.idcategoria" (change)="ctr_formulario(solicitud.idcategoria)">
-            <option value="" selected>- SELECCIONE CATEGORIA -</option>
-            <option *ngFor="let a of categorias" value="{{a.idcategoria}}">{{a.nombre}}</option>
-          </select>
-        </div>
-      </div>
+            <div class="w3-col m6">
+              <label class="w3-tag w3-small w3-theme">Lista de Categorías</label>
+              <select class="w3-select w3-border" name="piezas" [(ngModel)]="solicitud.idcategoria" (change)="ctr_formulario(solicitud.idcategoria)">
+                <option value="" selected>- SELECCIONE CATEGORIA -</option>
+                <option *ngFor="let a of categorias" value="{{a.idcategoria}}">{{a.nombre}}</option>
+              </select>
+            </div>
+          </div>
 
 
-      <div class="w3-row w3-section w3-row-padding">
+          <div class="w3-row w3-section w3-row-padding">
 
-        <div class="w3-col l12" *ngIf="vista_nombre">
-          <label class="w3-tag w3-small w3-theme">Nombre</label>
-          <textarea class="w3-input w3-border" type="text" maxlength="250" placeholder="" [(ngModel)]="solicitud.nombre"></textarea>
-        </div>
+            <div class="w3-col l12" *ngIf="vista_nombre">
+              <label class="w3-tag w3-small w3-theme">Nombre</label>
+              <textarea class="w3-input w3-border" type="text" maxlength="250" placeholder="" [(ngModel)]="solicitud.nombre"></textarea>
+            </div>
 
-        <div class="w3-col l12" *ngIf="vista_anexo_1">
-          <label class="w3-tag w3-small w3-theme">{{nom_anexo_1}}</label>
-          <textarea class="w3-input w3-border" rows="5" type="text" maxlength="2000" placeholder="" [(ngModel)]="solicitud.anexo_1"></textarea>
-        </div>
+            <div class="w3-col l12" *ngIf="vista_anexo_1">
+              <label class="w3-tag w3-small w3-theme">{{nom_anexo_1}}</label>
+              <textarea class="w3-input w3-border" rows="5" type="text" maxlength="2000" placeholder="" [(ngModel)]="solicitud.anexo_1"></textarea>
+            </div>
 
-        <div class="w3-col l12" *ngIf="vista_anexo_2">
-          <label class="w3-tag w3-small w3-theme">{{nom_anexo_2}}</label>
-          <textarea class="w3-input w3-border" rows="5" type="text" maxlength="2000" placeholder="" [(ngModel)]="solicitud.anexo_2"></textarea>
-        </div>
+            <div class="w3-col l12" *ngIf="vista_anexo_2">
+              <label class="w3-tag w3-small w3-theme">{{nom_anexo_2}}</label>
+              <textarea class="w3-input w3-border" rows="5" type="text" maxlength="2000" placeholder="" [(ngModel)]="solicitud.anexo_2"></textarea>
+            </div>
 
-        <div class="w3-col l12" *ngIf="vista_descripcion">
-          <label class="w3-tag w3-small w3-theme">Descripcion de la Matriz</label>
-          <textarea class="w3-input w3-border" rows="5" type="text" maxlength="2000" placeholder="" [(ngModel)]="solicitud.descripcion"></textarea>
-        </div>
+            <div class="w3-col l12" *ngIf="vista_descripcion">
+              <label class="w3-tag w3-small w3-theme">Descripcion de la Matriz</label>
+              <textarea class="w3-input w3-border" rows="5" type="text" maxlength="2000" placeholder="" [(ngModel)]="solicitud.descripcion"></textarea>
+            </div>
 
-      </div>
+          </div>
 
-      <div class="w3-row w3-section w3-row-padding">
-        <div class="w3-col m6" *ngIf="vista_hallasgo">
-          <label class="w3-tag w3-small w3-theme">Calificacion Cualitativa</label>
-          <select class="w3-select w3-border" name="piezas" [(ngModel)]="solicitud.idcualitativa">
-            <option value="null" selected>- SELECCIONE PIEZA -</option>
-            <option *ngFor="let a of cualitativa" value="{{a.idcualitativa}}">{{a.nombre}}</option>
-          </select>
-        </div>
-        <div class="w3-col m3" *ngIf="vista_hallasgo">
-          <label class="w3-tag w3-small w3-theme">Puntuación</label>
-          <input class="w3-input w3-border" type="text" maxlength="3" placeholder="" [(ngModel)]="solicitud.puntuacion">
-        </div>
-      </div>
+          <div class="w3-row w3-section w3-row-padding">
+            <div class="w3-col m6" *ngIf="vista_hallasgo">
+              <label class="w3-tag w3-small w3-theme">Calificacion Cualitativa</label>
+              <select class="w3-select w3-border" name="piezas" [(ngModel)]="solicitud.idcualitativa">
+                <option value="null" selected>- SELECCIONE PIEZA -</option>
+                <option *ngFor="let a of cualitativa" value="{{a.idcualitativa}}">{{a.nombre}}</option>
+              </select>
+            </div>
+            <div class="w3-col m3" *ngIf="vista_hallasgo">
+              <label class="w3-tag w3-small w3-theme">Puntuación</label>
+              <input class="w3-input w3-border" type="text" maxlength="3" placeholder="" [(ngModel)]="solicitud.puntuacion">
+            </div>
+          </div>
 
-      <div class="w3-row w3-section w3-row-padding">
-        <div class="w3-col m12" *ngIf="vista_hallasgo">
-          <label class="w3-tag w3-small w3-theme">Hallazgo de auto evaluación</label>
-          <textarea class="w3-input w3-border" type="text" rows="5" maxlength="2000" placeholder="" [(ngModel)]="solicitud.hallasgo"></textarea>
-        </div>
-      </div>
+          <div class="w3-row w3-section w3-row-padding">
+            <div class="w3-col m12" *ngIf="vista_hallasgo">
+              <label class="w3-tag w3-small w3-theme">Hallazgo de auto evaluación</label>
+              <textarea class="w3-input w3-border" type="text" rows="5" maxlength="2000" placeholder="" [(ngModel)]="solicitud.hallasgo"></textarea>
+            </div>
+          </div>
 
-      <div class="w3-row w3-section w3-row-padding">
-          <div class="w3-col m3" *ngIf="vista_hallasgo">
-            <label class="w3-tag w3-small w3-theme">Puntuación obtenida</label>
-            <input class="w3-input w3-border" type="number" maxlength="3" placeholder="" [(ngModel)]="solicitud.puntuacion_par">
+          <div class="w3-row w3-section w3-row-padding">
+            <div class="w3-col m3" *ngIf="vista_hallasgo">
+              <label class="w3-tag w3-small w3-theme">Puntuación obtenida</label>
+              <input class="w3-input w3-border" type="number" maxlength="3" placeholder="" [(ngModel)]="solicitud.puntuacion_par">
+            </div>
+          </div>
+
+          <div class="w3-row w3-section w3-row-padding">
+            <div class="w3-col m12" *ngIf="vista_hallasgo">
+              <label class="w3-tag w3-small w3-theme">Evaluacion externa</label>
+              <textarea class="w3-input w3-border" type="text" rows="5" maxlength="2000" placeholder="" [(ngModel)]="solicitud.hallasgo_par"></textarea>
+            </div>
+          </div>
+
+
+          <div class="w3-row w3-section w3-row-padding">
+            <div class="w3-col l12">
+              <button class="w3-button w3-section w3-padding w3-theme" (click)="guardar_valida()" *ngIf="!flag_envio">
+                <i class="fa fa-save"></i> Guardar</button>
+            </div>
           </div>
         </div>
-
-      <div class="w3-row w3-section w3-row-padding">
-        <div class="w3-col m12" *ngIf="vista_hallasgo">
-          <label class="w3-tag w3-small w3-theme">Evaluacion externa</label>
-          <textarea class="w3-input w3-border" type="text" rows="5" maxlength="2000" placeholder="" [(ngModel)]="solicitud.hallasgo_par"></textarea>
-        </div>
       </div>
 
 
-      <div class="w3-row w3-section w3-row-padding">
-        <div class="w3-col l12">
-          <button class="w3-button w3-section w3-block w3-padding w3-theme" (click)="guardar_valida()" *ngIf="!flag_envio">
-            <i class="fa fa-save"></i> Guardar</button>
-        </div>
-      </div>
+
+
+
+
 
     </div>
   </div>

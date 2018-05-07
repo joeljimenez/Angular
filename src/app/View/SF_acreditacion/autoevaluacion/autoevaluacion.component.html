@@ -8,42 +8,33 @@
 <div class="w3-bar w3-white w3-border" style="margin-top:1px;">
   <span class="w3-bar-item w3-theme"> {{nombre_encabezado}}</span>
   <a class="w3-bar-item w3-button w3-mobile" (click)="pieza_nodo(pieza_evaluar_reporte)">
-    <i class="fa fa-book ">
-    </i> Ver solo {{nombre_pieza_evaluada}}
+    <i class="fa fa-book" *ngIf="vista_lineal"> Ver solo {{nombre_pieza_evaluada}}</i>
+    <i class="fa fa-book" *ngIf="!vista_lineal"> Ver Vista Inicial</i>
   </a>
-  <!-- <div class="w3-dropdown-hover">
-    <button class="w3-button w3-bar-item w3-mobile" style="float: none;">
-      Etiquetas
-      <i class="fa fa-caret-down"></i>
-    </button>
-    <div class="w3-dropdown-content w3-bar-block w3-white w3-card-4">
-      <a class="w3-bar-item w3-button w3-mobile w3-border-left" *ngFor="let a of piezas| orderBy:'id'" (click)="pieza_nodo(a.id)">
-        <i class="fa fa-bookmark ">
-        </i> {{a.nombre}}
-        <span class="w3-tag w3-orange w3-text-white w3-tiny w3-right">{{a.cantidad}}</span>
-      </a>
-    </div>
-  </div> -->
+
   <div class="w3-dropdown-hover">
     <button class="w3-button w3-bar-item w3-mobile" style="float: none;">
-      Reportes
-      <i class="fa fa-caret-down"></i>
+
+      <i class="fa fa-caret-down"> Reportes</i>
     </button>
     <div class="w3-dropdown-content w3-bar-block w3-white w3-card-4">
       <a class="w3-bar-item w3-button w3-mobile w3-border-left" (click)="reporte_global('modal_reporte_tabla_piezas_categoria')">
-        <i class="fa fa-newspaper-o"></i> Número de indicadores por categoría</a>
+        <i class="fa fa-newspaper-o"> Número de indicadores por categoría</i>
+      </a>
       <a class="w3-bar-item w3-button w3-mobile w3-border-left" (click)="reporte_global('modal_reporte_estadistica_evidencia')">
-        <i class="fa fa-pie-chart"></i> Estadística de evidencias</a>
+        <i class="fa fa-pie-chart"> Estadística de evidencias</i>
+      </a>
       <a class="w3-bar-item w3-button w3-mobile w3-border-left" (click)="reporte_global('modal_reporte_cuantitativo_categoria')">
-        <i class="fa fa-pie-chart"></i> Evaluación cuantitativa por categoría</a>
+        <i class="fa fa-pie-chart"> Evaluación cuantitativa por categoría</i>
+      </a>
     </div>
   </div>
   <a class="w3-bar-item w3-button w3-mobile" (click)="presentaciones_matriz(matriz,'modal_documentos_matriz')">
-    <i class="fa fa-book ">
-    </i> Ver presentaciones</a>
+    <i class="fa fa-book "> Ver presentaciones</i>
+  </a>
   <a class="w3-bar-item w3-button w3-mobile" (click)="crear(matriz)" *ngIf="permisos.registrar == 1">
-    <i class="fa fa-code-fork">
-    </i> Crear pieza en la matriz</a>
+    <i class="fa fa-code-fork"> Crear pieza en la matriz</i>
+  </a>
 </div>
 
 <app-nav [titulo]="titulo" [breadcrumb]="breadcrumbArray"></app-nav>
@@ -52,112 +43,39 @@
 
 <div class="w3-container">
 
-    
-      
+
+
   <div class="" *ngIf="vista_lineal">
 
-      <div class="w3-row">
-          <div class="w3-col">
-            <app-arbol [visor]='data_arbol' 
-                       (Admin)='open_crear($event)' 
-                       (Vista)='open_vista($event)' 
-                       (Crear)='crear($event)' 
-                       (Editar)='editar($event)' > </app-arbol>
-          </div>
-        </div>
-    <!-- <div class="w3-animate-left" *ngFor="let a of matriz_completa  | orderBy:'ordenar'|filterBy: ['nombre', 'nombre_principal', 'nombre_pieza', 'orden','descripcion']: filtro">
-      <div class="w3-row w3-section panel w3-white w3-card" *ngIf="a.idsecuencia_padre == muestra_hijos" (dblclick)="next_nodo(a)">
-        <div class="w3-container">
-          <div class="w3-row w3-padding-16">
-            <div class="w3-rest">
-              <small>{{a.nombre_pieza +' ' + a.orden + ': '+ a.nombre}}</small>
-            </div>
-          </div>
-          <div class="w3-panel w3-padding-16 w3-light-grey" *ngIf="a.act_descripcion == 1">
-            <small> {{a.descripcion}} </small>
-          </div>
-        </div>
-        <footer class="w3-border-top">
-          <div class="w3-row w3-container">
-            <div class="w3-half">
-              <div class="">
-                <div class="w3-row w3-row-padding w3-left">
-                  <div class="w3-bar w3-padding-16">
-                    <button class="w3-text-white w3-border w3-theme w3-small w3-padding-small" (click)="open(a, 'ver-evidencias')" *ngIf="a.act_evidencia == 1 || a.act_hallasgo == 1"
-                      style="cursor: pointer;" title="Muestra contenido">
-                      <i class="fa fa-eye"></i> Ver Evidencias
-                    </button>
-                    <button class="w3-text-white w3-border w3-theme w3-small w3-padding-small" (click)="open(a, 'crear-evidencias')" *ngIf="a.act_evidencia == 1 && permisos.registrar == 1"
-                      style="cursor: pointer;" title="Adjuntar">
-                      <i class="fa fa-paperclip"></i> adjuntar
-                    </button>
-                    <button class="w3-text-white w3-border w3-theme w3-small w3-padding-small" (click)="crear(a,'modal_crea_nodo')" *ngIf="permisos.registrar == 1"
-                      style="cursor: pointer;" title="Crear">
-                      <i class="fa fa-plus"></i> Crear
-                    </button>
-                    <button class="w3-text-white w3-border w3-theme w3-small w3-padding-small" (click)="editar(a,'modal_crea_nodo')" *ngIf="permisos.actualizar == 1"
-                      style="cursor: pointer;" title="Editar">
-                      <i class="fa fa-pencil"></i> Editar</button>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div class="w3-half">
-              <div class="">
-                <div class="w3-row w3-row-padding w3-right">
-                  <div class="w3-bar w3-padding-16">
-                    <button class="w3-text-white w3-border w3-theme w3-small w3-padding-small" (click)="after_nodo(a)" *ngIf="padre != a.idsecuencia_padre"
-                      style="cursor: pointer;" title="Anterior">
-                      <i class="fa fa-arrow-left"></i>
-                    </button>
-                    <button class="w3-text-white w3-border w3-theme w3-small w3-padding-small" (click)="next_nodo(a)" *ngIf="a.siguiente" style="cursor: pointer;"
-                      title="Siguiente">
-                      <i class="fa fa-arrow-right"></i>
-                    </button>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="w3-row" *ngIf="a.act_evidencia == 1">
-            <div class="w3-container">
-              <div class="w3-bar w3-padding-16">
-                <button class="w3-text-black w3-border w3-white w3-small w3-padding-small" disabled title="Evidencias">
-                  <i class="fa fa-tag"></i> Evidencias:
-                  <strong class="w3-right"> {{a.cant_evidencia}}</strong>
-                </button>
-                <button class="w3-text-black w3-border w3-white w3-small w3-padding-small" disabled title="Categoría">
-                  <i class="fa fa-tag"></i> Categoría:
-                  <span class="w3-right w3-tag w3-text-white w3-tiny w3-orange"> {{' ' + a.nom_categoria}}</span>
-                </button>
-                <button class="w3-text-black w3-border w3-white w3-small w3-padding-small" disabled title="Criterio">
-                  <i class="fa fa-tag"></i> Criterio:
-                  <span class="w3-right w3-tag w3-text-white w3-tiny w3-orange"> {{' ' + a.nom_cripterio}}</span>
-                </button>
-              </div>
-            </div>
-          </div>
-        </footer>
+    <div class="w3-row">
+      <div class="w3-col">
+        <app-arbol [visor]='data_arbol' 
+                   (Admin)='open_crear($event)' 
+                   (Vista)='open_vista($event)' 
+                   (Crear_nodo)='crear_nodo($event)' 
+                   (Editar)='editar($event)'>
+        </app-arbol>
       </div>
-    </div> -->
-  </div>
+    </div>
   
+  </div>
+
   <div class="" *ngIf="!vista_lineal">
 
-      
-      <div class="w3-panel w3-padding-16 w3-white w3-card">
-        <div class="w3-row-padding">
-          <div class="w3-col">
-            <div class="w3-col" style="width:50px">
-              <i class="w3-xxlarge fa fa-search" style="color: #0182c0"></i>
-            </div>
-            <div class="w3-rest">
-              <input type="text" placeholder="Buscar..." class="w3-bar-item w3-input w3-white w3-border" [(ngModel)]="filtro">
-            </div>
+
+    <div class="w3-panel w3-padding-16 w3-white w3-card">
+      <div class="w3-row-padding">
+        <div class="w3-col">
+          <div class="w3-col" style="width:50px">
+            <i class="w3-xxlarge fa fa-search" style="color: #0182c0"></i>
+          </div>
+          <div class="w3-rest">
+            <input type="text" placeholder="Buscar..." class="w3-bar-item w3-input w3-white w3-border" [(ngModel)]="filtro">
           </div>
         </div>
       </div>
-  
+    </div>
+
 
     <div class="w3-animate-left" *ngFor="let a of matriz_completa  | orderBy:'ordenar'|filterBy: ['nombre', 'nombre_principal', 'nombre_pieza', 'orden','descripcion']: filtro">
       <div class="w3-row w3-section panel w3-white w3-card" *ngIf="a.idpieza == muestra_piezas" (dblclick)="next_nodo(a)">
@@ -177,11 +95,11 @@
               <div class="w3-container">
                 <div class="w3-row w3-row-padding w3-left">
                   <div class="w3-bar w3-padding-16">
-                    <button class="w3-text-white w3-border w3-theme w3-small w3-padding-small"  (click)="open_vista(a, 'ver-evidencias')" *ngIf="a.act_evidencia == 1 || a.act_hallasgo == 1"
+                    <button class="w3-text-white w3-border w3-theme w3-small w3-padding-small" (click)="open_vista(a, 'ver-evidencias')" *ngIf="a.act_evidencia == 1 || a.act_hallasgo == 1"
                       style="cursor: pointer;" title="Muestra contenido">
                       <i class="fa fa-eye"></i> Ver Evidencias
                     </button>
-                    <button class="w3-text-white w3-border w3-theme w3-small w3-padding-small"  (click)="open_crear(a, 'crear-evidencias')" *ngIf="a.act_evidencia == 1 && permisos.registrar == 1"
+                    <button class="w3-text-white w3-border w3-theme w3-small w3-padding-small" (click)="open_crear(a, 'crear-evidencias')" *ngIf="a.act_evidencia == 1 && permisos.registrar == 1"
                       style="cursor: pointer;" title="Adjuntar">
                       <i class="fa fa-paperclip"></i> adjuntar
                     </button>
@@ -196,22 +114,7 @@
                 </div>
               </div>
             </div>
-            <!-- <div class="w3-half">
-              <div class="w3-container">
-                <div class="w3-row w3-row-padding w3-right">
-                  <div class="w3-bar w3-padding-16">
-                    <button class="w3-text-white w3-border w3-theme w3-small w3-padding-small" (click)="after_nodo(a)" *ngIf="padre != a.idsecuencia_padre"
-                      style="cursor: pointer;" title="Anterior">
-                      <i class="fa fa-arrow-left"></i>
-                    </button>
-                    <button class="w3-text-white w3-border w3-theme w3-small w3-padding-small" (click)="next_nodo(a)" *ngIf="a.siguiente" style="cursor: pointer;"
-                      title="Siguiente">
-                      <i class="fa fa-arrow-right"></i>
-                    </button>
-                  </div>
-                </div>
-              </div>
-            </div> -->
+
           </div>
           <div class="w3-row">
             <div class="w3-container">

@@ -47,8 +47,7 @@
                           style="cursor: pointer;" title="Adjuntar">
                           <i class="fa fa-paperclip"></i> adjuntar
                         </button>
-                        <button class="w3-text-white w3-border w3-theme w3-small w3-padding-small" (click)="crear(a,'modal_crea_nodo')" *ngIf="permisos.registrar == 1"
-                          style="cursor: pointer;" title="Crear">
+                        <button class="w3-text-white w3-border w3-theme w3-small w3-padding-small" (click)="crear_nodo(a)" *ngIf="permisos.registrar == 1" style="cursor: pointer;" title="Crear">
                           <i class="fa fa-plus"></i> Agregar 
                         </button>
                         <button class="w3-text-white w3-border w3-theme w3-small w3-padding-small" (click)="editar(a)" *ngIf="permisos.actualizar == 1"
@@ -92,7 +91,7 @@
     <app-arbol [visor]='a.hijos'
               (Admin)='admin($event)' 
               (Vista)='vista($event)' 
-              (Crear)='crear($event)' 
+              (Crear_nodo)='crear_nodo($event)' 
               (Editar)='editar($event)'></app-arbol>
   </div>
 </div>

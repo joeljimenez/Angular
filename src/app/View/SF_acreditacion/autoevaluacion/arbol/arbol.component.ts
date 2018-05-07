@@ -9,7 +9,7 @@ export class ArbolComponent implements OnInit, AfterContentInit {
 
   @Input() visor = [];
   @Output() Admin = new EventEmitter();
-  @Output() Crear = new EventEmitter();
+  @Output() Crear_nodo = new EventEmitter();
   @Output() Editar = new EventEmitter();
   @Output() Vista = new EventEmitter();
   permisos = new Permisos().access;
@@ -26,15 +26,6 @@ export class ArbolComponent implements OnInit, AfterContentInit {
   }
 
   Toggle(a) {
-    // const x = document.getElementById(id);
-    // const fa = document.getElementById('fa' + id);
-    // if (x.className.indexOf('w3-show') === -1) {
-    //     x.className += ' w3-show';
-    //     fa.className = fa.className.replace(' fa-plus', ' fa-minus');
-    // } else {
-    //     x.className = x.className.replace(' w3-show', '');
-    //     fa.className = fa.className.replace(' fa-minus', ' fa-plus');
-    // }
 
     const data = JSON.parse(sessionStorage.select_matriz);
 
@@ -79,9 +70,9 @@ export class ArbolComponent implements OnInit, AfterContentInit {
     this.Admin.emit(a);
   }
 
-  crear(a) {
+  crear_nodo(a) {
 
-    this.Crear.emit(a);
+    this.Crear_nodo.emit(a);
   }
 
   editar(a) {

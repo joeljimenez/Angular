@@ -28,7 +28,7 @@ export class FormNodoComponent implements OnInit {
 
   nom_anexo_1 = "";
   nom_anexo_2 = "";
-
+  n_pieza: string;
   vista_nombre: boolean;
   vista_descripcion: boolean;
   vista_evidencia: boolean;
@@ -42,17 +42,21 @@ export class FormNodoComponent implements OnInit {
   ngOnInit() {
   }
 
-  crear(data: any) {
+  crear_nodo(data: any) {
     this.limpiar();
     this.solicitud = data;
     this.ctr_formulario(this.solicitud.idpieza);
-    this.piezas_esquema2 =  this.piezas_esquema.filter(value => value.idpieza === this.solicitud.idpieza); // filtra el esquema por el id de la pieza que se le envie.
+    // filtra el esquema por el id de la pieza que se le envie.
+    this.piezas_esquema2 =  this.piezas_esquema.filter(value => value.idpieza === this.solicitud.idpieza);
+    this.n_pieza = this.piezas_esquema2[0].nombre_p;
+  
     document.getElementById('formulario').style.display = 'block';
   }
 
   editar(data: any) {
     this.limpiar();
     this.solicitud = data;
+    console.log(this.solicitud);
     this.ctr_formulario(this.solicitud.idpieza);
     this.piezas_esquema2 =  this.piezas_esquema.filter(value => value.idpieza === this.solicitud.idpieza);
     document.getElementById('formulario').style.display = 'block';
@@ -135,7 +139,7 @@ export class FormNodoComponent implements OnInit {
     if (this.solicitud.idpieza != null) {
       if (this.solicitud.orden > 0) {
 
-        for (var i in this.piezas_esquema) {
+        for (const i in this.piezas_esquema) {
 
           if (this.piezas_esquema[i].idpieza == this.solicitud.idpieza) {
 
@@ -175,7 +179,7 @@ export class FormNodoComponent implements OnInit {
                   this.notify.warn('Valiadar campos', 'El Campo Calificacion Cualitativa es obligatorios...', this.optionconfig);
                 }
                 else {
-                  for (var e in this.cualitativa) {
+                  for (const e in this.cualitativa) {
                     if (this.cualitativa[e].idcualitativa == this.solicitud.idcualitativa) {
                       if (this.solicitud.puntuacion >= this.cualitativa[e].rango_inicio && this.solicitud.puntuacion <= this.cualitativa[e].rango_fin) {
 
@@ -192,15 +196,15 @@ export class FormNodoComponent implements OnInit {
 
             if (this.piezas_esquema[i].act_categoria != 1) {
 
-              for (var cat in this.categorias) {
+              for (const cat in this.categorias) {
                 if (this.categorias[cat].defaul == 1) {
                   this.solicitud.idcategoria = this.categorias[cat].idcategoria;
                 }
               }
             }
             else {
-              var seleccion_categoria = 0;
-              for (var i in this.categorias) {
+              let seleccion_categoria = 0;
+              for (const i in this.categorias) {
                 if (this.categorias[i].defaul == 1) {
                   seleccion_categoria = this.categorias[i].idcategoria;
                 }

@@ -108,7 +108,7 @@ export class AutoevaluacionComponent implements OnInit {
 
           this.titulo = 'Autoevaluación';
           this.breadcrumbArray = JSON.parse(atob(params['data'])).navegacion;
-          this.breadcrumbArray.push({titulo: this.titulo, nombre: this.titulo, ruta: '../home/autoevaluacion', datos: JSON.parse(atob(params['data']))});
+          this.breadcrumbArray.push({ titulo: this.titulo, nombre: this.titulo, ruta: '../home/autoevaluacion', datos: JSON.parse(atob(params['data'])) });
 
           if (this.prm_solicitud.idmatriz == 0 || this.prm_solicitud.identidad == null || this.prm_solicitud.idesquema == null) {
             this.router.navigate(['./home/Matriz']);
@@ -258,7 +258,6 @@ export class AutoevaluacionComponent implements OnInit {
        *ordenar el contenido numericamente *
        *************************************/
 
-      //this.matriz_completa[i].ordenar = this.Validaciones.ceros_izquierda(this.matriz_completa[i].orden, 15);
       this.matriz_completa[i].ordenar = Validacionesservice.prototype.ceros_izquierda(this.matriz_completa[i].orden, 15)
 
       if (this.matriz_completa[i].idsecuencia_padre != 0) {
@@ -341,7 +340,7 @@ export class AutoevaluacionComponent implements OnInit {
 
     /*ejecuta procesos para crear reporteria*/
 
-    
+
     this.organiza_matriz(this.matriz_completa)
   }
 
@@ -350,47 +349,47 @@ export class AutoevaluacionComponent implements OnInit {
   organiza_matriz(a) {
 
     this.data_matriz = a;
-      if (sessionStorage.select_matriz != null || sessionStorage.select_matriz !== undefined) {
-          if (sessionStorage.select_matriz.length > 2) {
-            const selec = JSON.parse(sessionStorage.select_matriz)
-              for (const sec in this.data_matriz) {
-                  for (const est in selec) {
-                      if (this.data_matriz[sec].idsecuencia === selec[est].idsecuencia) {
-                        this.data_matriz[sec].muestra = selec[est].muestra;
-                        this.data_matriz[sec].ico = selec[est].ico;
-                      }
-                  }
-              }
+    if (sessionStorage.select_matriz != null || sessionStorage.select_matriz !== undefined) {
+      if (sessionStorage.select_matriz.length > 2) {
+        const selec = JSON.parse(sessionStorage.select_matriz)
+        for (const sec in this.data_matriz) {
+          for (const est in selec) {
+            if (this.data_matriz[sec].idsecuencia === selec[est].idsecuencia) {
+              this.data_matriz[sec].muestra = selec[est].muestra;
+              this.data_matriz[sec].ico = selec[est].ico;
+            }
           }
+        }
       }
+    }
 
 
-      let padre = [];
+    let padre = [];
 
-      for (const i in this.data_matriz) {
-          if (this.data_matriz[i].idsecuencia_padre === 0) {
-              padre.push(this.data_matriz[i]);
-          }
+    for (const i in this.data_matriz) {
+      if (this.data_matriz[i].idsecuencia_padre === 0) {
+        padre.push(this.data_matriz[i]);
       }
+    }
 
 
-      this.buscar_hijos(padre[0]);
-      this.data_arbol = padre[0].hijos;
+    this.buscar_hijos(padre[0]);
+    this.data_arbol = padre[0].hijos;
 
-      
+
   };
 
   buscar_hijos(arreglo) {
-      arreglo.hijos = [];
-      for (const i in this.data_matriz) {
-          if (this.data_matriz[i].idsecuencia_padre === arreglo.idsecuencia) {
-              arreglo.hijos.push(this.data_matriz[i]);
-          }
+    arreglo.hijos = [];
+    for (const i in this.data_matriz) {
+      if (this.data_matriz[i].idsecuencia_padre === arreglo.idsecuencia) {
+        arreglo.hijos.push(this.data_matriz[i]);
       }
+    }
 
-      for (const a in arreglo.hijos) {
-          this.buscar_hijos(arreglo.hijos[a]);
-      }
+    for (const a in arreglo.hijos) {
+      this.buscar_hijos(arreglo.hijos[a]);
+    }
   }
 
 
@@ -428,7 +427,7 @@ export class AutoevaluacionComponent implements OnInit {
       }
     }
 
-    for (var i in this.mat_rpt) {
+    for (const i in this.mat_rpt) {
       var evidencias_total = 0;
       for (var a in this.mat_rpt[i].data) {
         evidencias_total = evidencias_total + this.mat_rpt[i].data[a].cant_evidencia;
@@ -449,21 +448,21 @@ export class AutoevaluacionComponent implements OnInit {
 
     let fac_rpt = [];
     /*un reporte temporal para evaluar indicadores por factor y categoria*/
-    var sec = 1;
-    for (var i in this.matriz_completa) {
+    let sec = 1;
+    for (const i in this.matriz_completa) {
       if (this.matriz_completa[i].idsecuencia == idsecuencia) {
         fac_rpt.push({ id: sec, orden: this.matriz_completa[i].ordenar, data: this.matriz_completa[i] });
       }
     }
 
 
-    var row = fac_rpt.length;
-    var count = 1
+    let row = fac_rpt.length;
+    let count = 1
     while (row >= count) {
 
-      var muestra = 0;
-      var pieza = 0;
-      for (var a in fac_rpt) {
+      let muestra = 0;
+      let pieza = 0;
+      for (const a in fac_rpt) {
         if (fac_rpt[a].id == count) {
           muestra = fac_rpt[a].data.idsecuencia;
           pieza = fac_rpt[a].data.idpieza;
@@ -472,7 +471,7 @@ export class AutoevaluacionComponent implements OnInit {
 
       if (pieza != this.pieza_evaluar_reporte) {
 
-        for (var i in this.matriz_completa) {
+        for (const i in this.matriz_completa) {
           if (this.matriz_completa[i].idsecuencia_padre == muestra) {
             sec = sec + 1;
             fac_rpt.push({ id: sec, orden: this.matriz_completa[i].ordenar, data: this.matriz_completa[i] });
@@ -492,9 +491,9 @@ export class AutoevaluacionComponent implements OnInit {
     // this.ep = 0; this.ip = 0; this.cp = 0;
     // this.evidencias_ep = 0; this.evidencias_ip = 0; this.evidencias_cp = 0;
 
-    let retorno = [];
+    const retorno = [];
 
-    for (var i in fac_rpt) {
+    for (const i in fac_rpt) {
       if (fac_rpt[i].data.idpieza == this.pieza_evaluar_reporte) {
         retorno.push(fac_rpt[i].data);
       }
@@ -562,7 +561,6 @@ export class AutoevaluacionComponent implements OnInit {
         const datos = JSON.parse(rs.text());
         if (datos.exito) {
           this.rest.NuevoTokent(datos.tokent);
-          console.log(datos.data)
           this.piezas_esquema = datos.data;
           /* consulta las piezas e indica cual es la pieza a evaluar y la contenedora */
           for (var i in this.piezas_esquema) {
@@ -745,8 +743,15 @@ export class AutoevaluacionComponent implements OnInit {
     /*cuando seleccionamos una de las piezas se activa
     la segunda vista.
     esto es lo que se explica en next_nodo()*/
-    this.vista_lineal = false;
-    this.muestra_piezas = a;
+    if (this.vista_lineal) {
+      this.vista_lineal = false;
+      this.muestra_piezas = a;
+    }
+    else {
+      this.vista_lineal = true;
+      this.muestra_piezas = 0;
+    }
+
   }
 
 
@@ -761,14 +766,16 @@ export class AutoevaluacionComponent implements OnInit {
     return valor
   }
 
-  /*
-      En los metodos crear y editar se reunen los parametros y se le envian al componente 'FormNodoComponent' en donde se ejecuta ya se editar o crear.
-      Al ejecutar alguna de las operaciones desde el componente hijo los valores son devueltos a 'guardar(data)' de este componente (componente padre) y ejecuta la consulta.
-  */
+  /**
+   * En los metodos crear y editar se reunen los parametros y se le envian al componente 
+   * 'FormNodoComponent' en donde se ejecuta ya se editar o crear.
+   *  Al ejecutar alguna de las operaciones desde el componente hijo
+   *  los valores son devueltos a 'guardar(data)' de este componente 
+   * (componente padre) y ejecuta la consulta.
+   */
 
-  crear(data: acreditacion) {
-    console.log(data)
-    let pieza = this.selecciona_pieza(data.idpieza);
+  crear_nodo(data: acreditacion) {
+    const pieza = this.selecciona_pieza(data.idpieza);
     if (pieza != null) {
       this.titulo_modal = data.nombre_pieza + ' [' + data.orden + '] ' + data.nombre.substring(0, 75);
       const arreglo = {
@@ -782,13 +789,18 @@ export class AutoevaluacionComponent implements OnInit {
         idmatriz: data.idmatriz,
         hijos: data.hijos
       }
-      this.FormNodo.crear(arreglo); // ejecuta el metodo crear del componente hijo "FormNodoComponent".
-                                    // esta funcion reune y trae de vuelta los parametros necesarios y los ejecuta en la funcionm *guardar(data)* de este componente.
+      this.FormNodo.crear_nodo(arreglo);
+      /**
+       * ejecuta el metodo crear del componente hijo "FormNodoComponent".
+       * esta funcion reune y trae de vuelta los parametros necesarios y
+       * los ejecuta en la funcionm *guardar(data)* de este componente.
+       */
     }
-
   }
 
   editar(data: acreditacion) {
+
+
     this.titulo_modal = data.nombre_pieza + ' [' + data.orden + '] ' + data.nombre.substring(0, 75);
 
     const arreglo = {
@@ -798,10 +810,9 @@ export class AutoevaluacionComponent implements OnInit {
       orden: data.orden,
       identidad: data.identidad,
       idsecuencia_padre: data.idsecuencia_padre,
-
       descripcion: data.descripcion,
       nombre: data.nombre,
-
+      idcategoria: data.idcategoria,
       idsecuencia: data.idsecuencia,
       idpieza: data.idpieza,
 
@@ -832,7 +843,7 @@ export class AutoevaluacionComponent implements OnInit {
     const arreglo = {
       data: data,
       nombre_encabezado: this.nombre_encabezado,
-      navegacion:this.breadcrumbArray
+      navegacion: this.breadcrumbArray
     }
     const paramatros = btoa(JSON.stringify(arreglo));
 
@@ -843,19 +854,19 @@ export class AutoevaluacionComponent implements OnInit {
     const arreglo = {
       data: data,
       nombre_encabezado: this.nombre_encabezado,
-      navegacion:this.breadcrumbArray
+      navegacion: this.breadcrumbArray
     }
     const paramatros = btoa(JSON.stringify(arreglo));
 
     this.router.navigate(['./home/ver-evidencias', paramatros]);
-   
+
   }
 
-  reporte_global(modal: string){
+  reporte_global(modal: string) {
     // CODE
   }
 
-  presentaciones_matriz(data: any, modal: string){
+  presentaciones_matriz(data: any, modal: string) {
     // CODE
   }
 
